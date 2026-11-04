@@ -1,35 +1,25 @@
-# Gulaab — a Diwali surprise for Ladoo
+# A little Diwali world for Ladoo ❤️
 
-At first glance this looks like a luxury Indian festive-couture boutique. The further you explore, the more personal it gets, until it's clear the whole boutique was built as a Diwali gift for Ladoo.
+A personal Diwali wish for Ladoo, made as a tiny "boutique" where nothing is for sale, because everything in it is already theirs. It starts out pretty and festive, and gets more personal room by room.
 
-## The journey
+## The rooms
 
-| Page | What happens |
+| Page | What's inside |
 |---|---|
-| `index.html` — Home | A personal welcome animation (a diya lights itself, "Welcome, Ladoo"). Then the hero, a live countdown to Lakshmi Puja (8 Nov 2026), shop-by-category tiles, the featured Diwali Edit, the brand story, and an appointment "reserved for one". |
-| `collection.html` — The Festive Edit | 16 products with category filters, sorting, hover image swap, wishlist, and a quick view with an image gallery and hover zoom. Items go into a working bag. At checkout the total comes to ₹0, with a note revealing the store was made for Ladoo. |
-| `styling.html` — Styling Room | "Your Diwali Look, Your Rules." Build a look (outfit, jewellery, finishing touch), use "Surprise me", or play the "Help me choose your Diwali look" quiz. The chosen look is remembered for the finale. |
-| `surprise.html` — The Diwali Surprise | A dark back room. Tap five diyas to light them. The quote appears word by word, then the personal letter is revealed. |
-| `gift.html` — A Little Something | A wrapped gift box that opens to "Because you deserve little surprises and big smiles.", and a greeting card that opens like a book. |
-| `celebrate.html` — Final Celebration | A marigold toran, a rotating rangoli, a ring of clickable diyas, fireworks wherever you tap, the final message, and "Celebrate Again ✨", which replays the experience from the welcome. |
-| `roses.html` — The Rose Room | The original "Pink Roses for Ladoo" page, unchanged apart from a link back to the gift. |
+| `index.html`: Home | "Hey Ladoo ❤️" welcome (a diya lights up and a little ladoo peeks in), the hero, a countdown to Diwali (8 Nov 2026), **the Ladoo Jar** (tap a ladoo to open a wish), a few favourite picks, how it all started with pink roses, and "little true things". |
+| `collection.html`: The Collection | Sarees, lehengas, suits, jewellery and little extras, each with a note on *why I picked it for you*. Tap ♥ to save favourites; they collect in the heart drawer at the top. "✨ Pick one for me" chooses one at random. |
+| `styling.html`: Styling Room | "Your Diwali Look, Your Rules." Mix an outfit, jewellery and a finishing touch, then hit "This is the one ♥", or play "Help me choose your Diwali look". |
+| `surprise.html`: The Surprise | A dark room: tap five diyas to light them, then the quote and the letter appear. |
+| `gift.html`: Your Gift | A wrapped gift box that opens, plus a greeting card that opens like a book. |
+| `celebrate.html`: Celebrate | Marigold toran, rangoli, diyas, fireworks wherever you tap, the final message, and "Celebrate Again ✨". |
+| `roses.html`: The Rose Room | The original pink-roses page, kept as it was. |
 
-Every page also has:
-- page transitions
-- floating golden particles
-- a working shopping bag that is saved between visits
-- optional festive music (a soft raag played live by the browser, with no audio files), switched on with the ♫ bars in the header
+Also on every page: soft page transitions, golden sparkles, heart bursts, and optional music (the little bars icon in the header).
 
 ## Photos
 
-All photography is set in **`assets/js/data.js` → `IMG`**. The fashion photos link to Unsplash. If a photo fails to load, a designed burgundy-and-gold tile appears instead of a broken image.
-
-To use your own photos, put the files in `assets/img/` and change the entries in `IMG`, for example:
-
-```js
-sareeSilk: 'assets/img/my-saree.jpg',
-```
+All photos are listed in `assets/js/data.js` → `IMG`. If a photo can't load, an elegant burgundy-and-gold tile shows instead. To use your own pictures, put them in `assets/img/` and point `IMG` at them, for example `sareeSilk: 'assets/img/my-photo.jpg'`.
 
 ## Running it
 
-Plain static HTML, CSS and JS with no build step. Open `index.html`, or host the folder anywhere: GitHub Pages, Netlify or Vercel.
+Plain HTML, CSS and JS with no build step. Open `index.html`, or host the folder on GitHub Pages, Netlify or Vercel.

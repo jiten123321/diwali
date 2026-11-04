@@ -1,17 +1,15 @@
 /* =========================================================
-   Gulaab — catalogue + imagery
+   Ladoo's Little Diwali Boutique — pieces + imagery
    ---------------------------------------------------------
    ALL photography lives in IMG below. Every image on the site is
    rendered through it, and every <img> has a designed fallback tile
    if a photo ever fails to load — so swapping a photo is a one-line
-   change here. Paths are Unsplash CDN ids (free Unsplash License);
-   you can also drop your own files into assets/img/ and use
+   change here. You can drop your own files into assets/img/ and use
    e.g. 'assets/img/my-photo.jpg'.
    ========================================================= */
 (function(){
   const U = id => 'https://images.unsplash.com/photo-' + id;
   const IMG = {
-    // couture
     sareeSilk:     U('1610030469983-98e550d6193c'),
     sareeBanarasi: U('1610030469668-935142b96fe4'),
     sareeOrganza:  U('1606760227091-3dd870d97f1d'),
@@ -25,7 +23,6 @@
     anarkali:      U('1618918319542-c34704836a3e'),
     kurta:         U('1617627143750-d86bc21e42bb'),
     dupatta:       U('1624698572118-2e0f49c065f3'),
-    // jewellery & accessories
     jhumka:        U('1535632066927-ab7c9ab60908'),
     necklace:      U('1599643478518-a784e5dc4c8f'),
     kundan:        U('1601121141461-9d6647bca1ed'),
@@ -33,10 +30,8 @@
     chain:         U('1617038220319-276d3cfab638'),
     bag:           U('1584917865442-de89df76afd3'),
     clutch:        U('1548036328-c9fa89d128fa'),
-    // festive
-    diyas:         U('1605342410313-a44229986348'),
     diwaliNight:   U('1590650516494-0c8e4a4dd67e'),
-    // the one photo that has always been here — the bouquet
+    // the photo that started it all — the bouquet
     roses:         'assets/img/roses.jpg'
   };
 
@@ -45,81 +40,63 @@
     return src.startsWith('http') ? `${src}?auto=format&fit=crop&w=${w}&q=80` : src;
   };
 
-  /* categories: saree · lehenga · suit · jewellery · bags */
+  /* note = why I picked it for you · desc = the piece · pair = what to wear it with */
   const PRODUCTS = [
-    { id:'kanjeevaram-rani', cat:'saree', name:'Rani Kanjeevaram Silk Saree', price:48500, was:null, tag:'Bestseller',
-      img:'sareeSilk', alt:['sareeBanarasi','dupatta'],
-      desc:'Pure mulberry silk woven in Kanchipuram, with a temple border in real zari. Drapes like poured light.',
-      details:['Pure silk, 5.5 m + blouse piece','Real zari temple border','Dry clean only'], sizes:['Free size'] },
-    { id:'banarasi-gulnaar', cat:'saree', name:'Gulnaar Banarasi Saree', price:36800, was:42000, tag:'Diwali Edit',
-      img:'sareeBanarasi', alt:['sareeSilk','sareeTissue'],
-      desc:'Hand-loomed in Varanasi with kadhua butis that took three weavers eleven days.',
-      details:['Katan silk','Kadhua weave, antique gold','Comes in a keepsake box'], sizes:['Free size'] },
-    { id:'organza-chandni', cat:'saree', name:'Chandni Organza Saree', price:18900, was:null, tag:'New',
-      img:'sareeOrganza', alt:['sareeChiffon','dupatta'],
-      desc:'Featherlight organza with a scalloped hand-embroidered edge, for evenings lit by a hundred diyas.',
-      details:['Silk organza','Hand-cut scallop border','Pre-stitched blouse available'], sizes:['Free size'] },
-    { id:'tissue-sona', cat:'saree', name:'Sona Tissue Saree', price:22400, was:null, tag:null,
-      img:'sareeTissue', alt:['sareeSilk','sareeOrganza'],
-      desc:'Gold tissue that catches every flicker of flame. Quietly dramatic.',
-      details:['Tissue silk','Woven gota pallu','Dry clean only'], sizes:['Free size'] },
+    { id:'saree-golden', cat:'saree', name:'Golden Hour Silk Saree', tag:'Ladoo-approved', img:'sareeSilk', alt:['sareeBanarasi','dupatta'],
+      note:'Because you deserve something that glows as much as you do.',
+      desc:'Pure silk with a temple border woven in gold. It drapes like poured light.', pair:'Swaying gold jhumkas + a bindi + that smile' },
+    { id:'saree-banarasi', cat:'saree', name:'Gulnaar Banarasi Saree', tag:'Classic you', img:'sareeBanarasi', alt:['sareeSilk','sareeTissue'],
+      note:'Timeless, elegant and a little bit royal — sounds like someone I know.',
+      desc:'Hand-loomed Banarasi silk with tiny woven gold flowers.', pair:'The Lakshmi temple necklace' },
+    { id:'saree-moonlight', cat:'saree', name:'Moonlight Organza Saree', tag:'Soft & dreamy', img:'sareeOrganza', alt:['sareeChiffon','dupatta'],
+      note:'Light and dreamy, for a Diwali night under a sky full of lights.',
+      desc:'Featherlight organza with a scalloped, hand-embroidered edge.', pair:'Pearl drops and a little velvet potli' },
+    { id:'saree-sona', cat:'saree', name:'Sona Tissue Saree', tag:null, img:'sareeTissue', alt:['sareeSilk','sareeOrganza'],
+      note:'It catches every flicker of the diya — just like your eyes do when you laugh.',
+      desc:'Gold tissue silk that shimmers in candlelight.', pair:'Chiming bangles, lots of them' },
 
-    { id:'lehenga-mehtaab', cat:'lehenga', name:'Mehtaab Bridal Lehenga', price:124000, was:null, tag:'Couture',
-      img:'lehengaBridal', alt:['lehengaRose','dupatta'],
-      desc:'Twelve kalis of raw silk, hand-worked with dabka, zardozi and the patience of our karigars.',
-      details:['Raw silk with net dupatta','Zardozi & dabka embroidery','Made to measure in 3 weeks'], sizes:['XS','S','M','L','XL'] },
-    { id:'lehenga-gulabo', cat:'lehenga', name:'Gulabo Rose Lehenga', price:68500, was:76000, tag:'Diwali Edit',
-      img:'lehengaRose', alt:['lehengaParty','dupatta'],
-      desc:'A rose-pink lehenga with a whisper of gold — our house flower, in silk.',
-      details:['Chanderi silk','Mirror & resham work','Can-can included'], sizes:['XS','S','M','L','XL'] },
-    { id:'lehenga-roshni', cat:'lehenga', name:'Roshni Party Lehenga', price:42900, was:null, tag:null,
-      img:'lehengaParty', alt:['lehengaRose','sareeChiffon'],
-      desc:'Made for dancing through Diwali night — light, swishy and joyfully over the top.',
-      details:['Georgette with sequin jaal','Lightweight 3.2 kg','Pockets. Yes, pockets.'], sizes:['XS','S','M','L','XL'] },
+    { id:'lehenga-mehtaab', cat:'lehenga', name:'Mehtaab Lehenga', tag:'Showstopper', img:'lehengaBridal', alt:['lehengaRose','dupatta'],
+      note:'For when you walk in and the whole room forgets what it was saying.',
+      desc:'Raw silk worked by hand with zardozi and a lot of patience.', pair:'The Rajkumari kundan choker' },
+    { id:'lehenga-gulabo', cat:'lehenga', name:'Gulabo Rose Lehenga', tag:'My favourite', img:'lehengaRose', alt:['lehengaParty','dupatta'],
+      note:'Rose-pink, because pink roses are where all of this began.',
+      desc:'A soft pink lehenga with a whisper of gold and tiny mirrors.', pair:'Jhumkas + a gajra + a twirl' },
+    { id:'lehenga-twirl', cat:'lehenga', name:'Twirl-Ready Party Lehenga', tag:'Made for twirling', img:'lehengaParty', alt:['lehengaRose','sareeChiffon'],
+      note:'Light, swishy and joyful — built for dancing badly and laughing loudly.',
+      desc:'Georgette with a sequin jaal that sparkles under fairy lights.', pair:'Comfy juttis (for the dancing)' },
 
-    { id:'anarkali-noor', cat:'suit', name:'Noor Anarkali Set', price:28600, was:null, tag:'New',
-      img:'anarkali', alt:['suitSilk','dupatta'],
-      desc:'A floor-length anarkali in jewel tones with a sheer gota dupatta.',
-      details:['Silk blend, fully lined','Gota-patti dupatta','Churidar included'], sizes:['XS','S','M','L','XL'] },
-    { id:'suit-chanderi', cat:'suit', name:'Chanderi Kurta Set', price:14800, was:17500, tag:null,
-      img:'suitChanderi', alt:['kurta','suitSilk'],
-      desc:'Hand-block-printed chanderi for Lakshmi Puja mornings and long family lunches.',
-      details:['Chanderi silk-cotton','Hand block print','Palazzo + dupatta'], sizes:['XS','S','M','L','XL'] },
-    { id:'suit-zari', cat:'suit', name:'Zari Silk Suit', price:19900, was:null, tag:null,
-      img:'suitSilk', alt:['suitChanderi','dupatta'],
-      desc:'A straight-cut silk suit with a zari yoke — effortless and impossibly elegant.',
-      details:['Art silk','Zari yoke embroidery','Organza dupatta'], sizes:['XS','S','M','L','XL'] },
+    { id:'anarkali-noor', cat:'suit', name:'Noor Anarkali', tag:'Elegant', img:'anarkali', alt:['suitSilk','dupatta'],
+      note:'Graceful and sweeping, for the moment you light the very first diya.',
+      desc:'A floor-length anarkali in jewel tones with a sheer gota dupatta.', pair:'Long temple necklace' },
+    { id:'suit-chanderi', cat:'suit', name:'Lazy Morning Kurta Set', tag:'Cosy', img:'suitChanderi', alt:['kurta','suitSilk'],
+      note:'For slow Diwali mornings, long family lunches and one sweet too many.',
+      desc:'Soft hand-block-printed chanderi with a light dupatta.', pair:'Small studs + a cup of chai' },
+    { id:'suit-zari', cat:'suit', name:'Zari Silk Suit', tag:null, img:'suitSilk', alt:['suitChanderi','dupatta'],
+      note:'Effortless and pretty — the way you make everything look.',
+      desc:'A straight-cut silk suit with a glimmering zari yoke.', pair:'The little evening clutch' },
 
-    { id:'jhumka-surya', cat:'jewellery', name:'Surya Gold Jhumkas', price:12600, was:null, tag:'Bestseller',
-      img:'jhumka', alt:['chain','kundan'],
-      desc:'Temple jhumkas that sway when you laugh. You will laugh a lot in them.',
-      details:['Gold-plated silver','Pearl drops','Hypoallergenic hooks'], sizes:['One size'] },
-    { id:'kundan-rajkumari', cat:'jewellery', name:'Rajkumari Kundan Choker', price:34500, was:null, tag:'Heirloom',
-      img:'kundan', alt:['necklace','jhumka'],
-      desc:'Kundan set by hand in Jaipur, finished with meenakari on the reverse — a secret just for the wearer.',
-      details:['Kundan & polki','Meenakari reverse','Earrings included'], sizes:['Adjustable'] },
-    { id:'necklace-lakshmi', cat:'jewellery', name:'Lakshmi Temple Necklace', price:27800, was:null, tag:null,
-      img:'necklace', alt:['kundan','chain'],
-      desc:'A long temple necklace with Lakshmi coins — very on theme for this week.',
-      details:['Gold-plated silver','Antique finish','Velvet case'], sizes:['One size'] },
-    { id:'bangles-chandrika', cat:'jewellery', name:'Chandrika Bangle Stack', price:9400, was:null, tag:null,
-      img:'bangles', alt:['jhumka','chain'],
-      desc:'Six bangles that chime softly. Wear all of them; restraint is not the point of Diwali.',
-      details:['Set of 6','Gold-plated brass','Sizes 2.4 – 2.8'], sizes:['2.4','2.6','2.8'] },
+    { id:'jhumka-swaying', cat:'jewellery', name:'Swaying Gold Jhumkas', tag:'Cute alert', img:'jhumka', alt:['chain','kundan'],
+      note:'They sway every time you laugh. So, they’ll be swaying a lot.',
+      desc:'Temple jhumkas with tiny pearl drops.', pair:'Literally everything' },
+    { id:'kundan-rajkumari', cat:'jewellery', name:'Rajkumari Kundan Choker', tag:'Royal', img:'kundan', alt:['necklace','jhumka'],
+      note:'Royal, sparkly — and still not as bright as your smile.',
+      desc:'Hand-set kundan with a secret meenakari pattern on the back.', pair:'The Mehtaab lehenga' },
+    { id:'necklace-lakshmi', cat:'jewellery', name:'Lakshmi Temple Necklace', tag:null, img:'necklace', alt:['kundan','chain'],
+      note:'Very on theme this week. Lakshmi would definitely approve.',
+      desc:'A long temple necklace with little Lakshmi coins.', pair:'The Gulnaar Banarasi' },
+    { id:'bangles-chime', cat:'jewellery', name:'Chiming Bangle Stack', tag:null, img:'bangles', alt:['jhumka','chain'],
+      note:'Six bangles that chime softly, like a tiny song whenever you move.',
+      desc:'A stack of six gold bangles. Restraint is not the point of Diwali.', pair:'The Sona tissue saree' },
 
-    { id:'potli-gulaab', cat:'bags', name:'Gulaab Velvet Potli', price:6800, was:null, tag:'Diwali Edit',
-      img:'bag', alt:['clutch','dupatta'],
-      desc:'Velvet potli with a beaded drawstring — fits a lipstick, a phone and every compliment.',
-      details:['Silk velvet','Hand-beaded tassels','Satin lining'], sizes:['One size'] },
-    { id:'clutch-noor', cat:'bags', name:'Noor Box Clutch', price:11200, was:null, tag:null,
-      img:'clutch', alt:['bag','chain'],
-      desc:'A structured evening clutch with a hand-finished clasp and detachable chain.',
-      details:['Leather & brass','Detachable chain','Dust bag included'], sizes:['One size'] },
+    { id:'potli-ladoo', cat:'bags', name:'The Ladoo Potli', tag:'Snack storage', img:'bag', alt:['clutch','dupatta'],
+      note:'Fits a phone, a lipstick and at least two emergency ladoos.',
+      desc:'A velvet potli with a beaded drawstring.', pair:'Any outfit + sweets' },
+    { id:'clutch-little', cat:'bags', name:'Little Evening Clutch', tag:null, img:'clutch', alt:['bag','chain'],
+      note:'Small, pretty and full of good things — a bit like you.',
+      desc:'A structured evening clutch with a delicate chain.', pair:'The Noor anarkali' },
   ];
 
-  const CATS = { all:'All', saree:'Sarees', lehenga:'Lehengas', suit:'Ethnic Suits', jewellery:'Jewellery', bags:'Bags & Accessories' };
+  const CATS = { all:'Everything', saree:'Sarees', lehenga:'Lehengas', suit:'Suits', jewellery:'Jewellery', bags:'Little Extras' };
 
-  const inr = n => '₹' + n.toLocaleString('en-IN');
-
-  window.GULAAB = { IMG, img, PRODUCTS, CATS, inr, byId: id => PRODUCTS.find(p => p.id === id) };
+  window.GULAAB = { IMG, img, PRODUCTS, CATS, byId: id => PRODUCTS.find(p => p.id === id) };
 })();

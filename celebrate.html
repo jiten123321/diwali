@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#14030a">
-<title>The Final Celebration — Gulaab</title>
+<title>Happy Diwali, Ladoo ❤️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Parisienne&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&display=swap">
@@ -159,7 +159,7 @@
   const look = G.store.get('gulaab-look', null);
   if(look && look.name){
     const ln = $('#lookNote'); ln.hidden = false;
-    ln.innerHTML = `P.S. Your Diwali look — <b>${look.name}</b> — has been set aside for you at the front desk.`;
+    ln.innerHTML = `P.S. I can already picture you in <b>${look.name.replace(/^The /, 'the ')}</b>. You’ll look beautiful.`;
     setTimeout(() => ln.classList.add('in'), after);
   }
   setTimeout(() => $('#again').classList.add('in'), after + 600);

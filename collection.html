@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2a0710">
-<title>The Festive Edit — Gulaab</title>
+<title>The Festive Collection — for Ladoo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Parisienne&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&display=swap">
@@ -26,8 +26,8 @@
   .chip.on{background:var(--maroon);border-color:var(--maroon);color:var(--ivory);}
   .chip i{font-style:normal;opacity:.6;margin-left:4px;}
   .sort{display:flex;align-items:center;gap:8px;font-family:var(--sans);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;flex:none;}
-  .sort select{font:inherit;letter-spacing:.06em;border:0;border-bottom:1px solid var(--ink);background:transparent;padding:6px 2px;color:inherit;}
-  @media (max-width:640px){.sort span{display:none;}}
+  .surprise-pick{border:0;background:none;color:var(--maroon);cursor:pointer;border-bottom:1px solid currentColor;padding:6px 2px;}
+  @media (max-width:640px){.surprise-pick{font-size:10.5px;letter-spacing:.08em;}}
 
   .results{display:flex;justify-content:space-between;align-items:baseline;margin:36px 0 24px;font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);}
   .grid .card{transition:opacity .45s, transform .45s var(--ease);}
@@ -47,35 +47,28 @@
 <main>
   <section class="page-hero grain">
     <div class="wrap">
-      <div class="crumbs"><a href="index.html">Home</a> / The Festive Edit</div>
-      <div class="eyebrow">Diwali 2026 · 16 handcrafted pieces</div>
+      <div class="crumbs"><a href="index.html">Home</a> / The Collection</div>
+      <div class="eyebrow">Picked for Ladoo · Diwali 2026</div>
       <h1 style="margin-top:14px">The Festive <em style="color:var(--gold-2)">Collection</em></h1>
-      <p class="lede">Silks that hold the glow of a diya, jewellery that chimes when you laugh, and little bags for big evenings.</p>
+      <p class="lede">I looked at a lot of beautiful things. These are the ones that made me think of you — each one comes with a little note on why.</p>
     </div>
   </section>
 
   <div class="toolbar">
     <div class="wrap">
       <div class="chips" id="chips" role="tablist" aria-label="Categories"></div>
-      <label class="sort"><span>Sort</span>
-        <select id="sort" aria-label="Sort products">
-          <option value="featured">Featured</option>
-          <option value="low">Price: low to high</option>
-          <option value="high">Price: high to low</option>
-          <option value="name">A – Z</option>
-        </select>
-      </label>
+      <button class="sort surprise-pick" id="pickOne">✨ Pick one for me</button>
     </div>
   </div>
 
   <section class="section" style="padding-top:0">
     <div class="wrap">
-      <div class="results"><span id="count">16 pieces</span><span>Complimentary gift-wrap</span></div>
+      <div class="results"><span id="count">16 picks</span><span>Tap ♥ on the ones you love</span></div>
       <div class="grid" id="grid"></div>
 
       <div class="next-chapter" style="margin-top:80px">
         <a href="index.html"><span class="k">Back</span><span class="t">Home</span></a>
-        <a href="styling.html" style="text-align:right"><span class="k">Next — a private appointment</span><span class="t">The Styling Room <span>→</span></span></a>
+        <a href="styling.html" style="text-align:right"><span class="k">Next — your own little room</span><span class="t">The Styling Room <span>→</span></span></a>
       </div>
     </div>
   </section>
@@ -88,14 +81,14 @@
 (function(){
   const G = window.GULAAB, { $, $$ } = G;
   const grid = $('#grid'), chips = $('#chips');
-  let cat = 'all', sort = 'featured';
+  let cat = 'all';
 
   const editorial = `<aside class="editorial reveal">
     <div class="media"><img data-img="lehengaParty" data-w="900" alt="A festive lehenga styled for Diwali night"></div>
     <div class="txt">
-      <div class="eyebrow">A note from the atelier</div>
+      <div class="eyebrow">A little note</div>
       <h3>Can’t decide? You don’t have to.</h3>
-      <p>Our stylist has set aside an evening — and a whole room — to help one guest find their Diwali look. (It’s you. It’s been you all along.)</p>
+      <p>Honestly, you’d look lovely in all of them. But if you want to play dress-up, there’s a whole styling room waiting for you.</p>
       <a class="btn gold" href="styling.html">Help me choose</a>
     </div></aside>`;
 
@@ -105,14 +98,11 @@
   }).join('');
 
   function render(){
-    let list = G.PRODUCTS.filter(p => cat === 'all' || p.cat === cat);
-    if(sort === 'low') list = [...list].sort((a, b) => a.price - b.price);
-    if(sort === 'high') list = [...list].sort((a, b) => b.price - a.price);
-    if(sort === 'name') list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+    const list = G.PRODUCTS.filter(p => cat === 'all' || p.cat === cat);
     const cards = list.map((p, i) => G.card(p, i));
-    if(cat === 'all' && sort === 'featured') cards.splice(8, 0, editorial);
+    if(cat === 'all') cards.splice(8, 0, editorial);
     grid.innerHTML = cards.join('');
-    $('#count').textContent = `${list.length} piece${list.length === 1 ? '' : 's'}`;
+    $('#count').textContent = `${list.length} pick${list.length === 1 ? '' : 's'}`;
     $$('.chip', chips).forEach(c => { const on = c.dataset.cat === cat; c.classList.toggle('on', on); c.setAttribute('aria-selected', on); });
     G.hydrateImages(grid);
     requestAnimationFrame(() => G.reveal(grid));
@@ -122,7 +112,7 @@
     const c = e.target.closest('.chip'); if(!c) return;
     cat = c.dataset.cat; history.replaceState(null, '', cat === 'all' ? location.pathname : '#' + cat); render();
   });
-  $('#sort').addEventListener('change', e => { sort = e.target.value; render(); });
+  $('#pickOne').addEventListener('click', () => { const p = G.PRODUCTS[Math.floor(Math.random() * G.PRODUCTS.length)]; G.quickView(p.id); });
 
   const fromHash = () => { const h = location.hash.slice(1); cat = G.CATS[h] ? h : 'all'; render(); };
   addEventListener('hashchange', fromHash);

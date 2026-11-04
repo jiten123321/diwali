@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2a0710">
-<title>The Styling Room — Gulaab</title>
+<title>Your Styling Room — for Ladoo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Parisienne&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&display=swap">
@@ -79,9 +79,9 @@
 <main>
   <section class="s-hero">
     <div class="wrap">
-      <div class="eyebrow reveal">Private styling appointment</div>
+      <div class="eyebrow reveal">Ladoo’s styling room</div>
       <h1 class="reveal d1" style="margin-top:14px">Your Diwali Look, <em>Your Rules.</em></h1>
-      <p class="lede reveal d2" style="margin:18px auto 0">Mix an outfit, pick your jewellery, add a finishing touch. Our only rule: it has to feel like you.</p>
+      <p class="lede reveal d2" style="margin:18px auto 0">Mix an outfit, pick your jewellery, add a finishing touch. Only one rule here: it has to feel like you.</p>
       <div class="placard reveal d3">Appointment for: <b>Ladoo</b> · Table for one · Chai included</div>
     </div>
   </section>
@@ -103,8 +103,8 @@
         </div>
         <p class="notes" id="lookNotes"></p>
         <div class="board-foot">
-          <span class="total" id="lookTotal">₹0</span>
-          <div class="btns"><button class="btn ghost" id="shuffle">Surprise me</button><button class="btn gold" id="addLook">Add look to bag</button></div>
+          <span class="total" id="lookTotal">Styled by you ♥</span>
+          <div class="btns"><button class="btn ghost" id="shuffle">Surprise me</button><button class="btn gold" id="addLook">This is the one ♥</button></div>
         </div>
       </aside>
     </div>
@@ -124,14 +124,14 @@
   <section class="section">
     <div class="wrap">
       <div class="eyebrow reveal">Styling inspiration</div>
-      <h2 class="reveal d1" style="margin:12px 0 40px">Notes from our stylist</h2>
+      <h2 class="reveal d1" style="margin:12px 0 40px">Little notes from me</h2>
       <div class="tips">
         <div class="tip reveal"><span class="n">01</span><h4>Gold loves maroon</h4><p>Deep reds and burgundies make antique gold glow warmer — exactly like diya light.</p></div>
         <div class="tip reveal d1"><span class="n">02</span><h4>One hero piece</h4><p>Heavy Banarasi? Let a single pair of jhumkas do the talking. Simple suit? Go full kundan.</p></div>
         <div class="tip reveal d2"><span class="n">03</span><h4>Wear the smile</h4><p>The most flattering accessory in this whole boutique. Non-negotiable. Also: free.</p></div>
       </div>
       <div class="next-chapter" style="margin-top:80px">
-        <a href="collection.html"><span class="k">Back</span><span class="t">The Festive Edit</span></a>
+        <a href="collection.html"><span class="k">Back</span><span class="t">The Collection</span></a>
         <a href="surprise.html" style="text-align:right"><span class="k">Psst — there’s a door at the back</span><span class="t">The Diwali Surprise <span>→</span></span></a>
       </div>
     </div>
@@ -145,22 +145,22 @@
   const G = window.GULAAB, { $, $$ } = G;
 
   const OUTFITS = [
-    { id:'lehenga-gulabo',   look:'The Gulaab Look',            note:'Rose-pink silk — our house flower — soft, warm and glowing.' },
-    { id:'banarasi-gulnaar', look:'The Lakshmi Puja Look',      note:'A Banarasi in antique gold: timeless, regal, made for the puja thali.' },
+    { id:'lehenga-gulabo',   look:'The Pink Roses Look',            note:'Rose-pink silk — our house flower — soft, warm and glowing.' },
+    { id:'saree-banarasi',   look:'The Lakshmi Puja Look',      note:'A Banarasi in antique gold: timeless, regal, made for the puja thali.' },
     { id:'anarkali-noor',    look:'The Noor Evening Look',      note:'A sweeping anarkali that twirls beautifully between the diyas.' },
-    { id:'organza-chandni',  look:'The Chandni Look',           note:'Featherlight organza — moonlight, but make it festive.' },
-    { id:'lehenga-roshni',   look:'The Phuljhadi Party Look',   note:'Sequins and swish, for dancing until the last sparkler.' },
+    { id:'saree-moonlight',  look:'The Moonlight Look',         note:'Featherlight organza — moonlight, but make it festive.' },
+    { id:'lehenga-twirl',    look:'The Phuljhadi Party Look',   note:'Sequins and swish, for dancing until the last sparkler.' },
   ];
   const JEWELS = [
     { id:'kundan-rajkumari',  note:'A kundan choker adds instant royalty.' },
-    { id:'jhumka-surya',      note:'Jhumkas that sway every time you laugh.' },
+    { id:'jhumka-swaying',    note:'Jhumkas that sway every time you laugh.' },
     { id:'necklace-lakshmi',  note:'A long temple necklace — very on theme this week.' },
-    { id:'bangles-chandrika', note:'A stack of bangles that chimes softly.' },
+    { id:'bangles-chime',     note:'A stack of bangles that chimes softly.' },
   ];
   const TOUCHES = [
-    { id:'potli-gulaab', note:'Finish with a velvet potli (room for a ladoo or two).' },
-    { id:'clutch-noor',  note:'Finish with a structured clutch for evening polish.' },
-    { id:'smile', name:'Just your smile', img:'roses', price:0, note:'And honestly? Your smile is the finishing touch nothing in this store can beat.' },
+    { id:'potli-ladoo',  note:'Finish with the Ladoo potli (room for a ladoo or two).' },
+    { id:'clutch-little', note:'Finish with a little evening clutch.' },
+    { id:'smile', name:'Just your smile', img:'roses', note:'And honestly? Your smile is the finishing touch nothing here can beat.' },
   ];
   const item = o => o.id === 'smile' ? o : Object.assign({}, G.byId(o.id), o, { name: G.byId(o.id).name });
 
@@ -170,7 +170,7 @@
     host.innerHTML = list.map((o, i) => { const it = item(o);
       return `<button class="opt" data-k="${key}" data-i="${i}" aria-pressed="${sel[key] === i}">
         <div class="media"><img data-img="${it.img}" data-w="300" alt=""></div>
-        <span>${it.name}</span><small>${it.price ? G.inr(it.price) : 'Priceless'}</small></button>`; }).join('');
+        <span>${it.name}</span><small>${it.tag || (it.id === 'smile' ? 'Priceless' : 'Picked for you')}</small></button>`; }).join('');
   }
   opts($('#optOutfit'), OUTFITS, 'o'); opts($('#optJewel'), JEWELS, 'j'); opts($('#optTouch'), TOUCHES, 't');
   G.hydrateImages();
@@ -186,7 +186,7 @@
     const nm = $('#lookName'); nm.style.opacity = 0; setTimeout(() => { nm.textContent = o.look; nm.style.opacity = 1; }, 250);
     setImg($('#b1'), o.img); setImg($('#b2'), j.img); setImg($('#b3'), t.img);
     $('#lookNotes').textContent = `${o.note} ${j.note} ${t.note}`;
-    $('#lookTotal').textContent = 'Complete look · ' + G.inr(o.price + j.price + t.price);
+    $('#lookTotal').textContent = 'Styled by you ♥';
     G.store.set('gulaab-look', { o: sel.o, j: sel.j, t: sel.t, name: o.look, outfit: o.name, jewel: j.name, touch: t.name, img: o.img });
   }
   document.addEventListener('click', e => {
@@ -200,9 +200,9 @@
       if(++n > 6){ clearInterval(spin); update(); const r = e.target.getBoundingClientRect(); G.Sparkles.burst(r.left + r.width / 2, r.top, 40); }
     }, 110);
   };
-  $('#addLook').onclick = () => {
-    [OUTFITS[sel.o], JEWELS[sel.j], TOUCHES[sel.t]].forEach(o => { if(o.id !== 'smile') G.Cart.add(o.id); });
-    G.toast('The whole look is in your bag ✨'); setTimeout(() => G.Cart.open(), 500);
+  $('#addLook').onclick = e => {
+    const r = e.target.getBoundingClientRect(); G.Sparkles.love(r.left + r.width / 2, r.top, 50); G.Music.chime();
+    G.toast(`Saved! I can already picture you in ${item(OUTFITS[sel.o]).look.replace('The ', 'the ')} ✨`);
   };
   update();
 

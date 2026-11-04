@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2a0710">
-<title>Gulaab — House of Festive Couture · Diwali Edit 2026</title>
-<meta name="description" content="A little world of beauty, elegance & celebration. The Gulaab Diwali Edit — handcrafted sarees, lehengas, jewellery and more.">
+<title>For Ladoo — A Little Diwali World</title>
+<meta name="description" content="A little world of beauty, elegance &amp; celebration — made with love for Ladoo this Diwali.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Parisienne&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&display=swap">
@@ -21,6 +21,8 @@
   .welcome .w-hey{font-family:var(--script);font-size:clamp(34px,7vw,50px);color:var(--gold-2);margin:34px 0 4px;opacity:0;animation:wIn 1.4s var(--ease) 2.5s forwards;}
   .welcome .w-note{font-style:italic;color:rgba(251,244,236,.75);opacity:0;animation:wIn 1.2s var(--ease) 3.1s forwards;margin:0;}
   .welcome .btn{margin-top:30px;opacity:0;animation:wIn 1s var(--ease) 3.6s forwards;}
+  .welcome .w-ladoo{position:absolute;right:max(16px,8vw);bottom:-8px;width:clamp(70px,12vw,110px);opacity:0;animation:peek 1.2s var(--ease) 4.2s forwards;}
+  @keyframes peek{from{opacity:0;transform:translateY(60%)}to{opacity:1;transform:translateY(18%) rotate(-8deg)}}
   @keyframes wIn{from{opacity:0;transform:translateY(12px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
 
   /* ---------- hero ---------- */
@@ -69,6 +71,34 @@
   @media (max-width:560px){.cats{grid-template-columns:repeat(2,1fr);}.cats .cat:last-child{grid-column:1/-1;width:50%;justify-self:center;}}
   .head-row{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:44px;}
 
+
+  /* ---------- ladoo jar ---------- */
+  .jar-sec{position:relative;z-index:4;background:linear-gradient(180deg,var(--ivory),var(--ivory-2));}
+  .jar-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,90px);align-items:center;}
+  .wish-card{position:relative;margin-top:28px;background:#fffaf5;padding:24px 26px;box-shadow:0 18px 40px rgba(120,40,70,.14);transform:rotate(-.8deg);min-height:130px;max-width:30em;}
+  .wish-card::before{content:"";position:absolute;top:-10px;left:50%;width:80px;height:20px;transform:translateX(-50%) rotate(2deg);background:rgba(212,92,134,.3);}
+  .wish-card .wc-k{font-family:var(--sans);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-deep);}
+  .wish-card p{margin:8px 0 0;font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.2vw,24px);line-height:1.4;color:var(--maroon);}
+  .wish-card.pop{animation:wcPop .6s var(--ease);}
+  @keyframes wcPop{0%{transform:rotate(-.8deg) scale(.94)}60%{transform:rotate(1deg) scale(1.03)}100%{transform:rotate(-.8deg)}}
+  .jar{position:relative;width:min(340px,80vw);justify-self:center;}
+  .jar-lid{height:34px;margin:0 14%;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg,#efd9a6,#c79a4e 60%,#a67c3a);box-shadow:0 6px 12px rgba(74,13,28,.2);position:relative;z-index:2;}
+  .jar-lid::after{content:"";position:absolute;left:-6%;right:-6%;bottom:-8px;height:12px;border-radius:6px;background:linear-gradient(180deg,#d6b16f,#a67c3a);}
+  .jar-glass{position:relative;margin-top:2px;aspect-ratio:1/1.1;border-radius:22% 22% 26% 26% / 14% 14% 18% 18%;
+    background:linear-gradient(100deg,rgba(255,255,255,.55),rgba(255,255,255,.12) 30%,rgba(255,255,255,.05) 60%,rgba(255,255,255,.35));
+    border:2px solid rgba(166,124,58,.35);box-shadow:inset 0 -20px 40px rgba(214,177,111,.25),0 30px 50px rgba(74,13,28,.15);overflow:hidden;}
+  .jar-glass::after{content:"";position:absolute;left:12%;top:10%;width:10%;height:60%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.7),transparent);pointer-events:none;}
+  .jar-ladoos{position:absolute;left:6%;right:6%;bottom:4%;display:flex;flex-wrap:wrap-reverse;justify-content:center;gap:2%;}
+  .jar-ladoos button{width:31%;aspect-ratio:1;border:0;background:none;padding:0;margin-top:-4%;transition:transform .35s var(--ease);}
+  .jar-ladoos button:hover{transform:translateY(-6px) rotate(-6deg);}
+  .jar-ladoos button.eaten{animation:eat .7s var(--ease) forwards;pointer-events:none;}
+  @keyframes eat{30%{transform:translateY(-40%) scale(1.15) rotate(10deg)}100%{transform:translateY(-120%) scale(0);opacity:0}}
+  .jar-label{position:absolute;left:50%;top:22%;transform:translateX(-50%) rotate(-3deg);background:var(--ivory);border:1px solid var(--gold);padding:8px 18px;text-align:center;
+    font-family:var(--script);font-size:26px;color:var(--maroon);line-height:1;box-shadow:0 4px 10px rgba(74,13,28,.12);z-index:1;pointer-events:none;}
+  .jar-label small{font-family:var(--sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep);}
+  .refill{margin-top:16px;}
+  @media (max-width:820px){.jar-grid{grid-template-columns:1fr;}.jar{order:-1;}}
+
   /* ---------- story ---------- */
   .story{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,90px);align-items:center;}
   .story .frame{position:relative;}
@@ -90,6 +120,7 @@
 
   .perks{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center;}
   .perks div{padding:10px;}
+  .perks i{display:block;font-style:normal;color:var(--gold-deep);margin-bottom:6px;}
   .perks b{display:block;font-family:var(--serif);font-weight:400;font-size:20px;margin-bottom:4px;}
   .perks span{font-size:16px;color:var(--ink-soft);}
   @media (max-width:760px){.perks{grid-template-columns:1fr 1fr;}}
@@ -100,11 +131,12 @@
 <div class="welcome" id="welcome" role="dialog" aria-label="Welcome">
   <div>
     <span class="diya w-diya" data-diya id="wDiya"></span>
-    <div class="w-brand">GULAAB</div>
-    <div class="w-sub">The Diwali Edit · 2026</div>
-    <p class="w-hey">Welcome, Ladoo</p>
-    <p class="w-note">We’ve been expecting you. The doors are open — just for tonight, just for you.</p>
-    <button class="btn gold" id="enterBtn">Step inside</button>
+    <div class="w-brand">LADOO’S</div>
+    <div class="w-sub">Little Diwali Boutique · 2026</div>
+    <p class="w-hey">Hey Ladoo ❤️</p>
+    <p class="w-note">I made a little something for you this Diwali.<br>Come in — everything here is yours.</p>
+    <button class="btn gold" id="enterBtn">Open it ✨</button>
+    <span class="ladoo-art w-ladoo" data-ladoo="wink"></span>
   </div>
 </div>
 
@@ -112,12 +144,12 @@
   <section class="hero grain">
     <div class="wrap hero-grid">
       <div>
-        <div class="eyebrow reveal">The Diwali Edit · 2026</div>
+        <div class="eyebrow reveal">Ladoo’s Diwali Edit · 2026</div>
         <h1 class="reveal d1">A Little World of Beauty, <em>Elegance</em> &amp; Celebration.</h1>
         <p class="lede reveal d2">Curated with love, especially for someone special.</p>
         <div class="ctas reveal d3">
           <a class="btn gold" href="collection.html">Explore the Collection</a>
-          <a class="btn ghost" href="styling.html">Book a styling session</a>
+          <a class="btn ghost" href="styling.html">Your styling room</a>
         </div>
       </div>
       <div class="arches reveal d1">
@@ -126,15 +158,15 @@
         <span class="diya lit" data-diya></span>
       </div>
     </div>
-    <div class="wrap hero-foot"><span>Handwoven in Kanchipuram · Varanasi · Jaipur</span><span>Scroll to discover ↓</span></div>
+    <div class="wrap hero-foot"><span>Every piece picked with you in mind</span><span>Scroll to discover ↓</span></div>
   </section>
 
   <section class="countdown" aria-label="Diwali countdown">
     <div class="wrap cd-grid">
       <div>
-        <div class="eyebrow" id="cdEyebrow">Lakshmi Puja · Sunday, 8 November</div>
-        <h2 id="cdTitle">The festival of lights begins in</h2>
-        <p id="cdNote">Order by Friday for doorstep delivery before the first diya is lit.</p>
+        <div class="eyebrow" id="cdEyebrow">Diwali · Sunday, 8 November</div>
+        <h2 id="cdTitle">Counting down to your Diwali</h2>
+        <p id="cdNote">Every second closer to diyas, sweets, and you smiling.</p>
       </div>
       <div class="cd" id="cd" aria-live="off">
         <div><b id="cdD">00</b><span>Days</span></div><div class="sep">:</div>
@@ -148,24 +180,46 @@
   <section class="section">
     <div class="wrap">
       <div class="center">
-        <div class="eyebrow reveal">Shop by category</div>
-        <h2 class="reveal d1" style="margin-top:12px">Dressed for every diya</h2>
+        <div class="eyebrow reveal">Ladoo’s wardrobe</div>
+        <h2 class="reveal d1" style="margin-top:12px">Picked for you, one by one</h2>
       </div>
       <div class="cats">
         <a class="cat reveal" href="collection.html#saree"><div class="media"><img data-img="sareeBanarasi" data-w="600" alt="Sarees"></div><h3>Sarees</h3><small>Silk · Banarasi · Organza</small></a>
         <a class="cat reveal d1" href="collection.html#lehenga"><div class="media"><img data-img="lehengaBridal" data-w="600" alt="Lehengas"></div><h3>Lehengas</h3><small>Couture & festive</small></a>
         <a class="cat reveal d2" href="collection.html#suit"><div class="media"><img data-img="anarkali" data-w="600" alt="Ethnic suits"></div><h3>Ethnic Suits</h3><small>Anarkali · Kurta sets</small></a>
         <a class="cat reveal d3" href="collection.html#jewellery"><div class="media"><img data-img="kundan" data-w="600" alt="Jewellery"></div><h3>Jewellery</h3><small>Kundan · Temple · Jhumkas</small></a>
-        <a class="cat reveal" href="collection.html#bags"><div class="media"><img data-img="bag" data-w="600" alt="Bags and accessories"></div><h3>Accessories</h3><small>Potlis · Clutches</small></a>
+        <a class="cat reveal" href="collection.html#bags"><div class="media"><img data-img="bag" data-w="600" alt="Bags and accessories"></div><h3>Little Extras</h3><small>Potlis · Clutches</small></a>
       </div>
     </div>
   </section>
 
-  <section class="section" style="padding-top:0">
+
+  <section class="section jar-sec" id="jar">
+    <div class="wrap jar-grid">
+      <div>
+        <div class="eyebrow reveal">The Ladoo Jar</div>
+        <h2 class="reveal d1" style="margin:12px 0 16px">A jar of ladoos, for my Ladoo</h2>
+        <p class="lede reveal d2">Every ladoo in here has a little Diwali wish tucked inside. Tap one to open it.</p>
+        <div class="wish-card" id="wishCard" aria-live="polite">
+          <span class="wc-k" id="wishK">6 wishes inside</span>
+          <p id="wishText">Go on, pick one. They’re all for you.</p>
+        </div>
+      </div>
+      <div class="jar reveal d1">
+        <div class="jar-lid"></div>
+        <div class="jar-glass">
+          <div class="jar-ladoos" id="jarLadoos"></div>
+          <div class="jar-label">for Ladoo<br><small>Diwali 2026</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="wrap">
       <div class="head-row">
-        <div><div class="eyebrow reveal">Most loved this week</div><h2 class="reveal d1" style="margin-top:12px">The Diwali Edit</h2></div>
-        <a class="link reveal" href="collection.html">View all 16 pieces</a>
+        <div><div class="eyebrow reveal">My favourites</div><h2 class="reveal d1" style="margin-top:12px">A few I couldn’t stop thinking about</h2></div>
+        <a class="link reveal" href="collection.html">See everything I picked</a>
       </div>
       <div class="grid" id="featured"></div>
     </div>
@@ -175,11 +229,12 @@
     <div class="wrap story">
       <div class="frame reveal"><div class="media"><img data-img="roses" data-w="900" alt="A bouquet of soft pink garden roses wrapped in dusty pink paper"></div></div>
       <div>
-        <div class="eyebrow reveal">Our story</div>
-        <h2 class="reveal d1" style="margin:14px 0 22px">It began with a bouquet of <em style="color:var(--gold-2)">pink roses.</em></h2>
-        <p class="lede reveal d2">Gulaab means rose. Ours started as one armful of them, given to one person — and grew, petal by petal, into a house of festive couture.</p>
-        <p class="lede reveal d2">Every saree, every jhumka, every stitch in this edit was chosen with a single question in mind: <em>would it make one particular person smile?</em></p>
-        <span class="script reveal d3">— with love, the Gulaab atelier</span>
+        <div class="eyebrow reveal">How it started</div>
+        <h2 class="reveal d1" style="margin:14px 0 22px">It all began with a bouquet of <em style="color:var(--gold-2)">pink roses.</em></h2>
+        <p class="lede reveal d2">First it was a bouquet of pink roses for you — the kind that never wilt. This Diwali, it grew into a whole little world.</p>
+        <p class="lede reveal d2">Every outfit, every sparkle and every diya here was picked with one question in mind: <em>would it make Ladoo smile?</em></p>
+        <a class="link reveal d2" href="roses.html" style="color:var(--gold-2)">Visit your roses</a>
+        <span class="script reveal d3">— made with love, just for you</span>
       </div>
     </div>
   </section>
@@ -187,23 +242,24 @@
   <section class="section appt">
     <div class="wrap">
       <div class="appt-card reveal">
-        <div class="seal">Reserved<br>for one</div>
+        <div class="seal">Reserved<br>for Ladoo</div>
         <div>
-          <div class="eyebrow">Private appointment</div>
-          <h3>A styling room has been prepared for a very special guest.</h3>
-          <p>Outfits pulled, jewellery laid out, the chai is warm. All that’s missing is you.</p>
+          <div class="eyebrow">Your styling room</div>
+          <h3>Your styling room is ready, Ladoo.</h3>
+          <p>Outfits laid out, jewellery picked, chai is warm. All that’s missing is you.</p>
         </div>
-        <a class="btn" href="styling.html">Enter the Styling Room</a>
+        <a class="btn" href="styling.html">Come on in</a>
       </div>
     </div>
   </section>
 
   <section class="section tight">
+    <div class="wrap center" style="margin-bottom:28px"><div class="eyebrow reveal">Little true things</div></div>
     <div class="wrap perks">
-      <div class="reveal"><b>Handcrafted</b><span>by 140+ master karigars</span></div>
-      <div class="reveal d1"><b>Gift-wrapped</b><span>in our Diwali keepsake box</span></div>
-      <div class="reveal d2"><b>Express delivery</b><span>complimentary, pan-India</span></div>
-      <div class="reveal d3"><b>Made for you</b><span>alterations on the house</span></div>
+      <div class="reveal"><i>✦</i><b>You light up rooms</b><span>brighter than any diya</span></div>
+      <div class="reveal d1"><i>✦</i><b>Your laugh</b><span>is genuinely contagious</span></div>
+      <div class="reveal d2"><i>✦</i><b>Ordinary days</b><span>feel special around you</span></div>
+      <div class="reveal d3"><i>✦</i><b>You deserve</b><span>all the sweets. All of them.</span></div>
     </div>
   </section>
 </main>
@@ -216,16 +272,49 @@
   const G = window.GULAAB, { $ } = G;
 
   /* featured edit */
-  const picks = ['banarasi-gulnaar','lehenga-gulabo','kundan-rajkumari','potli-gulaab'];
+  const picks = ['saree-banarasi','lehenga-gulabo','jhumka-swaying','potli-ladoo'];
   $('#featured').innerHTML = picks.map((id, i) => G.card(G.byId(id), i)).join('');
   G.hydrateImages($('#featured')); G.reveal($('#featured'));
+
+
+  /* the ladoo jar */
+  const WISHES = [
+    'May your chai always be the perfect temperature.',
+    'May all your worries burn out faster than a phuljhadi.',
+    'Here’s to a whole year of laughing until your cheeks hurt.',
+    'May every diya you light tonight light up something wonderful for you.',
+    'Wishing you adventures, good food, and someone to share both with.',
+    'And this one’s just to remind you: you’re the sweetest ladoo of them all.',
+  ];
+  const jarBox = $('#jarLadoos');
+  function fillJar(){
+    jarBox.innerHTML = WISHES.map((_, i) => `<button class="ladoo-art" data-ladoo="${i % 3 === 1 ? 'wink' : 'happy'}" data-w="${i}" aria-label="Open wish ${i + 1}"></button>`).join('');
+    G.$$('[data-ladoo]', jarBox).forEach(G.makeLadoo);
+    left = WISHES.length;
+    $('#wishK').textContent = `${left} wishes inside`;
+    $('#wishText').textContent = 'Go on, pick one. They’re all for you.';
+  }
+  let left = 0, opened = 0;
+  jarBox.addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b || b.classList.contains('eaten')) return;
+    b.classList.add('eaten'); left--; opened++;
+    const r = b.getBoundingClientRect(); G.Sparkles.love(r.left + r.width / 2, r.top, 30); G.Music.chime();
+    const card = $('#wishCard'); card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop');
+    $('#wishText').textContent = WISHES[+b.dataset.w];
+    $('#wishK').textContent = left ? `Wish ${opened} · ${left} left in the jar` : 'That was the last one';
+    if(!left) setTimeout(() => {
+      $('#wishText').innerHTML = 'All gone! Don’t worry — the wishes are yours to keep. ❤️ <br><button class="btn refill" id="refill">Refill the jar</button>';
+      $('#refill').onclick = () => { opened = 0; fillJar(); };
+    }, 4200);
+  });
+  fillJar();
 
   /* personalised welcome — once per visit */
   const w = $('#welcome');
   const dismiss = () => {
     if(w.classList.contains('gone')) return;
     w.classList.add('gone'); G.session.set('gulaab-welcomed', '1');
-    G.Sparkles.burst(innerWidth / 2, innerHeight * .4, 80);
+    G.Sparkles.love(innerWidth / 2, innerHeight * .4, 80);
   };
   if(G.session.get('gulaab-welcomed')){ w.remove(); }
   else {
@@ -244,11 +333,11 @@
     let target = DIWALI;
     if(now >= DIWALI && now < FEST_END){
       $('#cdEyebrow').textContent = 'Shubh Deepavali';
-      $('#cdTitle').textContent = 'Diwali is here — the lights are on.';
-      $('#cdNote').textContent = 'May every diya you light tonight light something in you too.';
+      $('#cdTitle').textContent = 'It’s Diwali! Happy Diwali, Ladoo ❤️';
+      $('#cdNote').textContent = 'May every diya you light tonight light up something wonderful for you.';
       $('#cd').style.display = 'none'; return;
     }
-    if(now >= FEST_END){ target = NEXT; $('#cdEyebrow').textContent = 'Diwali 2027 · Friday, 29 October'; $('#cdTitle').textContent = 'Counting down to the next festival of lights'; $('#cdNote').textContent = 'Some things are worth the wait.'; }
+    if(now >= FEST_END){ target = NEXT; $('#cdEyebrow').textContent = 'Diwali 2027 · Friday, 29 October'; $('#cdTitle').textContent = 'Counting down to our next Diwali'; $('#cdNote').textContent = 'Some things are worth the wait. You are one of them.'; }
     let s = Math.max(0, Math.floor((target - now) / 1000));
     $('#cdD').textContent = pad(Math.floor(s / 86400)); s %= 86400;
     $('#cdH').textContent = pad(Math.floor(s / 3600)); s %= 3600;
