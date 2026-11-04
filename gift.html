@@ -155,11 +155,9 @@
     <div class="card-hint" id="cardHint">Tap the card to open</div>
   </section>
 
-  <div class="wrap" style="position:relative;z-index:4">
-    <div class="next-chapter">
-      <a href="index.html"><span class="k">Back</span><span class="t">The Diwali Surprise</span></a>
-      <a href="celebrate.html" style="text-align:right"><span class="k">Last stop</span><span class="t">The Final Celebration <span>→</span></span></a>
-    </div>
+  <div class="next-step wait" id="nextStep">
+    <span class="k">One last stop</span>
+    <a class="btn gold" href="celebrate.html">Next: let’s celebrate →</a>
   </div>
 </main>
 
@@ -178,14 +176,14 @@
     setTimeout(() => G.Sparkles.burst(r.left + r.width * .2, r.top, 50, [340, 42]), 700);
     setTimeout(() => G.Sparkles.burst(r.left + r.width * .8, r.top, 50, [42, 24]), 900);
     G.Music.chime(); G.Sparkles.setLevel(1.6);
-    setTimeout(() => { $('#cardSec').classList.add('on'); }, 1600);
+    setTimeout(() => { $('#cardSec').classList.add('on'); $('#nextStep').classList.add('in'); }, 1600);
   });
 
   const wrap = $('#gcard'), cover = $('#gcover');
   wrap.addEventListener('click', e => {
     if(e.target.closest('a')) return;
     if(!wrap.classList.contains('open') && !e.target.closest('#gcover')) return;
-    $('#cardSec').classList.add('on');
+    $('#cardSec').classList.add('on'); $('#nextStep').classList.add('in');
     const open = !wrap.classList.contains('open');
     wrap.classList.toggle('open', open);
     cover.setAttribute('aria-label', open ? 'Close the greeting card' : 'Open the greeting card');
