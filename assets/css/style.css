@@ -304,3 +304,18 @@ body{animation:pageIn .9s var(--ease) both;}
   .toast.on{transform:translate(-50%,0);}
   .qv-cta .btn{flex:1 1 100%;}
 }
+
+/* ---------- e-bouquet header ---------- */
+.nav{grid-template-columns:auto 1fr auto;}
+.brand{justify-self:start;text-align:left;}
+.brand .mark{font-family:var(--script);font-size:32px;letter-spacing:0;text-indent:0;text-transform:none;line-height:.9;}
+.brand .sub{letter-spacing:.3em;text-indent:0;}
+.nav > .nav-links{justify-self:center;}
+@media (max-width:980px){
+  .nav{grid-template-columns:1fr auto;height:auto;padding:10px 0 8px;row-gap:4px;}
+  .nav > .nav-links{display:flex;grid-column:1/-1;grid-row:2;gap:18px;justify-self:center;}
+  .nav > .nav-links a{font-size:10.5px;letter-spacing:.14em;}
+  .brand .mark{font-size:28px;}
+}
+.site-footer{padding:28px 0;}
+.site-footer .foot-note{margin-top:0;padding-top:0;border-top:0;}
