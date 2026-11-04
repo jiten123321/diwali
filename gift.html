@@ -56,8 +56,8 @@
   .gift-stage.opened .tap{opacity:0;}
 
   /* ---------- greeting card ---------- */
-  .card-sec{position:relative;z-index:4;padding:40px var(--gutter) clamp(60px,8vw,110px);text-align:center;opacity:.25;transition:opacity 1.2s;pointer-events:none;}
-  .card-sec.on{opacity:1;pointer-events:all;}
+  .card-sec{position:relative;z-index:4;padding:40px var(--gutter) clamp(60px,8vw,110px);text-align:center;opacity:.6;transition:opacity 1.2s;}
+  .card-sec.on,.card-sec:hover{opacity:1;}
   .gcard-wrap{perspective:2200px;width:min(380px,84vw);aspect-ratio:5/7;margin:36px auto 0;position:relative;transition:transform 1.2s var(--ease);}
   .gcard-wrap.open{transform:translateX(50%);}
   @media (max-width:760px){.gcard-wrap.open{transform:none;}.gcard-wrap.open .gcover{opacity:0;pointer-events:none;transition:transform 1.6s cubic-bezier(.6,.05,.25,1),opacity .5s 1s;}}
@@ -185,6 +185,7 @@
   wrap.addEventListener('click', e => {
     if(e.target.closest('a')) return;
     if(!wrap.classList.contains('open') && !e.target.closest('#gcover')) return;
+    $('#cardSec').classList.add('on');
     const open = !wrap.classList.contains('open');
     wrap.classList.toggle('open', open);
     cover.setAttribute('aria-label', open ? 'Close the greeting card' : 'Open the greeting card');
