@@ -319,3 +319,12 @@ body{animation:pageIn .9s var(--ease) both;}
 }
 .site-footer{padding:28px 0;}
 .site-footer .foot-note{margin-top:0;padding-top:0;border-top:0;}
+
+/* ---------- one page at a time: no tabs, a single "next" button ---------- */
+.nav{grid-template-columns:1fr auto;}
+@media (max-width:980px){.nav{height:64px;padding:0;}}
+.next-step{position:relative;z-index:4;text-align:center;padding:40px 16px 72px;}
+.next-step .k{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.next-step .btn{font-size:13px;padding:18px 34px;}
+.next-step.wait{opacity:0;pointer-events:none;transition:opacity 1.2s;}
+.next-step.wait.in{opacity:1;pointer-events:auto;}

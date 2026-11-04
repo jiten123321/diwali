@@ -70,8 +70,7 @@
     header.innerHTML = `
       <header class="site-header">
         <nav class="nav wrap" aria-label="Main">
-          <a class="brand" href="index.html" aria-label="Start again"><span class="mark">for Ladoo</span><span class="sub">a Diwali e-bouquet</span></a>
-          <ul class="nav-links">${links}</ul>
+          <a class="brand" href="index.html" aria-label="Back to the start"><span class="mark">for Ladoo</span><span class="sub">a Diwali e-bouquet</span></a>
           <div class="nav-tools">
             <button class="icon-btn sound-btn" id="soundBtn" aria-label="Play festive music" aria-pressed="false"><span class="bars"><i></i><i></i><i></i><i></i></span></button>
           </div>
