@@ -1,7 +1,7 @@
 /* =========================================================
    Ladoo's Little Diwali Boutique — shared engine
    header/footer · page transitions · golden particles & hearts
-   favourites · ambient music · diya + ladoo art · reveal-on-scroll
+   ambient music · diya art · reveal-on-scroll
    ========================================================= */
 (function(){
   const G = window.GULAAB;
@@ -20,12 +20,9 @@
   const page = document.body.dataset.page || '';
 
   const PAGES = [
-    ['index.html',      'Home',           'home'],
-    ['collection.html', 'The Collection', 'collection'],
-    ['styling.html',    'Styling Room',   'styling'],
-    ['surprise.html',   'Surprise',       'surprise'],
-    ['gift.html',       'Your Gift',      'gift'],
-    ['celebrate.html',  'Celebrate',      'celebrate'],
+    ['index.html',     'Surprise',  'surprise'],
+    ['gift.html',      'Your Gift', 'gift'],
+    ['celebrate.html', 'Celebrate', 'celebrate'],
   ];
 
   /* ---------------- diya SVG ---------------- */
@@ -60,125 +57,40 @@
     el.innerHTML = diyaSVG();
   }
 
-  /* ---------------- a cute little ladoo ---------------- */
-  function ladooSVG(mood = 'happy'){
-    const n = ++artN;
-    let dots = '';
-    for(let i = 0; i < 26; i++){
-      const a = i * 2.39996, r = 34 * Math.sqrt((i + .5) / 26);
-      dots += `<circle cx="${(50 + Math.cos(a) * r).toFixed(1)}" cy="${(54 + Math.sin(a) * r).toFixed(1)}" r="3.2" fill="#ffd27a" opacity=".45"/>`;
-    }
-    const eyes = mood === 'wink'
-      ? `<circle cx="39" cy="55" r="3.4" fill="#3a1a0a"/><path d="M57 55 q4 -4 8 0" stroke="#3a1a0a" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
-      : `<circle cx="39" cy="55" r="3.4" fill="#3a1a0a"/><circle cx="61" cy="55" r="3.4" fill="#3a1a0a"/><circle cx="40.2" cy="53.8" r="1.1" fill="#fff"/><circle cx="62.2" cy="53.8" r="1.1" fill="#fff"/>`;
-    return `<svg viewBox="0 0 100 100" aria-hidden="true">
-      <defs><radialGradient id="ld${n}" cx=".36" cy=".3" r=".8"><stop offset="0" stop-color="#ffe2a0"/><stop offset=".5" stop-color="#f5a73c"/><stop offset="1" stop-color="#c6701c"/></radialGradient></defs>
-      <ellipse cx="50" cy="92" rx="30" ry="4.5" fill="#000" opacity=".18"/>
-      <circle cx="50" cy="54" r="38" fill="url(#ld${n})"/>
-      ${dots}
-      <path d="M44 17 q6 -8 13 -2 q-6 4 -13 2Z" fill="#7cb342"/>
-      <ellipse cx="29" cy="65" rx="6.5" ry="4" fill="#ff7f9e" opacity=".55"/>
-      <ellipse cx="71" cy="65" rx="6.5" ry="4" fill="#ff7f9e" opacity=".55"/>
-      ${eyes}
-      <path d="M43 64 q7 7 14 0" stroke="#3a1a0a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-    </svg>`;
-  }
-  function makeLadoo(el){
-    if(el.dataset.ready) return;
-    el.dataset.ready = 1;
-    el.innerHTML = ladooSVG(el.dataset.ladoo || 'happy');
-  }
-
   /* ---------------- chrome ---------------- */
   const icons = {
-    menu:'<svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></svg>',
     x:'<svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>',
-    heart:'<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9Z"/></svg>',
   };
   G.icons = icons;
 
   function buildChrome(){
     const links = PAGES.map(([href, label, key]) =>
       `<li><a href="${href}"${key === page ? ' aria-current="page"' : ''}>${label}</a></li>`).join('');
-    const announceMsgs = [
-      'Hey <b>Ladoo</b> — this whole little world is yours ✨',
-      'Warning: this website may cause <b>excessive smiling</b>',
-      'Diwali 2026 · made with love, <b>just for you</b>',
-      'Tip: tap the <b>♥</b> on anything you love',
-    ];
     const header = document.createElement('div');
     header.innerHTML = `
-      <div class="announce" id="announce" aria-live="polite">${announceMsgs[0]}</div>
       <header class="site-header">
         <nav class="nav wrap" aria-label="Main">
-          <div class="nav-left">
-            <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu">${icons.menu}</button>
-            <ul class="nav-links">${links.split('</li>').slice(0,3).join('</li>')}</li></ul>
-          </div>
-          <a class="brand" href="index.html" aria-label="Home"><span class="mark">LADOO’S</span><span class="sub">Little Diwali Boutique</span></a>
+          <a class="brand" href="index.html" aria-label="Start again"><span class="mark">for Ladoo</span><span class="sub">a Diwali e-bouquet</span></a>
+          <ul class="nav-links">${links}</ul>
           <div class="nav-tools">
-            <ul class="nav-links">${links.split('</li>').slice(3,6).join('</li>')}</li></ul>
             <button class="icon-btn sound-btn" id="soundBtn" aria-label="Play festive music" aria-pressed="false"><span class="bars"><i></i><i></i><i></i><i></i></span></button>
-            <button class="icon-btn" id="favBtn" aria-label="Your favourites">${icons.heart}<span class="badge" id="favCount">0</span></button>
           </div>
         </nav>
-      </header>
-      <div class="drawer-nav" id="drawerNav" aria-hidden="true">
-        <button class="icon-btn close" id="menuClose" aria-label="Close menu">${icons.x}</button>
-        <ol>${links}</ol>
-        <p>made with love, for Ladoo</p>
-      </div>`;
+      </header>`;
     document.body.prepend(...header.children);
 
     const footer = document.createElement('footer');
     footer.className = 'site-footer';
-    footer.innerHTML = `
-      <div class="wrap">
-        <div class="foot-grid">
-          <div>
-            <a class="brand" href="index.html"><span class="mark">LADOO’S</span><span class="sub">Little Diwali Boutique</span></a>
-            <p style="max-width:22em;margin:20px 0 0;">A tiny Diwali world, made by hand, for one person only. Nothing here is for sale — it’s all already yours.</p>
-          </div>
-          <div><h4>Wander</h4><ul>
-            <li><a href="index.html">Home</a></li><li><a href="collection.html">The Collection</a></li>
-            <li><a href="styling.html">Styling Room</a></li></ul></div>
-          <div><h4>Surprises</h4><ul>
-            <li><a href="surprise.html">The Diwali Surprise</a></li><li><a href="gift.html">Your Gift</a></li>
-            <li><a href="celebrate.html">Celebrate</a></li></ul></div>
-          <div><h4>Secret rooms</h4><ul>
-            <li><a href="roses.html">The Rose Room</a></li><li><a href="index.html#jar">The Ladoo Jar</a></li></ul></div>
-        </div>
-        <div class="foot-note"><span>Diwali 2026</span><span>Made with <span class="heart">♥</span> for Ladoo</span></div>
-      </div>`;
+    footer.innerHTML = `<div class="wrap foot-note"><span>Diwali 2026</span><span>Made with <span class="heart">♥</span> for Ladoo</span></div>`;
     document.body.append(footer);
 
     const extras = document.createElement('div');
     extras.innerHTML = `
       <canvas id="sparkles" aria-hidden="true"></canvas>
       <div class="scrim" id="scrim"></div>
-      <aside class="cart" id="favs" aria-label="Your favourites" aria-hidden="true">
-        <div class="cart-head"><h3>Things you loved</h3><button class="icon-btn" id="favClose" aria-label="Close favourites">${icons.x}</button></div>
-        <div class="cart-items" id="favItems"></div>
-        <div class="cart-foot" id="favFoot">
-          <p class="fav-note">Great taste, Ladoo. (I had a feeling you’d pick these.)</p>
-          <a class="btn gold" href="surprise.html">There’s one more surprise →</a>
-        </div>
-      </aside>
       <div class="toast" id="toast" role="status"><span class="dot"></span><span id="toastText"></span></div>
       <div class="veil out" id="veil" aria-hidden="true"><span class="diya veil-diya lit" data-diya></span></div>`;
     document.body.append(...extras.children);
-
-    let ai = 0;
-    setInterval(() => {
-      const a = $('#announce'); if(!a) return;
-      ai = (ai + 1) % announceMsgs.length;
-      a.style.transition = 'opacity .5s'; a.style.opacity = 0;
-      setTimeout(() => { a.innerHTML = announceMsgs[ai]; a.style.opacity = 1; }, 500);
-    }, 5200);
-
-    const dn = $('#drawerNav');
-    $('#menuBtn').onclick = () => { dn.classList.add('open'); dn.setAttribute('aria-hidden','false'); };
-    $('#menuClose').onclick = () => { dn.classList.remove('open'); dn.setAttribute('aria-hidden','true'); };
   }
 
   /* ---------------- toast ---------------- */
@@ -372,65 +284,6 @@
     paint();
   }
 
-  /* ---------------- favourites ---------------- */
-  const Favs = {
-    ids: new Set(store.get('gulaab-wish', []).filter(id => G.byId(id))),
-    has(id){ return this.ids.has(id); },
-    toggle(id, el){
-      const p = G.byId(id); if(!p) return;
-      const on = !this.ids.has(id);
-      on ? this.ids.add(id) : this.ids.delete(id);
-      store.set('gulaab-wish', [...this.ids]);
-      this.render(); this.paint(id);
-      if(on){
-        const b = $('#favCount'); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
-        const lines = ['Ooh, good choice ♥', 'Saved! I knew you’d like that one ♥', 'Added to your favourites ♥', 'That one is so you ♥'];
-        toast(lines[this.ids.size % lines.length]);
-        if(el){ const r = el.getBoundingClientRect(); Sparkles.love(r.left + r.width / 2, r.top + r.height / 2, 26); }
-        Music.chime();
-      } else toast('Removed from your favourites');
-    },
-    paint(id){
-      $$(`[data-wish="${id}"]`).forEach(b => {
-        const on = this.ids.has(id); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on);
-        if(b.dataset.label) b.textContent = on ? '♥ Loved it' : '♡ Love this';
-      });
-    },
-    render(){
-      const n = this.ids.size, b = $('#favCount');
-      b.textContent = n; b.classList.toggle('on', n > 0);
-      $('#favFoot').style.display = n ? '' : 'none';
-      const list = $('#favItems');
-      if(!n){
-        list.innerHTML = `<div class="cart-empty"><span class="ladoo-art" data-ladoo="wink" style="width:84px;display:block;margin:0 auto 12px"></span><span class="script">Nothing here yet</span><p>Go find something that makes you smile — then tap the ♥.</p><a class="btn" href="collection.html">See the collection</a></div>`;
-        $$('[data-ladoo]', list).forEach(makeLadoo);
-        return;
-      }
-      list.innerHTML = [...this.ids].map(id => {
-        const p = G.byId(id); if(!p) return '';
-        return `<div class="line-item">
-          <div class="media"><img data-img="${p.img}" data-w="200" alt="${p.name}"></div>
-          <div><h4>${p.name}</h4><small>${G.CATS[p.cat]}</small><p class="li-note">${p.note}</p>
-            <button class="rm" data-unfav="${id}">Remove</button></div></div>`;
-      }).join('');
-      hydrateImages(list);
-    },
-    open(){ $('#favs').classList.add('open'); $('#scrim').classList.add('on'); $('#favs').setAttribute('aria-hidden','false'); },
-    close(){ $('#favs').classList.remove('open'); $('#scrim').classList.remove('on'); $('#favs').setAttribute('aria-hidden','true'); },
-  };
-
-  function favUI(){
-    Favs.render();
-    $('#favBtn').onclick = () => Favs.open();
-    $('#favClose').onclick = () => Favs.close();
-    $('#scrim').onclick = () => { Favs.close(); closeModals(); };
-    $('#favItems').addEventListener('click', e => { const r = e.target.closest('[data-unfav]'); if(r) Favs.toggle(r.dataset.unfav); });
-    document.addEventListener('click', e => {
-      const w = e.target.closest('[data-wish]');
-      if(w){ e.preventDefault(); Favs.toggle(w.dataset.wish, w); }
-    });
-  }
-
   /* ---------------- modals ---------------- */
   let lastFocus;
   function openModal(sel){
@@ -440,22 +293,20 @@
   }
   function closeModals(){
     $$('.modal.open').forEach(m => m.classList.remove('open'));
-    if(!$('#favs').classList.contains('open')) $('#scrim').classList.remove('on');
+    $('#scrim').classList.remove('on');
     lastFocus && lastFocus.focus && lastFocus.focus();
   }
   document.addEventListener('click', e => { if(e.target.closest('[data-close]')) closeModals(); if(e.target.classList.contains('modal')) closeModals(); });
-  document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeModals(); Favs.close(); $('#drawerNav')?.classList.remove('open'); } });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeModals(); } });
 
   /* ---------------- boot ---------------- */
   buildChrome();
   transitions();
   Sparkles.init();
   soundUI();
-  favUI();
   $$('[data-diya]').forEach(makeDiya);
-  $$('[data-ladoo]').forEach(makeLadoo);
   hydrateImages();
   reveal();
 
-  Object.assign(G, { store, session, toast, hydrateImages, reveal, Favs, Music, Sparkles, diyaSVG, makeDiya, ladooSVG, makeLadoo, openModal, closeModals, reduce, $, $$ });
+  Object.assign(G, { store, session, toast, hydrateImages, reveal, Music, Sparkles, diyaSVG, makeDiya, openModal, closeModals, reduce, $, $$ });
 })();

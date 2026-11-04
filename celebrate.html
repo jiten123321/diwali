@@ -45,6 +45,47 @@
   .again.in{opacity:1;}
   .again .btn{font-size:14px;padding:18px 36px;}
   .tip{font-family:var(--sans);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:rgba(214,177,111,.7);margin-top:26px;}
+
+  /* ---------- the e-bouquet ---------- */
+  .bouquet{--blush:#f1d5d3;--rose:#b23a64;--rose-2:#d45c86;--ink2:#45182a;--ink2-soft:#7b4a5c;
+    position:relative;z-index:46;background:var(--blush);color:var(--ink2);overflow:hidden;padding:clamp(56px,9vw,110px) 16px clamp(64px,9vw,110px);cursor:default;}
+  .bouquet .petals{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+  .b-inner{position:relative;z-index:1;max-width:560px;margin:0 auto;}
+  .b-welcome{display:grid;justify-items:center;gap:14px;text-align:center;min-height:60svh;align-content:center;transition:opacity .9s ease, transform 1s cubic-bezier(.6,0,.3,1);}
+  .b-welcome.gone{opacity:0;transform:translateY(-4%);}
+  .bud{width:74px;height:auto;filter:drop-shadow(0 8px 14px rgba(120,20,40,.25));animation:bsway 4s ease-in-out infinite;transform-origin:50% 100%;}
+  @keyframes bsway{50%{transform:rotate(4deg)}}
+  .b-welcome .hey{font-family:var(--script);font-size:clamp(60px,17vw,92px);line-height:1;color:var(--rose);margin:0;font-weight:400;}
+  .b-welcome p{margin:0;font-size:20px;}
+  .b-welcome small{font-style:italic;color:var(--ink2-soft);font-size:15px;}
+  .open-btn{margin-top:14px;border:0;border-radius:999px;padding:15px 30px;background:linear-gradient(180deg,var(--rose-2),var(--rose));color:#fbf4ec;
+    font-family:var(--serif);font-style:italic;font-size:19px;letter-spacing:.02em;cursor:pointer;
+    box-shadow:0 10px 26px rgba(178,58,100,.35),inset 0 1px 0 rgba(255,255,255,.25);animation:breathe 2.4s ease-in-out infinite;}
+  .open-btn:active{transform:scale(.97);}
+  @keyframes breathe{50%{box-shadow:0 12px 34px rgba(178,58,100,.5),0 0 0 8px rgba(178,58,100,.08),inset 0 1px 0 rgba(255,255,255,.25)}}
+  .b-content{display:grid;gap:18px;}
+  .bouquet [hidden]{display:none!important;}
+  .bouquet{scroll-margin-top:60px;}
+  .b-head{text-align:center;animation:brise 1.2s ease both;}
+  .b-eyebrow{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink2-soft);}
+  .b-title{font-family:var(--script);font-weight:400;font-size:clamp(54px,15vw,84px);line-height:1.05;margin:2px 0 6px;color:var(--rose);}
+  .intro{max-width:30em;margin:0 auto;text-wrap:balance;}
+  .stage{position:relative;width:min(100%,620px);justify-self:center;aspect-ratio:1100/1174;}
+  .stage img{position:absolute;inset:0;width:100%;height:100%;animation:bloom 2s cubic-bezier(.2,.7,.2,1) .35s both;}
+  @keyframes bloom{0%{opacity:0;transform:scale(.86) translateY(24px);filter:blur(10px) saturate(.6)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
+  @keyframes brise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .b-letter{position:relative;background:#fffaf5;border-radius:6px;padding:30px 26px 28px;margin:8px 4px 0;
+    box-shadow:0 18px 40px rgba(120,40,70,.16),0 2px 0 rgba(255,255,255,.8) inset;transform:rotate(-.6deg);animation:brise 1.2s ease 1.3s both;}
+  .b-letter::before{content:"";position:absolute;top:-12px;left:50%;width:88px;height:24px;transform:translateX(-50%) rotate(2deg);background:rgba(212,92,134,.35);border-radius:2px;}
+  .b-letter h3{font-family:var(--script);font-weight:400;font-size:44px;line-height:1.1;margin:0 0 10px;color:var(--rose);}
+  .b-letter p{margin:0 0 14px;line-height:1.65;font-size:19px;}
+  .b-letter .sign{font-family:var(--script);font-size:40px;color:var(--rose);line-height:1.1;text-align:right;margin-top:6px;}
+  .bouquet .again{opacity:1;text-align:center;margin-top:28px;}
+  .rose-btn{background:linear-gradient(180deg,var(--rose-2),var(--rose));border-radius:999px;}
+  .rose-btn:hover{background:var(--rose);}
+  @media (max-width:520px){.b-letter{padding:26px 20px 22px;margin-inline:0;}.b-letter h3{font-size:38px;}.b-letter .sign{font-size:36px;}.b-letter p{font-size:18px;}}
+  .more{margin-top:34px;opacity:0;transition:opacity 1.4s;}
+  .more.in{opacity:1;}
 </style>
 </head>
 <body data-page="celebrate" class="dark-page" data-sparkles="high">
@@ -63,9 +104,46 @@
       <p>May your life always shine <em>brighter than a thousand diyas.</em></p>
       <p>Keep smiling, keep being your beautiful self, and never stop being excited about the little things.</p>
       <p class="sig">Happy Diwali, Ladoo! ❤️</p>
-      <div class="look-note" id="lookNote" hidden></div>
-      <div class="again" id="again"><a class="btn gold" href="index.html" data-reset="1">Celebrate Again ✨</a></div>
+      <div class="more" id="again"><a class="btn gold" href="#bouquet">There’s one more thing… 🌹</a></div>
       <div class="tip">Tap anywhere for phuljhadi · tap a diya to light it</div>
+    </div>
+  </section>
+
+  <section class="bouquet" id="bouquet" aria-label="Pink roses for Ladoo">
+    <canvas class="petals" id="petals" aria-hidden="true"></canvas>
+    <div class="b-inner">
+      <div class="b-welcome" id="bWelcome">
+        <svg class="bud" viewBox="0 0 80 120" aria-hidden="true">
+          <defs><radialGradient id="bg1" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fcd0df"/><stop offset=".6" stop-color="#ec8fb0"/><stop offset="1" stop-color="#b23a64"/></radialGradient></defs>
+          <path d="M40 118 C40 95 41 80 40 62" stroke="#4f7a3a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M40 92 C28 86 20 88 14 96 C24 100 33 98 40 92Z" fill="#5f8a45"/>
+          <path d="M40 60 C22 58 16 40 22 24 C28 12 36 6 40 4 C44 6 52 12 58 24 C64 40 58 58 40 60Z" fill="url(#bg1)"/>
+          <path d="M40 60 C30 52 29 36 36 20 M40 60 C50 52 52 38 46 22" stroke="#b23a64" stroke-width="1.4" fill="none" opacity=".6"/>
+          <path d="M40 62 C30 64 24 58 22 50 C30 54 36 56 40 56 C44 56 50 54 58 50 C56 58 50 64 40 62Z" fill="#4f7a3a"/>
+        </svg>
+        <h2 class="hey">Hey Ladoo</h2>
+        <p>I have something for you.</p>
+        <button class="open-btn" id="openBtn" type="button">Open your flowers</button>
+        <small>Tap to open</small>
+      </div>
+
+      <div class="b-content" id="bContent" hidden>
+        <header class="b-head">
+          <div class="b-eyebrow">for my Ladoo</div>
+          <h2 class="b-title">Pink roses</h2>
+          <p class="intro">A whole armful of them, because one rose felt too small for what I feel about you.</p>
+        </header>
+        <div class="stage"><img src="assets/img/roses.jpg" alt="A thick bouquet of soft pink garden roses ringed with pink baby's breath and small pink carnations, wrapped in dusty pink and white paper with a blush ribbon."></div>
+        <section class="b-letter" aria-label="A letter for Ladoo">
+          <h3>Dear Ladoo,</h3>
+          <p>I wanted to give you flowers that don't wilt in a few days, so here's a bouquet you can open whenever you want.</p>
+          <p>Pink, because it's soft and warm, just like you are with me, even on the days I don't deserve it.</p>
+          <p>Thank you for being patient with me, for laughing at my silly jokes, and for making ordinary days feel like something worth remembering. You make my life lighter in ways you probably don't even notice.</p>
+          <p>Whenever you miss me, open this page. The flowers will be here, and so will I.</p>
+          <div class="sign">Always yours</div>
+        </section>
+        <div class="again"><a class="btn rose-btn" href="index.html">Celebrate Again ✨</a></div>
+      </div>
     </div>
   </section>
 </main>
@@ -156,12 +234,6 @@
   const lines = $$('#final > p');
   lines.forEach((p, i) => setTimeout(() => p.classList.add('in'), 2400 + i * (G.reduce ? 0 : 1600)));
   const after = 2400 + lines.length * (G.reduce ? 0 : 1600);
-  const look = G.store.get('gulaab-look', null);
-  if(look && look.name){
-    const ln = $('#lookNote'); ln.hidden = false;
-    ln.innerHTML = `P.S. I can already picture you in <b>${look.name.replace(/^The /, 'the ')}</b>. You’ll look beautiful.`;
-    setTimeout(() => ln.classList.add('in'), after);
-  }
   setTimeout(() => $('#again').classList.add('in'), after + 600);
 
   /* ---------- fireworks ---------- */
@@ -174,6 +246,49 @@
     fire(innerWidth * (.15 + Math.random() * .7), innerHeight * (.12 + Math.random() * .3));
     if(++auto > 14) clearInterval(show);
   }, 1500);
+
+  /* ---------- the e-bouquet ---------- */
+  (function(){
+    const welcome = $('#bWelcome'), content = $('#bContent');
+    $('#openBtn').addEventListener('click', () => {
+      welcome.classList.add('gone'); G.Music.chime();
+      setTimeout(() => { welcome.hidden = true; content.hidden = false;
+        $('#bouquet').scrollIntoView({ behavior: G.reduce ? 'auto' : 'smooth', block: 'start' }); }, G.reduce ? 0 : 900);
+    });
+    const cv = $('#petals'), c = cv.getContext('2d'), sec = $('#bouquet');
+    let W, H, ps = [], running = false;
+    const mk = top => ({ x: Math.random() * W, y: top ? -30 : Math.random() * H, s: 7 + Math.random() * 9, vy: .45 + Math.random() * .7,
+      sw: Math.random() * 6.28, sws: .01 + Math.random() * .015, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .03,
+      flip: Math.random() * 6.28, vf: .02 + Math.random() * .03, hue: Math.random() });
+    function size(){ const d = Math.min(devicePixelRatio || 1, 2); W = sec.clientWidth; H = sec.clientHeight;
+      cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0);
+      const n = Math.round(Math.min(26, W * H / 40000) + 4); ps = Array.from({ length: n }, () => mk(false)); }
+    function petal(p){
+      c.save(); c.translate(p.x, p.y); c.rotate(p.rot); c.scale(Math.cos(p.flip) * .8 + .2 * Math.sign(Math.cos(p.flip) || 1), 1);
+      const s = p.s, g = c.createRadialGradient(-s * .2, -s * .3, s * .1, 0, 0, s * 1.2);
+      const a = p.hue < .5 ? ['#fde0ea', '#f4a3be', '#d9658e'] : ['#fbd3e1', '#ee93b3', '#cf5a84'];
+      g.addColorStop(0, a[0]); g.addColorStop(.6, a[1]); g.addColorStop(1, a[2]);
+      c.fillStyle = g; c.globalAlpha = .9;
+      c.beginPath(); c.moveTo(0, s); c.bezierCurveTo(s * 1.1, s * .5, s * .9, -s * 1.1, 0, -s * .75); c.bezierCurveTo(-s * .9, -s * 1.1, -s * 1.1, s * .5, 0, s); c.fill();
+      c.globalAlpha = .25; c.strokeStyle = '#ffd1d8'; c.lineWidth = .8; c.beginPath(); c.moveTo(0, s * .8); c.quadraticCurveTo(s * .1, 0, 0, -s * .5); c.stroke();
+      c.restore();
+    }
+    function tick(){
+      if(sec.clientHeight !== H || sec.clientWidth !== W) size();
+      c.clearRect(0, 0, W, H);
+      for(const p of ps){
+        if(!G.reduce){ p.sw += p.sws; p.x += Math.sin(p.sw) * .7; p.y += p.vy; p.rot += p.vr; p.flip += p.vf; if(p.y > H + 30) Object.assign(p, mk(true)); }
+        petal(p);
+      }
+      if(running && !G.reduce) requestAnimationFrame(tick);
+    }
+    size(); addEventListener('resize', size);
+    new IntersectionObserver(es => es.forEach(e => {
+      if(e.isIntersecting && !running){ running = true; requestAnimationFrame(tick); }
+      else if(!e.isIntersecting) running = false;
+    })).observe(sec);
+    if(location.hash === '#bouquet') setTimeout(() => sec.scrollIntoView(), 50);
+  })();
 })();
 </script>
 </body>
