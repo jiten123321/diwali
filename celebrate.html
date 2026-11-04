@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14030a">
+<title>Happy Diwali, Ladoo ❤️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Parisienne&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  body{background:#14030a;color:var(--ivory);}
+  .scene{position:relative;z-index:4;overflow:hidden;min-height:100svh;padding-bottom:80px;cursor:crosshair;}
+  .scene .backdrop{position:absolute;inset:0;opacity:.28;filter:blur(2px) saturate(1.2);}
+  .scene .backdrop .media{width:100%;height:100%;background:none;}
+  .scene .backdrop .media.fail::after{display:none;}
+  .scene::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:
+    radial-gradient(60% 45% at 50% 58%,rgba(255,150,50,.28),transparent 70%),
+    linear-gradient(to bottom,rgba(20,3,10,.4),rgba(20,3,10,.1) 30%,rgba(20,3,10,.85));}
+  .scene > *{position:relative;z-index:2;}
+
+  .toran{width:100%;height:clamp(110px,16vw,190px);display:block;pointer-events:none;}
+  .toran .sway{animation:sway 6s ease-in-out infinite;transform-origin:50% 0;transform-box:fill-box;}
+  @keyframes sway{50%{transform:rotate(1.5deg)}}
+
+  .center-piece{position:relative;width:min(560px,86vw);aspect-ratio:1;margin:clamp(16px,4vw,48px) auto 0;}
+  .rangoli{position:absolute;inset:12%;animation:spin 120s linear infinite;filter:drop-shadow(0 0 30px rgba(255,140,60,.25));}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ring{position:absolute;inset:0;}
+  .ring .diya{position:absolute;width:clamp(48px,11vw,78px);transform:translate(-50%,-60%);}
+  .center-msg{position:absolute;inset:30%;display:grid;place-items:center;text-align:center;pointer-events:none;}
+  .center-msg .script{font-size:clamp(30px,6vw,48px);color:#fff4d6;text-shadow:0 0 24px rgba(255,170,80,.8);line-height:1.05;}
+
+  .final{max-width:760px;margin:10px auto 0;padding:0 var(--gutter);text-align:center;cursor:default;}
+  .final p{font-family:var(--serif);font-size:clamp(22px,3vw,34px);line-height:1.35;margin:0 0 18px;opacity:0;transform:translateY(14px);transition:opacity 1.4s var(--ease), transform 1.4s var(--ease);}
+  .final p.in{opacity:1;transform:none;}
+  .final p:first-child{font-size:clamp(28px,4.4vw,50px);}
+  .final p em{color:var(--gold-2);}
+  .final .sig{font-family:var(--script);font-size:clamp(44px,7vw,72px);color:#ffd9a0;text-shadow:0 0 30px rgba(255,160,60,.6);line-height:1.1;}
+  .look-note{display:inline-block;margin:10px 0 0;padding:12px 20px;border:1px solid rgba(214,177,111,.35);font-size:16px;color:rgba(251,244,236,.8);opacity:0;transition:opacity 1.4s;}
+  .look-note.in{opacity:1;}
+  .look-note b{color:var(--gold-2);font-weight:400;font-style:italic;}
+  .again{margin-top:36px;opacity:0;transition:opacity 1.4s;}
+  .again.in{opacity:1;}
+  .again .btn{font-size:14px;padding:18px 36px;}
+  .tip{font-family:var(--sans);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:rgba(214,177,111,.7);margin-top:26px;}
+</style>
+</head>
+<body data-page="celebrate" class="dark-page" data-sparkles="high">
+<main>
+  <section class="scene" id="scene" aria-label="Diwali celebration">
+    <div class="backdrop" aria-hidden="true"><div class="media"><img data-img="diwaliNight" data-w="1600" alt=""></div></div>
+    <svg class="toran" id="toran" viewBox="0 0 1200 190" preserveAspectRatio="xMidYMin slice" aria-hidden="true"></svg>
+
+    <div class="center-piece">
+      <svg class="rangoli" id="rangoli" viewBox="-100 -100 200 200" aria-hidden="true"></svg>
+      <div class="ring" id="ring" role="group" aria-label="Diyas around the rangoli"></div>
+    </div>
+
+    <div class="final" id="final">
+      <div class="eyebrow" style="margin-bottom:18px">Shubh Deepavali</div>
+      <p>May your life always shine <em>brighter than a thousand diyas.</em></p>
+      <p>Keep smiling, keep being your beautiful self, and never stop being excited about the little things.</p>
+      <p class="sig">Happy Diwali, Ladoo! ❤️</p>
+      <div class="look-note" id="lookNote" hidden></div>
+      <div class="again" id="again"><a class="btn gold" href="index.html" data-reset="1">Celebrate Again ✨</a></div>
+      <div class="tip">Tap anywhere for phuljhadi · tap a diya to light it</div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(function(){
+  const G = window.GULAAB, { $, $$ } = G;
+  const NS = 'http://www.w3.org/2000/svg';
+
+  /* ---------- marigold toran ---------- */
+  (function(){
+    const svg = $('#toran');
+    let defs = `<defs>
+      <radialGradient id="mgO" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#ffd27a"/><stop offset=".55" stop-color="#f28a1c"/><stop offset="1" stop-color="#b8510c"/></radialGradient>
+      <radialGradient id="mgY" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#fff0a0"/><stop offset=".55" stop-color="#f6c21c"/><stop offset="1" stop-color="#c08a0a"/></radialGradient>
+      <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5f9a3a"/><stop offset="1" stop-color="#2f5a1c"/></linearGradient></defs>`;
+    let out = '';
+    const flower = (x, y, r, k) => {
+      let s = `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#${k ? 'mgY' : 'mgO'})"/>`;
+      for(let i = 0; i < 6; i++){ const a = i / 6 * 6.28 + (x % 7); s += `<circle cx="${(x + Math.cos(a) * r * .55).toFixed(1)}" cy="${(y + Math.sin(a) * r * .55).toFixed(1)}" r="${(r * .32).toFixed(1)}" fill="${k ? '#ffe36a' : '#ffae3d'}" opacity=".7"/>`; }
+      return s;
+    };
+    // top straight band of mango leaves
+    for(let x = -10; x < 1220; x += 26){ out += `<path d="M${x} 6 q 10 28 0 44 q -10 -16 0 -44Z" fill="url(#leaf)" transform="rotate(${(x % 3) * 4 - 4} ${x} 6)"/>`; }
+    // swags
+    const swags = 6, w = 1200 / swags;
+    for(let s = 0; s < swags; s++){
+      const x0 = s * w, x1 = x0 + w, depth = 70;
+      let g = '';
+      for(let t = 0; t <= 1.0001; t += 1 / 22){
+        const x = x0 + (x1 - x0) * t, y = 14 + 4 * depth * t * (1 - t);
+        g += flower(+x.toFixed(1), +y.toFixed(1), 9, (Math.round(t * 22) % 2));
+      }
+      out += `<g class="sway" style="animation-delay:${-s * .7}s">${g}</g>`;
+      // hanging strand at join
+      let h = '';
+      for(let k = 0; k < 7; k++) h += flower(x1, 24 + k * 15, 7.5, k % 2);
+      h += `<path d="M${x1} ${24 + 7 * 15} l -7 16 h14z" fill="#d6b16f"/><circle cx="${x1}" cy="${24 + 7 * 15 + 18}" r="3" fill="#efd9a6"/>`;
+      if(s < swags - 1) out += `<g class="sway" style="animation-delay:${-s * .5}s">${h}</g>`;
+    }
+    svg.innerHTML = defs + out;
+  })();
+
+  /* ---------- rangoli ---------- */
+  (function(){
+    const svg = $('#rangoli');
+    const layers = [
+      { n:16, r:92, len:16, w:7,  c:'#d6336c' },
+      { n:16, r:80, len:14, w:7,  c:'#f28a1c', off:.5 },
+      { n:12, r:64, len:20, w:10, c:'#f6c21c' },
+      { n:12, r:46, len:18, w:9,  c:'#1f9e8a', off:.5 },
+      { n:8,  r:30, len:16, w:10, c:'#8e2a9e' },
+      { n:8,  r:16, len:10, w:7,  c:'#fff4d6', off:.5 },
+    ];
+    let s = `<circle r="98" fill="none" stroke="#efd9a6" stroke-width=".8" stroke-dasharray="1 4" stroke-linecap="round"/>`;
+    s += `<circle r="86" fill="#3a0d1c" opacity=".55"/>`;
+    layers.forEach(L => {
+      for(let i = 0; i < L.n; i++){
+        const a = (i + (L.off || 0)) / L.n * 360;
+        s += `<path d="M0 ${-L.r} C ${L.w} ${-L.r + L.len * .4} ${L.w * .6} ${-L.r + L.len} 0 ${-L.r + L.len} C ${-L.w * .6} ${-L.r + L.len} ${-L.w} ${-L.r + L.len * .4} 0 ${-L.r}Z" fill="${L.c}" transform="rotate(${a})"/>`;
+        s += `<circle cy="${-L.r + L.len * .55}" r="1.2" fill="#fff8e6" opacity=".85" transform="rotate(${a})"/>`;
+      }
+    });
+    for(let i = 0; i < 48; i++) s += `<circle cy="-95" r="1.4" fill="#fff8e6" transform="rotate(${i * 7.5})"/>`;
+    s += `<circle r="8" fill="#f28a1c"/><circle r="4" fill="#fff4d6"/>`;
+    svg.innerHTML = s;
+  })();
+
+  /* ---------- ring of diyas ---------- */
+  const ring = $('#ring'), N = 10, diyas = [];
+  for(let i = 0; i < N; i++){
+    const b = document.createElement('button');
+    b.className = 'diya'; b.setAttribute('aria-label', `Light diya ${i + 1}`);
+    const a = i / N * Math.PI * 2 - Math.PI / 2;
+    b.style.left = (50 + Math.cos(a) * 44) + '%'; b.style.top = (50 + Math.sin(a) * 44) + '%';
+    G.makeDiya(b); ring.append(b); diyas.push(b);
+    b.addEventListener('click', e => {
+      e.stopPropagation();
+      b.classList.toggle('lit');
+      if(b.classList.contains('lit')){ const r = b.getBoundingClientRect(); G.Sparkles.burst(r.left + r.width / 2, r.top + r.height / 4, 24, [42, 30]); G.Music.chime(); }
+    });
+  }
+  diyas.forEach((d, i) => setTimeout(() => d.classList.add('lit'), 600 + i * 220));
+
+  /* ---------- message ---------- */
+  const lines = $$('#final > p');
+  lines.forEach((p, i) => setTimeout(() => p.classList.add('in'), 2400 + i * (G.reduce ? 0 : 1600)));
+  const after = 2400 + lines.length * (G.reduce ? 0 : 1600);
+  const look = G.store.get('gulaab-look', null);
+  if(look && look.name){
+    const ln = $('#lookNote'); ln.hidden = false;
+    ln.innerHTML = `P.S. I can already picture you in <b>${look.name.replace(/^The /, 'the ')}</b>. You’ll look beautiful.`;
+    setTimeout(() => ln.classList.add('in'), after);
+  }
+  setTimeout(() => $('#again').classList.add('in'), after + 600);
+
+  /* ---------- fireworks ---------- */
+  const palettes = [[42, 30, 50], [340, 320, 42], [24, 12, 42], [180, 42, 160], [280, 42, 330]];
+  const fire = (x, y) => G.Sparkles.burst(x, y, 70, palettes[Math.floor(Math.random() * palettes.length)]);
+  $('#scene').addEventListener('click', e => { if(e.target.closest('a,button')) return; fire(e.clientX, e.clientY); G.Music.chime(); });
+  let auto = 0;
+  const show = setInterval(() => {
+    if(document.hidden) return;
+    fire(innerWidth * (.15 + Math.random() * .7), innerHeight * (.12 + Math.random() * .3));
+    if(++auto > 14) clearInterval(show);
+  }, 1500);
+})();
+</script>
+</body>
+</html>
