@@ -3,30 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2a0710">
-<title>Pink Roses for Ladoo</title>
+<meta name="theme-color" content="#000000">
+<title>Red Roses for Ladoo</title>
 <style>
-  /* same palette as the rest of the site: wine, burgundy, maroon and champagne gold */
-  :root{color-scheme:dark;--wine:#2a0710;--burgundy:#4a0d1c;--maroon:#6e1427;--gold:#d6b16f;}
-  html,body{margin:0;height:100%;overflow:hidden;background:var(--wine);}
+  /* a completely black night, so the bouquet photo (shot on black) shows in full */
+  :root{color-scheme:dark;--gold:#d6b16f;}
+  html,body{margin:0;height:100%;overflow:hidden;background:#000;}
   body{animation:fadeIn 1.2s ease both;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  /* everything that blends lives in one screen-sized frame, so nothing can widen the page */
+  /* one screen-sized frame, so nothing can widen the page */
   .scene{position:fixed;inset:0;overflow:hidden;}
-  .bg{position:absolute;inset:0;background:
-      radial-gradient(70% 60% at 50% 46%,rgba(214,177,111,.10),transparent 70%),
-      radial-gradient(90% 80% at 50% 42%,#3a0a17 0%,var(--wine) 50%,#160309 100%);}
+  .bg{position:absolute;inset:0;background:#000;}
 
-  /* the Gamma photo sits on pure black: "lighten" drops the black out so the page's burgundy shows through */
-  .bouquet{mix-blend-mode:lighten;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    width:min(100vw, 94svh * 4 / 5, 900px);aspect-ratio:4/5;}
-  @media (max-aspect-ratio:3/4){.bouquet{width:min(118vw, 94svh * 4 / 5);}}
-  .bouquet img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
-    /* feather the photo's edges as a safety net */
-    -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 82%,transparent 100%);
-            mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 82%,transparent 100%);
-    opacity:0;}
-  .bouquet img.fallback{-webkit-mask-image:none;mask-image:none;object-fit:contain;}
+  /* the whole bouquet always fits on screen, nothing cropped, faded or blended away */
+  .bouquet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:min(100vw, 92svh * 4 / 5, 900px);aspect-ratio:4/5;}
+  .bouquet img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;opacity:0;}
   .bouquet img.ready{animation:bloom 2.4s cubic-bezier(.2,.7,.2,1) both;}
   @keyframes bloom{0%{opacity:0;transform:scale(.84) translateY(30px);filter:blur(12px) saturate(.7)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
   .sway{position:absolute;inset:0;animation:sway 8s ease-in-out 2.8s infinite;transform-origin:50% 92%;}
@@ -42,7 +34,7 @@
     box-shadow:0 12px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.4);}
   .again.in{opacity:1;transform:translate(-50%,0);pointer-events:auto;}
   .again:active{transform:translate(-50%,0) scale(.97);}
-  .veil{position:fixed;inset:0;z-index:9;background:#2a0710;opacity:0;pointer-events:none;transition:opacity .7s;}
+  .veil{position:fixed;inset:0;z-index:9;background:#000;opacity:0;pointer-events:none;transition:opacity .7s;}
   .veil.on{opacity:1;}
   @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;}}
 </style>
@@ -66,7 +58,7 @@
   const BOUQUET = 'https://cdn.gamma.app/n4ay785j5gfy9a4/design-anything/y0mtft3XhDHF2mb4EIaYv/m0zoyl8OiBw4bNhKtfmtW.jpg';
   const img = document.getElementById('bouquet');
   img.onload = () => img.classList.add('ready');
-  img.onerror = () => { img.onerror = null; img.classList.add('fallback'); img.parentNode.parentNode.style.mixBlendMode = 'normal'; img.src = 'assets/img/bouquet-cutout-red.webp'; };
+  img.onerror = () => { img.onerror = null; img.classList.add('fallback'); img.src = 'assets/img/bouquet-cutout-red.webp'; };
   img.src = BOUQUET;
 
   let W, H;
