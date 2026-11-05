@@ -3,122 +3,200 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b0206">
+<meta name="theme-color" content="#05020a">
 <title>Happy Diwali, Ladoo ❤️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6..96,400&display=swap">
 <style>
   :root{color-scheme:dark;}
-  html,body{margin:0;height:100%;background:#0b0206;overflow:hidden;}
-  body{animation:fadeIn 1.4s ease both;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;}
+  html,body{margin:0;height:100%;overflow:hidden;background:#05020a;}
+  body{animation:fadeIn 1.4s ease both;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;cursor:pointer;}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-  /* night sky backdrop (Gamma-generated photo, with a graceful gradient behind it) */
+  /* night sky: deep gradient with a faint warm glow low on the horizon */
   .sky{position:fixed;inset:0;background:
-      radial-gradient(70% 55% at 50% 60%,rgba(255,140,60,.18),transparent 70%),
-      radial-gradient(120% 90% at 50% 0%,#2a0712 0%,#12030a 55%,#070105 100%);}
-  .sky img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 2.4s ease;filter:saturate(1.08) brightness(.82);}
-  .sky img.on{opacity:1;}
-  .sky::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 55%,rgba(8,1,4,.15),rgba(8,1,4,.55) 100%);}
-
+      radial-gradient(90% 45% at 50% 115%,rgba(255,120,60,.16),transparent 70%),
+      radial-gradient(70% 60% at 70% 20%,rgba(70,30,110,.35),transparent 70%),
+      linear-gradient(#05020a 0%,#0d0518 45%,#1c0718 100%);}
   canvas{position:fixed;inset:0;width:100%;height:100%;display:block;}
-  #fireworks{z-index:2;}
-  #petals{z-index:4;pointer-events:none;}
 
-  /* the bouquet */
-  .bouquet{position:fixed;left:50%;top:52%;z-index:3;width:min(78vw,62svh,560px);aspect-ratio:1100/1174;transform:translate(-50%,-50%);pointer-events:none;}
-  .bouquet .glow{position:absolute;inset:-6% -2% 8%;border-radius:50%;background:radial-gradient(circle,rgba(255,170,200,.30),rgba(255,140,90,.10) 45%,transparent 68%);filter:blur(10px);
-    animation:glow 4s ease-in-out infinite;opacity:0;animation-delay:1.6s;animation-fill-mode:both;}
-  @keyframes glow{0%{opacity:.6;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}100%{opacity:.6;transform:scale(.96)}}
-  .bouquet img{position:absolute;inset:0;width:100%;height:100%;
-    -webkit-mask-image:linear-gradient(#000 82%,transparent 94%);
-            mask-image:linear-gradient(#000 82%,transparent 94%);
-    filter:drop-shadow(0 0 22px rgba(255,170,200,.25));
-    animation:bloom 2.4s cubic-bezier(.2,.7,.2,1) .5s both;}
-  @keyframes bloom{0%{opacity:0;transform:scale(.8) translateY(30px);filter:blur(12px) saturate(.6)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
-  .bouquet .sway{position:absolute;inset:0;animation:sway 7s ease-in-out 3s infinite;transform-origin:50% 90%;}
-  @keyframes sway{50%{transform:rotate(1.2deg) translateY(-4px)}}
+  /* sound: tiny speaker icon, pulses until sound is on */
+  .sound{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:14px;z-index:5;width:44px;height:44px;border-radius:50%;
+    border:1px solid rgba(255,220,170,.35);background:rgba(20,8,20,.5);display:grid;place-items:center;cursor:pointer;padding:0;}
+  .sound svg{width:20px;height:20px;fill:none;stroke:#ffe2b0;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+  .sound .wave{transition:opacity .3s;}
+  .sound:not(.on) .wave{opacity:0;}
+  .sound:not(.on){animation:nudge 1.8s ease-in-out infinite;}
+  .sound:not(.on) .x{opacity:1;} .sound.on .x{opacity:0;}
+  @keyframes nudge{50%{box-shadow:0 0 0 8px rgba(255,210,150,.12)}}
 
-  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;}}
+  /* the one button: on to the flowers */
+  .next{position:fixed;left:50%;bottom:calc(34px + env(safe-area-inset-bottom,0px));z-index:5;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+    transition:opacity 1.2s ease, transform 1.2s cubic-bezier(.2,.7,.2,1);
+    padding:16px 30px;border-radius:999px;border:0;text-decoration:none;white-space:nowrap;
+    background:linear-gradient(180deg,#d45c86,#b23a64);color:#fbf4ec;font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-size:19px;
+    box-shadow:0 10px 30px rgba(178,58,100,.45),inset 0 1px 0 rgba(255,255,255,.25);}
+  .next.in{opacity:1;transform:translate(-50%,0);pointer-events:auto;animation:breathe 2.4s ease-in-out 1.2s infinite;}
+  @keyframes breathe{50%{box-shadow:0 12px 36px rgba(178,58,100,.6),0 0 0 8px rgba(212,92,134,.12),inset 0 1px 0 rgba(255,255,255,.25)}}
+  .veil{position:fixed;inset:0;z-index:9;background:#05020a;opacity:0;pointer-events:none;transition:opacity .7s;}
+  .veil.on{opacity:1;}
 </style>
 </head>
 <body>
-  <div class="sky" aria-hidden="true"><img id="skyImg" alt=""></div>
+  <div class="sky" aria-hidden="true"></div>
+  <canvas id="stars" aria-hidden="true"></canvas>
   <canvas id="fireworks" aria-hidden="true"></canvas>
-  <div class="bouquet">
-    <div class="glow"></div>
-    <div class="sway"><img src="assets/img/bouquet.webp" alt="A bouquet of soft pink roses for Ladoo, under Diwali fireworks"></div>
-  </div>
-  <canvas id="petals" aria-hidden="true"></canvas>
+
+  <button class="sound" id="sound" aria-label="Turn firework sounds on" aria-pressed="false">
+    <svg viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="#ffe2b0" stroke="none"/>
+      <path class="wave" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>
+      <path class="x" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+  </button>
+  <a class="next" id="next" href="bouquet.html">One more thing… 🌹</a>
+  <div class="veil" id="veil"></div>
 
 <script>
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  let W, H;
 
-  /* backdrop photo: fades in only once it has loaded */
-  // photorealistic Diwali fireworks sky, generated with Gamma
-  const SKY = 'https://cdn.gamma.app/n4ay785j5gfy9a4/design-anything/SckNC0qbL8Ab3UHKjuGAz/gsUIvFrJ06EpvR9HqVbxv.jpg';
-  const sky = document.getElementById('skyImg');
-  sky.onload = () => sky.classList.add('on');
-  sky.src = SKY;
+  /* ---------------- stars ---------------- */
+  const sc = document.getElementById('stars'), s2 = sc.getContext('2d');
+  let stars = [];
+  function makeStars(){
+    stars = Array.from({ length: Math.round(W * H / 3500) }, () => ({
+      x: Math.random() * W, y: Math.random() * H * .85, r: Math.random() < .9 ? rnd(.3, 1) : rnd(1, 1.7),
+      a: rnd(.3, 1), t: Math.random() * 6.28, ts: rnd(.005, .03) }));
+  }
+  function drawStars(){
+    s2.clearRect(0, 0, W, H);
+    for(const s of stars){
+      s.t += s.ts;
+      s2.globalAlpha = s.a * (.55 + .45 * Math.sin(s.t));
+      s2.fillStyle = '#fff6e8'; s2.beginPath(); s2.arc(s.x, s.y, s.r, 0, 6.29); s2.fill();
+    }
+    s2.globalAlpha = 1;
+  }
 
-  /* ---------------- realistic fireworks ---------------- */
+  /* ---------------- firework sounds (synthesised, no files) ---------------- */
+  const AC = window.AudioContext || window.webkitAudioContext;
+  let ac, master, noiseBuf, soundOn = false;
+  function initAudio(){
+    if(ac || !AC) return;
+    ac = new AC();
+    const comp = ac.createDynamicsCompressor();
+    comp.threshold.value = -18; comp.ratio.value = 4;
+    master = ac.createGain(); master.gain.value = .9;
+    master.connect(comp); comp.connect(ac.destination);
+    noiseBuf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate);
+    const d = noiseBuf.getChannelData(0);
+    for(let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  function out(x){
+    const g = ac.createGain();
+    if(ac.createStereoPanner){ const p = ac.createStereoPanner(); p.pan.value = Math.max(-1, Math.min(1, (x / W) * 1.6 - .8)); g.connect(p); p.connect(master); }
+    else g.connect(master);
+    return g;
+  }
+  function noise(t, dur){ const n = ac.createBufferSource(); n.buffer = noiseBuf; n.start(t, Math.random(), dur); return n; }
+  function soundLaunch(x, dur){
+    if(!soundOn) return;
+    const t = ac.currentTime, n = noise(t, dur + .1), bp = ac.createBiquadFilter(), g = out(x);
+    bp.type = 'bandpass'; bp.Q.value = 6;
+    bp.frequency.setValueAtTime(500, t); bp.frequency.exponentialRampToValueAtTime(2600, t + dur);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.12, t + .08); g.gain.linearRampToValueAtTime(.05, t + dur);
+    g.gain.linearRampToValueAtTime(0, t + dur + .08);
+    n.connect(bp); bp.connect(g);
+    if(Math.random() < .4){ // the odd whistling rocket
+      const o = ac.createOscillator(), og = out(x);
+      o.type = 'sine'; o.frequency.setValueAtTime(1300, t); o.frequency.exponentialRampToValueAtTime(2900, t + dur);
+      og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(.025, t + .1); og.gain.linearRampToValueAtTime(0, t + dur);
+      o.connect(og); o.start(t); o.stop(t + dur + .05);
+    }
+  }
+  function soundBoom(x, size, crackle){
+    if(!soundOn) return;
+    const t = ac.currentTime + .02;
+    // the bang: a short noise burst through a low-pass, with a long decaying tail
+    const n = noise(t, 2.2), lp = ac.createBiquadFilter(), g = out(x);
+    lp.type = 'lowpass'; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(180, t + 1.2);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.9 * size, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + 2);
+    n.connect(lp); lp.connect(g);
+    // the thump you feel
+    const o = ac.createOscillator(), og = out(x);
+    o.type = 'sine'; o.frequency.setValueAtTime(90, t); o.frequency.exponentialRampToValueAtTime(32, t + .5);
+    og.gain.setValueAtTime(.8 * size, t); og.gain.exponentialRampToValueAtTime(.001, t + .7);
+    o.connect(og); o.start(t); o.stop(t + .75);
+    if(crackle){
+      for(let i = 0; i < 26; i++){
+        const ct = t + .55 + Math.random() * 1.1, cn = noise(ct, .03), hp = ac.createBiquadFilter(), cg = out(x + rnd(-80, 80));
+        hp.type = 'highpass'; hp.frequency.value = 2500;
+        cg.gain.setValueAtTime(rnd(.05, .16), ct); cg.gain.exponentialRampToValueAtTime(.001, ct + .03);
+        cn.connect(hp); hp.connect(cg);
+      }
+    }
+  }
+  const soundBtn = document.getElementById('sound');
+  function setSound(on){
+    initAudio(); if(!ac) return;
+    soundOn = on; if(on) ac.resume();
+    soundBtn.classList.toggle('on', on); soundBtn.setAttribute('aria-pressed', on);
+    soundBtn.setAttribute('aria-label', on ? 'Mute firework sounds' : 'Turn firework sounds on');
+  }
+  soundBtn.addEventListener('click', e => { e.stopPropagation(); setSound(!soundOn); });
+  // browsers only allow sound after a tap: try right away, and switch on with the first touch
+  try{ initAudio(); if(ac){ ac.resume().then(() => { if(ac.state === 'running') setSound(true); }); } }catch(e){}
+  const firstTouch = e => {
+    removeEventListener('pointerdown', firstTouch, true);
+    if(e.target.closest && e.target.closest('.sound')) return;   // the speaker button handles itself
+    if(!soundOn) setSound(true);
+  };
+  addEventListener('pointerdown', firstTouch, true);
+  if(!AC) soundBtn.hidden = true;
+
+  /* ---------------- fireworks ---------------- */
   const cv = document.getElementById('fireworks'), c = cv.getContext('2d');
-  let W, H, D;
-  function size(){ D = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
-    cv.width = W * D; cv.height = H * D; c.setTransform(D, 0, 0, D, 0, 0);
-    pc.width = W * D; pc.height = H * D; p2.setTransform(D, 0, 0, D, 0, 0); }
-
   const PALETTES = [
-    [[255, 214, 120], [255, 180, 70]],          // gold
-    [[255, 120, 170], [255, 190, 215]],         // pink
-    [[255, 140, 60], [255, 220, 140]],          // saffron
-    [[200, 120, 255], [255, 160, 220]],         // violet-pink
-    [[120, 220, 255], [255, 255, 255]],         // silver-blue
-    [[255, 90, 90], [255, 200, 120]],           // red-gold
+    [[255, 214, 120], [255, 180, 70]], [[255, 120, 170], [255, 200, 225]], [[255, 140, 60], [255, 225, 150]],
+    [[190, 120, 255], [255, 170, 225]], [[130, 225, 255], [255, 255, 255]], [[255, 85, 90], [255, 205, 120]], [[150, 255, 170], [255, 245, 170]],
   ];
   const rockets = [], sparks = [];
-  const rnd = (a, b) => a + Math.random() * (b - a);
-
   function launch(tx, ty){
-    const x = tx ?? rnd(W * .12, W * .88);
-    const y = ty ?? rnd(H * .1, H * .38);
-    const sx = x + rnd(-W * .05, W * .05);
-    rockets.push({ x: sx, y: H + 10, tx: x, ty: y, vx: (x - sx) / 60, vy: -(H + 10 - y) / 60, t: 0, trail: [] });
+    const x = tx ?? rnd(W * .1, W * .9), y = ty ?? rnd(H * .12, H * .45);
+    const sx = x + rnd(-W * .06, W * .06), frames = 55 + Math.random() * 15;
+    rockets.push({ x: sx, y: H + 10, ty: y, vx: (x - sx) / frames, vy: -(H + 10 - y) / frames, t: 0, max: frames + 15 });
+    soundLaunch(sx, frames / 60);
   }
   function explode(x, y){
     const pal = PALETTES[Math.floor(Math.random() * PALETTES.length)];
-    const kind = Math.random();
-    const n = kind < .2 ? 170 : 130;
-    const scale = Math.max(.8, Math.min(W, H) / 420);
-    const speed = rnd(3.2, 4.8) * scale;
+    const kind = Math.random(), scale = Math.max(.8, Math.min(W, H) / 420);
+    const ring = kind < .2, willow = kind > .8, crackle = kind > .6 && kind <= .8;
+    const n = ring ? 170 : 140, speed = rnd(3.2, 4.8) * scale;
     for(let i = 0; i < n; i++){
       const a = (i / n) * Math.PI * 2 + rnd(-.05, .05);
-      let s = speed * (kind < .2 ? 1 : rnd(.35, 1));        // ring vs peony
-      const col = Math.random() < .75 ? pal[0] : pal[1];
-      sparks.push({ x, y, px: x, py: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rnd(70, 110), max: 110,
-        col, w: rnd(1.4, 2.6), twinkle: Math.random() < .35, crackle: kind > .85 && Math.random() < .5 });
+      const s = speed * (ring ? 1 : Math.cbrt(Math.random()));
+      sparks.push({ x, y, px: x, py: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s,
+        life: willow ? rnd(110, 150) : rnd(70, 110), max: willow ? 150 : 110, g: willow ? .055 : .04,
+        col: willow ? [255, 200, 110] : (Math.random() < .75 ? pal[0] : pal[1]), w: rnd(1.4, 2.6),
+        twinkle: Math.random() < .3, crackle });
     }
-    // bright flash
-    sparks.push({ flash: true, x, y, life: 12, max: 12, col: pal[0], r: 140 * scale });
+    sparks.push({ flash: true, x, y, life: 12, max: 12, col: pal[0], r: 150 * scale });
+    soundBoom(x, Math.min(1, .55 + scale * .25), crackle);
   }
-
   function frame(){
-    // fade previous frame for natural light trails while keeping the backdrop visible
+    drawStars();
     c.globalCompositeOperation = 'destination-out';
-    c.fillStyle = 'rgba(0,0,0,.18)';
-    c.fillRect(0, 0, W, H);
+    c.fillStyle = 'rgba(0,0,0,.18)'; c.fillRect(0, 0, W, H);
     c.globalCompositeOperation = 'lighter';
-
     for(let i = rockets.length - 1; i >= 0; i--){
       const r = rockets[i]; r.t++;
-      r.px = r.x; r.py = r.y;
-      r.x += r.vx; r.y += r.vy; r.vy *= .985;
-      c.strokeStyle = 'rgba(255,220,160,.9)'; c.lineWidth = 2;
-      c.beginPath(); c.moveTo(r.px, r.py); c.lineTo(r.x, r.y); c.stroke();
-      // ember sparks falling from the rocket
-      if(Math.random() < .6) sparks.push({ x: r.x, y: r.y, px: r.x, py: r.y, vx: rnd(-.4, .4), vy: rnd(.5, 1.5), life: 22, max: 22, col: [255, 190, 110], w: 1 });
-      if(r.y <= r.ty || r.t > 75){ explode(r.x, r.y); rockets.splice(i, 1); }
+      const px = r.x, py = r.y; r.x += r.vx; r.y += r.vy;
+      c.strokeStyle = 'rgba(255,225,170,.95)'; c.lineWidth = 2;
+      c.beginPath(); c.moveTo(px, py); c.lineTo(r.x, r.y); c.stroke();
+      if(Math.random() < .7) sparks.push({ x: r.x, y: r.y, px: r.x, py: r.y, vx: rnd(-.4, .4), vy: rnd(.4, 1.4), life: 22, max: 22, g: .02, col: [255, 190, 110], w: 1 });
+      if(r.y <= r.ty || r.t > r.max){ explode(r.x, r.y); rockets.splice(i, 1); }
     }
-
     for(let i = sparks.length - 1; i >= 0; i--){
       const s = sparks[i]; s.life--;
       if(s.life <= 0){ sparks.splice(i, 1); continue; }
@@ -128,60 +206,45 @@
         g.addColorStop(0, `rgba(${s.col},${.6 * al})`); g.addColorStop(1, 'rgba(0,0,0,0)');
         c.fillStyle = g; c.beginPath(); c.arc(s.x, s.y, s.r, 0, 6.29); c.fill(); continue;
       }
-      s.px = s.x; s.py = s.y;
-      s.vx *= .978; s.vy = s.vy * .978 + .04;   // drag + gravity
-      s.x += s.vx; s.y += s.vy;
+      s.px = s.x; s.py = s.y; s.vx *= .978; s.vy = s.vy * .978 + s.g; s.x += s.vx; s.y += s.vy;
       let a = al;
       if(s.twinkle) a *= .5 + Math.random() * .5;
-      if(s.crackle && al < .35 && Math.random() < .3) a = 1;
-      c.strokeStyle = `rgba(${s.col[0]},${s.col[1]},${s.col[2]},${a})`;
-      c.lineWidth = s.w;
+      if(s.crackle && al < .4 && Math.random() < .35) a = 1;
+      c.strokeStyle = `rgba(${s.col[0]},${s.col[1]},${s.col[2]},${a})`; c.lineWidth = s.w;
       c.beginPath(); c.moveTo(s.px, s.py); c.lineTo(s.x, s.y); c.stroke();
     }
     requestAnimationFrame(frame);
   }
 
-  /* ---------------- falling rose petals ---------------- */
-  const pc = document.getElementById('petals'), p2 = pc.getContext('2d');
-  let petals = [];
-  const mkPetal = top => ({ x: Math.random() * W, y: top ? -30 : Math.random() * H, s: 6 + Math.random() * 8, vy: .4 + Math.random() * .6,
-    sw: Math.random() * 6.28, sws: .01 + Math.random() * .015, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .03, flip: Math.random() * 6.28, vf: .02 + Math.random() * .03, hue: Math.random() });
-  function petal(p){
-    p2.save(); p2.translate(p.x, p.y); p2.rotate(p.rot); p2.scale(Math.cos(p.flip) * .8 + .2 * Math.sign(Math.cos(p.flip) || 1), 1);
-    const s = p.s, g = p2.createRadialGradient(-s * .2, -s * .3, s * .1, 0, 0, s * 1.2);
-    const a = p.hue < .5 ? ['#fde0ea', '#f4a3be', '#d9658e'] : ['#fbd3e1', '#ee93b3', '#cf5a84'];
-    g.addColorStop(0, a[0]); g.addColorStop(.6, a[1]); g.addColorStop(1, a[2]);
-    p2.fillStyle = g; p2.globalAlpha = .85;
-    p2.beginPath(); p2.moveTo(0, s); p2.bezierCurveTo(s * 1.1, s * .5, s * .9, -s * 1.1, 0, -s * .75); p2.bezierCurveTo(-s * .9, -s * 1.1, -s * 1.1, s * .5, 0, s); p2.fill();
-    p2.restore();
+  function size(){
+    const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+    for(const [el, ctx] of [[cv, c], [sc, s2]]){ el.width = W * d; el.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); }
+    makeStars();
   }
-  function petalFrame(){
-    p2.clearRect(0, 0, W, H);
-    for(const p of petals){
-      p.sw += p.sws; p.x += Math.sin(p.sw) * .7; p.y += p.vy; p.rot += p.vr; p.flip += p.vf;
-      if(p.y > H + 30) Object.assign(p, mkPetal(true));
-      petal(p);
-    }
-    requestAnimationFrame(petalFrame);
-  }
+  size(); addEventListener('resize', size);
 
-  size();
-  addEventListener('resize', size);
-  petals = Array.from({ length: Math.round(Math.min(18, W * H / 50000) + 5) }, () => mkPetal(false));
+  /* the button to the flowers */
+  const next = document.getElementById('next');
+  setTimeout(() => next.classList.add('in'), reduce ? 300 : 6000);
+  next.addEventListener('click', e => {
+    e.preventDefault(); e.stopPropagation();
+    document.getElementById('veil').classList.add('on');
+    setTimeout(() => { location.href = next.href; }, 700);
+  });
+  next.addEventListener('pointerdown', e => e.stopPropagation());
 
-  if(reduce){ petals.forEach(petal); return; }
+  if(reduce){ drawStars(); return; }
   requestAnimationFrame(frame);
-  requestAnimationFrame(petalFrame);
-
-  // a grand opening volley, then a gentle, endless show
-  [900, 1300, 1700, 2000, 2400].forEach(t => setTimeout(() => launch(), t));
+  [700, 1100, 1500, 1800, 2200].forEach(t => setTimeout(() => launch(), t));
   (function loop(){
-    if(!document.hidden){ launch(); if(Math.random() < .35) setTimeout(() => launch(), 250); }
+    if(!document.hidden){ launch(); if(Math.random() < .35) setTimeout(() => launch(), 260); }
     setTimeout(loop, rnd(900, 1800));
   })();
-
-  // tap anywhere for your own firework
-  addEventListener('pointerdown', e => launch(e.clientX, Math.min(e.clientY, H * .6)));
+  // tap the sky for your own firework
+  addEventListener('pointerdown', e => {
+    if(e.target.closest('.sound, .next')) return;
+    launch(e.clientX, Math.min(e.clientY, H * .65));
+  });
 })();
 </script>
 </body>
