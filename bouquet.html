@@ -14,8 +14,8 @@
   /* everything that blends lives in one screen-sized frame, so nothing can widen the page */
   .scene{position:fixed;inset:0;overflow:hidden;}
   .bg{position:absolute;inset:0;background:
-      radial-gradient(55% 50% at 50% 46%,rgba(214,177,111,.22),transparent 70%),
-      radial-gradient(90% 80% at 50% 40%,var(--maroon) 0%,var(--burgundy) 45%,var(--wine) 80%,#160309 100%);}
+      radial-gradient(70% 60% at 50% 46%,rgba(214,177,111,.10),transparent 70%),
+      radial-gradient(90% 80% at 50% 42%,#3a0a17 0%,var(--wine) 50%,#160309 100%);}
 
   /* the Gamma photo sits on pure black: "lighten" drops the black out so the page's burgundy shows through */
   .bouquet{mix-blend-mode:lighten;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -26,7 +26,7 @@
     -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 82%,transparent 100%);
             mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 82%,transparent 100%);
     opacity:0;}
-  .bouquet img.fallback{-webkit-mask-image:none;mask-image:none;object-fit:contain;filter:drop-shadow(0 0 30px rgba(255,170,200,.25));}
+  .bouquet img.fallback{-webkit-mask-image:none;mask-image:none;object-fit:contain;}
   .bouquet img.ready{animation:bloom 2.4s cubic-bezier(.2,.7,.2,1) both;}
   @keyframes bloom{0%{opacity:0;transform:scale(.84) translateY(30px);filter:blur(12px) saturate(.7)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
   .sway{position:absolute;inset:0;animation:sway 8s ease-in-out 2.8s infinite;transform-origin:50% 92%;}
@@ -52,7 +52,7 @@
   <div class="bg" aria-hidden="true"></div>
   <canvas id="sparkles" aria-hidden="true"></canvas>
   <div class="bouquet"><div class="sway">
-    <img id="bouquet" alt="A huge bouquet of soft pink roses for Ladoo">
+    <img id="bouquet" alt="A huge bouquet of deep red roses for Ladoo">
   </div></div>
   </div>
   <canvas id="glitter" aria-hidden="true"></canvas>
@@ -62,11 +62,11 @@
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* a realistic bouquet generated with Gamma; a cut-out of the original bouquet is the fallback */
-  const BOUQUET = 'https://cdn.gamma.app/n4ay785j5gfy9a4/design-anything/vIsqIQywkO1SZ2SKNNxX1/Z-ZVfBSMuWiTqXuLOaOkW.jpg';
+  /* a realistic bouquet generated with Gamma; a red cut-out of the original bouquet is the fallback */
+  const BOUQUET = 'https://cdn.gamma.app/n4ay785j5gfy9a4/design-anything/y0mtft3XhDHF2mb4EIaYv/m0zoyl8OiBw4bNhKtfmtW.jpg';
   const img = document.getElementById('bouquet');
   img.onload = () => img.classList.add('ready');
-  img.onerror = () => { img.onerror = null; img.classList.add('fallback'); img.parentNode.parentNode.style.mixBlendMode = 'normal'; img.src = 'assets/img/bouquet-cutout.webp'; };
+  img.onerror = () => { img.onerror = null; img.classList.add('fallback'); img.parentNode.parentNode.style.mixBlendMode = 'normal'; img.src = 'assets/img/bouquet-cutout-red.webp'; };
   img.src = BOUQUET;
 
   let W, H;
