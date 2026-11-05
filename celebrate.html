@@ -79,63 +79,82 @@
     s2.globalAlpha = 1;
   }
 
-  /* ---------------- firework sounds (synthesised, no files) ---------------- */
+  /* ---------------- firework sounds ----------------
+     Bursts use real firework recordings (assets/sfx, from fireworks-js, MIT licence).
+     Each one is pitched a little differently, panned to where it bursts, arrives a moment
+     after the flash (sound travels slower than light) and rings out with an outdoor echo. */
   const AC = window.AudioContext || window.webkitAudioContext;
-  let ac, master, noiseBuf, soundOn = false;
+  const SFX = ['assets/sfx/explosion0.mp3', 'assets/sfx/explosion1.mp3', 'assets/sfx/explosion2.mp3'];
+  let ac, master, dry, wet, noiseBuf, booms = [], soundOn = false;
+  function decode(buf){ return new Promise((ok, no) => { const r = ac.decodeAudioData(buf, ok, no); if(r && r.then) r.then(ok, no); }); }
   function initAudio(){
     if(ac || !AC) return;
     ac = new AC();
     const comp = ac.createDynamicsCompressor();
-    comp.threshold.value = -18; comp.ratio.value = 4;
-    master = ac.createGain(); master.gain.value = .9;
+    comp.threshold.value = -14; comp.knee.value = 12; comp.ratio.value = 3; comp.attack.value = .003; comp.release.value = .25;
+    master = ac.createGain(); master.gain.value = 1;
     master.connect(comp); comp.connect(ac.destination);
+    // outdoor echo: a long, dark, decaying reverb
+    const len = Math.floor(ac.sampleRate * 3.2), ir = ac.createBuffer(2, len, ac.sampleRate);
+    for(let ch = 0; ch < 2; ch++){
+      const d = ir.getChannelData(ch);
+      for(let i = 0; i < len; i++){ const t = i / ac.sampleRate; d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6) * (t < .04 ? t / .04 : 1); }
+    }
+    const verb = ac.createConvolver(); verb.buffer = ir;
+    const dark = ac.createBiquadFilter(); dark.type = 'lowpass'; dark.frequency.value = 2200;
+    dry = ac.createGain(); dry.gain.value = .85; dry.connect(master);
+    wet = ac.createGain(); wet.gain.value = .5; wet.connect(dark); dark.connect(verb); verb.connect(master);
     noiseBuf = ac.createBuffer(1, ac.sampleRate * 2, ac.sampleRate);
-    const d = noiseBuf.getChannelData(0);
-    for(let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    const n = noiseBuf.getChannelData(0);
+    for(let i = 0; i < n.length; i++) n[i] = Math.random() * 2 - 1;
+    SFX.forEach(u => fetch(u).then(r => r.arrayBuffer()).then(decode).then(b => booms.push(b)).catch(() => {}));
   }
-  function out(x){
+  function out(x, reverb = .5){
     const g = ac.createGain();
-    if(ac.createStereoPanner){ const p = ac.createStereoPanner(); p.pan.value = Math.max(-1, Math.min(1, (x / W) * 1.6 - .8)); g.connect(p); p.connect(master); }
-    else g.connect(master);
+    let node = g;
+    if(ac.createStereoPanner){ const p = ac.createStereoPanner(); p.pan.value = Math.max(-1, Math.min(1, (x / W) * 1.4 - .7)); g.connect(p); node = p; }
+    node.connect(dry);
+    const send = ac.createGain(); send.gain.value = reverb; node.connect(send); send.connect(wet);
     return g;
   }
   function noise(t, dur){ const n = ac.createBufferSource(); n.buffer = noiseBuf; n.start(t, Math.random(), dur); return n; }
   function soundLaunch(x, dur){
     if(!soundOn) return;
-    const t = ac.currentTime, n = noise(t, dur + .1), bp = ac.createBiquadFilter(), g = out(x);
-    bp.type = 'bandpass'; bp.Q.value = 6;
-    bp.frequency.setValueAtTime(500, t); bp.frequency.exponentialRampToValueAtTime(2600, t + dur);
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.12, t + .08); g.gain.linearRampToValueAtTime(.05, t + dur);
-    g.gain.linearRampToValueAtTime(0, t + dur + .08);
+    const t = ac.currentTime;
+    // the mortar "thump" as the shell leaves the tube
+    const th = ac.createOscillator(), tg = out(x, .3);
+    th.type = 'sine'; th.frequency.setValueAtTime(140, t); th.frequency.exponentialRampToValueAtTime(45, t + .12);
+    tg.gain.setValueAtTime(.32, t); tg.gain.exponentialRampToValueAtTime(.001, t + .18);
+    th.connect(tg); th.start(t); th.stop(t + .2);
+    const pop = noise(t, .06), pf = ac.createBiquadFilter(), pg = out(x, .3);
+    pf.type = 'lowpass'; pf.frequency.value = 900;
+    pg.gain.setValueAtTime(.35, t); pg.gain.exponentialRampToValueAtTime(.001, t + .06);
+    pop.connect(pf); pf.connect(pg);
+    // the soft hiss of the rising shell, fading as it climbs away
+    const n = noise(t + .02, dur), bp = ac.createBiquadFilter(), g = out(x, .4);
+    bp.type = 'bandpass'; bp.Q.value = 1.2;
+    bp.frequency.setValueAtTime(1800, t); bp.frequency.exponentialRampToValueAtTime(3800, t + dur);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.05, t + .1); g.gain.exponentialRampToValueAtTime(.002, t + dur);
     n.connect(bp); bp.connect(g);
-    if(Math.random() < .4){ // the odd whistling rocket
-      const o = ac.createOscillator(), og = out(x);
-      o.type = 'sine'; o.frequency.setValueAtTime(1300, t); o.frequency.exponentialRampToValueAtTime(2900, t + dur);
-      og.gain.setValueAtTime(0, t); og.gain.linearRampToValueAtTime(.025, t + .1); og.gain.linearRampToValueAtTime(0, t + dur);
-      o.connect(og); o.start(t); o.stop(t + dur + .05);
-    }
   }
-  function soundBoom(x, size, crackle){
+  function soundBoom(x, y, size){
     if(!soundOn) return;
-    const t = ac.currentTime + .02;
-    // the bang: a short noise burst through a low-pass, with a long decaying tail
-    const n = noise(t, 2.2), lp = ac.createBiquadFilter(), g = out(x);
-    lp.type = 'lowpass'; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(180, t + 1.2);
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.9 * size, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + 2);
-    n.connect(lp); lp.connect(g);
-    // the thump you feel
-    const o = ac.createOscillator(), og = out(x);
-    o.type = 'sine'; o.frequency.setValueAtTime(90, t); o.frequency.exponentialRampToValueAtTime(32, t + .5);
-    og.gain.setValueAtTime(.8 * size, t); og.gain.exponentialRampToValueAtTime(.001, t + .7);
-    o.connect(og); o.start(t); o.stop(t + .75);
-    if(crackle){
-      for(let i = 0; i < 26; i++){
-        const ct = t + .55 + Math.random() * 1.1, cn = noise(ct, .03), hp = ac.createBiquadFilter(), cg = out(x + rnd(-80, 80));
-        hp.type = 'highpass'; hp.frequency.value = 2500;
-        cg.gain.setValueAtTime(rnd(.05, .16), ct); cg.gain.exponentialRampToValueAtTime(.001, ct + .03);
-        cn.connect(hp); hp.connect(cg);
-      }
+    const far = Math.max(0, Math.min(1, 1 - y / H));             // higher bursts feel further away
+    const t = ac.currentTime + .08 + far * .3;                    // the bang arrives just after the flash
+    if(booms.length){
+      const src = ac.createBufferSource(), g = out(x, .35 + far * .4), tone = ac.createBiquadFilter();
+      src.buffer = booms[Math.floor(Math.random() * booms.length)];
+      src.playbackRate.value = rnd(.82, 1.12);                     // every burst a little different
+      tone.type = 'lowpass'; tone.frequency.value = 9000 - far * 4500; // distance softens the highs
+      g.gain.value = (.65 + .35 * size) * (1 - far * .35);
+      src.connect(tone); tone.connect(g); src.start(t);
+      return;
     }
+    // recordings not loaded yet: a simple synthesised bang
+    const n = noise(t, 2), lp = ac.createBiquadFilter(), g = out(x);
+    lp.type = 'lowpass'; lp.frequency.setValueAtTime(3000, t); lp.frequency.exponentialRampToValueAtTime(180, t + 1.2);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.8 * size, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + 1.8);
+    n.connect(lp); lp.connect(g);
   }
   const soundBtn = document.getElementById('sound');
   function setSound(on){
@@ -182,7 +201,7 @@
         twinkle: Math.random() < .3, crackle });
     }
     sparks.push({ flash: true, x, y, life: 12, max: 12, col: pal[0], r: 150 * scale });
-    soundBoom(x, Math.min(1, .55 + scale * .25), crackle);
+    soundBoom(x, y, Math.min(1, .55 + scale * .25));
   }
   function frame(){
     drawStars();
