@@ -30,6 +30,13 @@
     box-shadow:0 10px 30px rgba(178,58,100,.45),inset 0 1px 0 rgba(255,255,255,.25);}
   .next.in{opacity:1;transform:translate(-50%,0);pointer-events:auto;animation:breathe 2.4s ease-in-out 1.2s infinite;}
   @keyframes breathe{50%{box-shadow:0 12px 36px rgba(178,58,100,.6),0 0 0 8px rgba(212,92,134,.12),inset 0 1px 0 rgba(255,255,255,.25)}}
+  /* shown only until the sound starts (iPhones need one tap before any page can play sound) */
+  .tap-sound{position:fixed;left:50%;top:calc(18px + env(safe-area-inset-top,0px));z-index:6;transform:translate(-50%,-10px);opacity:0;
+    padding:10px 18px;border-radius:999px;background:rgba(20,8,20,.6);border:1px solid rgba(255,220,170,.35);color:#ffe2b0;
+    font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-size:16px;white-space:nowrap;pointer-events:none;
+    transition:opacity .6s ease, transform .6s ease;}
+  .tap-sound.show{opacity:1;transform:translate(-50%,0);animation:tapPulse 2s ease-in-out infinite;}
+  @keyframes tapPulse{50%{box-shadow:0 0 0 8px rgba(255,210,150,.10)}}
   .veil{position:fixed;inset:0;z-index:9;background:#05020a;opacity:0;pointer-events:none;transition:opacity .7s;}
   .veil.on{opacity:1;}
 </style>
@@ -39,6 +46,7 @@
   <canvas id="stars" aria-hidden="true"></canvas>
   <canvas id="fireworks" aria-hidden="true"></canvas>
 
+  <div class="tap-sound" id="tapSound" aria-hidden="true">🔊 Tap anywhere for sound</div>
   <a class="next" id="next" href="bouquet.html">One more thing… 🌹</a>
   <div class="veil" id="veil"></div>
 
@@ -107,7 +115,9 @@
   }
 
   /* unlock: the first touch plays every player silently once, which iPhones require */
-  function markUnlocked(){ unlocked = true; }
+  const tapSound = document.getElementById('tapSound');
+  function markUnlocked(){ if(!unlocked){ unlocked = true; tapSound.classList.remove('show'); } }
+  setTimeout(() => { if(!unlocked) tapSound.classList.add('show'); }, 700);
   function unlock(){
     if(unlocked) return;
     try{ if(navigator.audioSession) navigator.audioSession.type = 'playback'; }catch(e){}
