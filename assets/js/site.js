@@ -25,36 +25,137 @@
     ['celebrate.html', 'Celebrate', 'celebrate'],
   ];
 
-  /* ---------------- diya SVG ---------------- */
+  /* ---------------- diya: a clay oil lamp with a live, flickering flame ----------------
+     The lamp is SVG (terracotta with clay grain, inner wall, oil pool, cotton wick);
+     the flame and the warm light it throws are drawn on a canvas every frame. */
   let artN = 0;
   function diyaSVG(){
     const n = ++artN;
     return `<svg viewBox="0 0 120 120" aria-hidden="true">
       <defs>
-        <radialGradient id="dg${n}" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd27a" stop-opacity=".75"/><stop offset=".4" stop-color="#ff9d3a" stop-opacity=".25"/><stop offset="1" stop-color="#ff7a1a" stop-opacity="0"/></radialGradient>
-        <linearGradient id="dc${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8693a"/><stop offset=".55" stop-color="#9a4322"/><stop offset="1" stop-color="#5e2412"/></linearGradient>
-        <linearGradient id="do${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c66a"/><stop offset="1" stop-color="#b8792a"/></linearGradient>
-        <radialGradient id="df${n}" cx=".5" cy=".75" r=".7"><stop offset="0" stop-color="#fffbe8"/><stop offset=".35" stop-color="#ffe08a"/><stop offset=".7" stop-color="#ffa53a"/><stop offset="1" stop-color="#ff6a12" stop-opacity=".2"/></radialGradient>
+        <radialGradient id="db${n}" cx=".5" cy="-.15" r="1.15">
+          <stop offset="0" stop-color="#e0915a"/><stop offset=".45" stop-color="#b45a2c"/><stop offset=".8" stop-color="#7c3517"/><stop offset="1" stop-color="#4d1e0c"/>
+        </radialGradient>
+        <linearGradient id="dside${n}" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#000" stop-opacity=".45"/><stop offset=".3" stop-color="#000" stop-opacity="0"/>
+          <stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".5"/>
+        </linearGradient>
+        <radialGradient id="dwall${n}" cx=".5" cy=".2" r=".9"><stop offset="0" stop-color="#2a0f06"/><stop offset="1" stop-color="#5a2610"/></radialGradient>
+        <radialGradient id="doil${n}" cx=".5" cy=".45" r=".6">
+          <stop offset="0" stop-color="#f6c45a"/><stop offset=".55" stop-color="#b9781f"/><stop offset="1" stop-color="#5e3708"/>
+        </radialGradient>
+        <radialGradient id="dwarm${n}" cx=".5" cy=".18" r=".75">
+          <stop offset="0" stop-color="#ffb35c" stop-opacity=".75"/><stop offset=".5" stop-color="#ff8a2a" stop-opacity=".25"/><stop offset="1" stop-color="#ff7a1a" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="dgrain${n}" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="1.9" numOctaves="3" seed="${n * 7}" result="t"/>
+          <feColorMatrix in="t" type="matrix" values="0 0 0 0 .18  0 0 0 0 .07  0 0 0 0 .02  0 0 0 -1.1 .62"/>
+        </filter>
+        <clipPath id="dclip${n}"><path d="M8 64 C9 90 34 104 60 104 C86 104 111 90 112 64 Z"/></clipPath>
       </defs>
-      <circle class="glow" cx="60" cy="52" r="58" fill="url(#dg${n})"/>
-      <ellipse cx="60" cy="98" rx="38" ry="5" fill="#000" opacity=".25"/>
-      <path d="M14 70 C18 92 40 100 60 100 C80 100 102 92 106 70 C96 66 86 65 74 66 L60 52 L46 66 C34 65 24 66 14 70Z" fill="url(#dc${n})"/>
-      <path d="M14 70 C30 64 46 66 60 68 C74 66 90 64 106 70 C92 76 76 78 60 78 C44 78 28 76 14 70Z" fill="#4a1a0c"/>
-      <path d="M22 71 C36 68 48 70 60 71 C72 70 84 68 98 71 C86 74 74 75 60 75 C46 75 34 74 22 71Z" fill="url(#do${n})" opacity=".9"/>
-      <g fill="#f3c46b" opacity=".85"><circle cx="30" cy="84" r="1.8"/><circle cx="42" cy="89" r="1.8"/><circle cx="60" cy="91" r="2"/><circle cx="78" cy="89" r="1.8"/><circle cx="90" cy="84" r="1.8"/></g>
-      <path d="M24 80 Q60 96 96 80" stroke="#f3c46b" stroke-width="1" fill="none" opacity=".6"/>
-      <path class="wick" d="M60 70 L60 62" stroke="#3a1a0a" stroke-width="2.4" stroke-linecap="round" fill="#3a1a0a"/>
-      <g class="flame">
-        <path d="M60 64 C50 54 52 40 60 22 C68 40 70 54 60 64Z" fill="url(#df${n})"/>
-        <path d="M60 62 C55 56 56 47 60 38 C64 47 65 56 60 62Z" fill="#fffdf2" opacity=".9"/>
-        <ellipse cx="60" cy="60" rx="2.6" ry="3.2" fill="#6ab0ff" opacity=".55"/>
+      <ellipse cx="60" cy="106" rx="44" ry="5.5" fill="#000" opacity=".45"/>
+      <!-- bowl body -->
+      <path d="M8 64 C9 90 34 104 60 104 C86 104 111 90 112 64 Z" fill="url(#db${n})"/>
+      <g clip-path="url(#dclip${n})">
+        <rect x="0" y="40" width="120" height="70" filter="url(#dgrain${n})"/>
+        <rect x="0" y="40" width="120" height="70" fill="url(#dside${n})"/>
+        <path d="M14 76 C34 88 86 88 106 76" stroke="#e6a06a" stroke-width=".8" fill="none" opacity=".35"/>
+        <rect class="warm" x="0" y="40" width="120" height="70" fill="url(#dwarm${n})"/>
       </g>
-    </svg>`;
+      <!-- the pinched lip at the front, where the wick rests -->
+      <path d="M48 70 Q60 84 72 70 Q60 76 48 70Z" fill="#9a4722"/>
+      <!-- rim, inner wall and oil -->
+      <ellipse cx="60" cy="64" rx="52" ry="11" fill="#c8733f"/>
+      <ellipse cx="60" cy="64.6" rx="49.5" ry="9.6" fill="url(#dwall${n})"/>
+      <ellipse class="oil" cx="60" cy="66.6" rx="42" ry="6.6" fill="url(#doil${n})"/>
+      <ellipse class="refl" cx="60" cy="66.4" rx="9" ry="2.2" fill="#fff4c8" opacity=".25"/>
+      <path d="M8.5 63 C20 52.5 100 52.5 111.5 63" stroke="#eeb383" stroke-width="1.1" fill="none" opacity=".55"/>
+      <!-- cotton wick lying in the oil, its tip in the lip -->
+      <path d="M44 66 C50 67.5 55 68.2 60 70.5" stroke="#efe3cb" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+      <path d="M44 66 C50 67.5 55 68.2 60 70.5" stroke="#b7a37f" stroke-width="1" stroke-dasharray="1.4 1.6" fill="none" opacity=".7"/>
+      <circle class="wick-tip" cx="60.6" cy="70.2" r="1.9" fill="#2b1a10"/>
+    </svg><canvas class="flame-cv" aria-hidden="true"></canvas>`;
   }
+
+  const Flames = (() => {
+    const list = [];
+    let running = false;
+    const reduceM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function add(el){
+      list.push({ el, cv: el.querySelector('.flame-cv'), refl: el.querySelector('.refl'), warm: el.querySelector('.warm'),
+        p1: Math.random() * 9, p2: Math.random() * 9, p3: Math.random() * 9, litAt: 0, ctx: null, S: 0 });
+      if(!running){ running = true; requestAnimationFrame(loop); }
+    }
+    function drop(c, x, y, w, h, sway){
+      c.beginPath();
+      c.moveTo(x - w * .18, y);
+      c.bezierCurveTo(x - w * 1.05, y - h * .12, x - w * .62 + sway * .25, y - h * .62, x + sway, y - h);
+      c.bezierCurveTo(x + w * .62 + sway * .25, y - h * .62, x + w * 1.05, y - h * .12, x + w * .18, y);
+      c.quadraticCurveTo(x, y + w * .55, x - w * .18, y);
+      c.closePath();
+    }
+    function draw(d, t){
+      const S = d.el.clientWidth; if(!S) return;
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const W = Math.round(S * 2.2), H = Math.round(S * 2.3);
+      if(d.S !== S){ d.S = S; d.cv.width = W * dpr; d.cv.height = H * dpr; d.ctx = d.cv.getContext('2d'); d.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+      const c = d.ctx;
+      c.clearRect(0, 0, W, H);
+      const lit = d.el.classList.contains('lit');
+      if(!lit){ d.litAt = 0; if(d.warm) d.warm.style.opacity = 0; if(d.refl) d.refl.style.opacity = .12; return; }
+      if(!d.litAt) d.litAt = t;
+      const grow = Math.min(1, (t - d.litAt) / .7), g = 1 - Math.pow(1 - grow, 3);
+      const tt = reduceM ? 0 : t;
+      const n = Math.sin(tt * 7.3 + d.p1) * .5 + Math.sin(tt * 13.7 + d.p2) * .3 + Math.sin(tt * 23.1 + d.p3) * .2;
+      const flick = .5 + .5 * n;
+      const x = W * .5, y = S * 1.0 + S * (70.2 / 120);           // wick tip in canvas space
+      const h = S * .44 * g * (1 + .09 * n + .04 * Math.sin(tt * 31 + d.p1));
+      const w = S * .075 * (.8 + .2 * g) * (1 - .05 * n);
+      const sway = S * .03 * (Math.sin(tt * 2.1 + d.p2) * .6 + Math.sin(tt * 5.3 + d.p3) * .4);
+
+      // warm light thrown around the lamp
+      c.globalCompositeOperation = 'lighter';
+      const R = S * (.78 + .06 * flick);
+      let gr = c.createRadialGradient(x, y - h * .45, 0, x, y - h * .45, R);
+      gr.addColorStop(0, `rgba(255,170,80,${.30 * g})`); gr.addColorStop(.35, `rgba(255,120,40,${.12 * g})`); gr.addColorStop(1, 'rgba(255,100,30,0)');
+      c.fillStyle = gr; c.fillRect(0, 0, W, H);
+
+      // blue base where the flame meets the wick
+      c.globalCompositeOperation = 'source-over';
+      gr = c.createRadialGradient(x, y - h * .06, 0, x, y - h * .06, w * 1.1);
+      gr.addColorStop(0, `rgba(110,160,255,${.55 * g})`); gr.addColorStop(1, 'rgba(110,160,255,0)');
+      c.fillStyle = gr; c.beginPath(); c.ellipse(x, y - h * .07, w * 1.1, h * .12, 0, 0, 6.29); c.fill();
+
+      // outer flame: orange edges fading to transparent
+      drop(c, x, y, w, h, sway);
+      gr = c.createRadialGradient(x + sway * .3, y - h * .28, 0, x + sway * .3, y - h * .3, h * .95);
+      gr.addColorStop(0, `rgba(255,246,214,${g})`); gr.addColorStop(.28, `rgba(255,214,110,${g})`);
+      gr.addColorStop(.6, `rgba(255,146,44,${.92 * g})`); gr.addColorStop(.88, `rgba(220,70,12,${.5 * g})`); gr.addColorStop(1, 'rgba(180,40,0,0)');
+      c.save(); c.shadowColor = `rgba(255,140,40,${.9 * g})`; c.shadowBlur = S * .12; c.fillStyle = gr; c.fill(); c.restore();
+
+      // bright inner core
+      drop(c, x + sway * .12, y - h * .04, w * .48, h * .58, sway * .45);
+      gr = c.createRadialGradient(x, y - h * .2, 0, x, y - h * .2, h * .5);
+      gr.addColorStop(0, `rgba(255,255,248,${.98 * g})`); gr.addColorStop(.6, `rgba(255,240,190,${.85 * g})`); gr.addColorStop(1, 'rgba(255,220,140,0)');
+      c.fillStyle = gr; c.fill();
+
+      // the lamp catches the light
+      if(d.warm) d.warm.style.opacity = (.55 + .45 * flick) * g;
+      if(d.refl) d.refl.style.opacity = (.35 + .5 * flick) * g;
+    }
+    function loop(ms){
+      const t = ms / 1000;
+      for(const d of list) if(d.el.isConnected && d.el.offsetParent !== null) draw(d, t);
+      requestAnimationFrame(loop);
+    }
+    return { add };
+  })();
+
   function makeDiya(el){
     if(el.dataset.ready) return;
     el.dataset.ready = 1;
     el.innerHTML = diyaSVG();
+    Flames.add(el);
   }
 
   /* ---------------- chrome ---------------- */

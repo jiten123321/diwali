@@ -207,14 +207,13 @@ body{animation:pageIn .9s var(--ease) both;}
 
 /* ---------- diya (SVG component) ---------- */
 .diya{position:relative;display:inline-block;width:90px;aspect-ratio:1/1;border:0;background:none;padding:0;cursor:pointer;}
-.diya svg{width:100%;height:100%;overflow:visible;}
-.diya .flame{transform-origin:50% 100%;transform-box:fill-box;opacity:0;transform:scale(.2);transition:opacity .5s, transform .6s var(--ease);}
-.diya .glow{opacity:0;transition:opacity 1s;}
-.diya.lit .flame{opacity:1;transform:scale(1);animation:flicker 2.6s ease-in-out infinite;}
-.diya.lit .glow{opacity:1;animation:glowPulse 3s ease-in-out infinite;}
-.diya:not(.lit):hover .wick{fill:#ffcf7a;}
-@keyframes flicker{0%,100%{transform:scale(1) rotate(-1deg)}20%{transform:scale(1.04,.96) rotate(2deg)}45%{transform:scale(.96,1.06) rotate(-2deg)}70%{transform:scale(1.03,1) rotate(1deg)}}
-@keyframes glowPulse{50%{opacity:.75}}
+.diya svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.diya svg{transition:filter 1s ease;}
+.diya:not(.lit) svg{filter:brightness(.5) saturate(.8);}
+.diya .flame-cv{position:absolute;left:-60%;top:-100%;width:220%;height:230%;pointer-events:none;}
+.diya .warm{opacity:0;transition:opacity .4s;}
+.diya .wick-tip{transition:fill .3s;}
+.diya:not(.lit):hover .wick-tip{fill:#ff9a4a;}
 
 /* ---------- helpers ---------- */
 .section{position:relative;z-index:4;padding:clamp(72px,10vw,140px) 0;}
