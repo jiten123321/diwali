@@ -20,16 +20,6 @@
       linear-gradient(#05020a 0%,#0d0518 45%,#1c0718 100%);}
   canvas{position:fixed;inset:0;width:100%;height:100%;display:block;}
 
-  /* sound: tiny speaker icon, pulses until sound is on */
-  .sound{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:14px;z-index:5;width:44px;height:44px;border-radius:50%;
-    border:1px solid rgba(255,220,170,.35);background:rgba(20,8,20,.5);display:grid;place-items:center;cursor:pointer;padding:0;}
-  .sound svg{width:20px;height:20px;fill:none;stroke:#ffe2b0;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
-  .sound .wave{transition:opacity .3s;}
-  .sound:not(.on) .wave{opacity:0;}
-  .sound:not(.on){animation:nudge 1.8s ease-in-out infinite;}
-  .sound:not(.on) .x{opacity:1;} .sound.on .x{opacity:0;}
-  @keyframes nudge{50%{box-shadow:0 0 0 8px rgba(255,210,150,.12)}}
-
   /* the one button: on to the flowers */
   .next{position:fixed;left:50%;bottom:calc(34px + env(safe-area-inset-bottom,0px));z-index:5;transform:translate(-50%,20px);opacity:0;pointer-events:none;
     transition:opacity 1.2s ease, transform 1.2s cubic-bezier(.2,.7,.2,1);
@@ -47,11 +37,6 @@
   <canvas id="stars" aria-hidden="true"></canvas>
   <canvas id="fireworks" aria-hidden="true"></canvas>
 
-  <button class="sound" id="sound" aria-label="Turn firework sounds on" aria-pressed="false">
-    <svg viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="#ffe2b0" stroke="none"/>
-      <path class="wave" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/>
-      <path class="x" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
-  </button>
   <a class="next" id="next" href="bouquet.html">One more thing… 🌹</a>
   <div class="veil" id="veil"></div>
 
@@ -156,23 +141,13 @@
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.8 * size, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + 1.8);
     n.connect(lp); lp.connect(g);
   }
-  const soundBtn = document.getElementById('sound');
-  function setSound(on){
-    initAudio(); if(!ac) return;
-    soundOn = on; if(on) ac.resume();
-    soundBtn.classList.toggle('on', on); soundBtn.setAttribute('aria-pressed', on);
-    soundBtn.setAttribute('aria-label', on ? 'Mute firework sounds' : 'Turn firework sounds on');
-  }
-  soundBtn.addEventListener('click', e => { e.stopPropagation(); setSound(!soundOn); });
-  // browsers only allow sound after a tap: try right away, and switch on with the first touch
-  try{ initAudio(); if(ac){ ac.resume().then(() => { if(ac.state === 'running') setSound(true); }); } }catch(e){}
-  const firstTouch = e => {
-    removeEventListener('pointerdown', firstTouch, true);
-    if(e.target.closest && e.target.closest('.sound')) return;   // the speaker button handles itself
-    if(!soundOn) setSound(true);
-  };
-  addEventListener('pointerdown', firstTouch, true);
-  if(!AC) soundBtn.hidden = true;
+  /* sound is always on: start straight away; if the browser holds audio back until the
+     first touch (iPhones do), the very first tap or key press starts it */
+  soundOn = true;
+  const wake = () => { try{ initAudio(); if(ac && ac.state !== 'running') ac.resume(); }catch(e){} };
+  wake();
+  ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown'].forEach(ev => addEventListener(ev, wake, { capture: true, passive: true }));
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) wake(); });
 
   /* ---------------- fireworks ---------------- */
   const cv = document.getElementById('fireworks'), c = cv.getContext('2d');
@@ -261,7 +236,7 @@
   })();
   // tap the sky for your own firework
   addEventListener('pointerdown', e => {
-    if(e.target.closest('.sound, .next')) return;
+    if(e.target.closest('.next')) return;
     launch(e.clientX, Math.min(e.clientY, H * .65));
   });
 })();
