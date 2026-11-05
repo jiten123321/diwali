@@ -15,7 +15,7 @@
   .g-hero h1 em{color:var(--gold-2);}
 
   /* ---------- gift box ---------- */
-  .gift-stage{position:relative;z-index:4;display:grid;place-items:center;padding:30px 16px 40px;min-height:540px;overflow:hidden;}
+  .gift-stage{position:relative;z-index:4;display:grid;place-items:center;padding:30px 16px 40px;min-height:540px;overflow-x:clip;overflow-y:visible;}
   .giftbox{position:relative;width:min(300px,72vw);aspect-ratio:1/1;border:0;background:none;padding:0;margin-top:120px;}
   .giftbox .halo{position:absolute;left:50%;top:55%;width:190%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
     background:radial-gradient(circle,rgba(255,200,110,.38),rgba(255,140,60,.1) 40%,transparent 65%);animation:halo 3s ease-in-out infinite;pointer-events:none;}
@@ -87,17 +87,6 @@
   .card-hint{font-family:var(--sans);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-top:22px;}
   .next-chapter{border-color:rgba(214,177,111,.2);}
   .next-chapter .k{color:var(--gold);}
-  /* scroll-down hint: on phones the card and the next button sit below the fold */
-  .scroll-down{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:60;
-    display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:none;padding:6px 10px;cursor:pointer;
-    font-family:var(--sans);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-2);
-    transition:opacity .5s, visibility .5s;}
-  .scroll-down .chev{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
-    background:linear-gradient(180deg,var(--gold-2),var(--gold) 55%,var(--gold-deep));box-shadow:0 8px 22px rgba(0,0,0,.4);
-    animation:nudge 1.8s ease-in-out infinite;}
-  .scroll-down svg{width:20px;height:20px;fill:none;stroke:var(--wine);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
-  .scroll-down.hide{opacity:0;visibility:hidden;}
-  @keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
   /* phones: tighten the top so the whole gift box fits on the first screen, above the scroll arrow */
   @media (max-width:520px){
     .g-hero{padding-top:26px;}
@@ -107,8 +96,8 @@
     .giftbox{width:min(220px,58vw);margin-top:64px;}
     .giftbox .tagline{font-size:20px;}
     .tap{margin-top:10px;}
-    .scroll-down{bottom:calc(6px + env(safe-area-inset-bottom,0px));gap:2px;}
-    .scroll-down .chev{width:38px;height:38px;}
+    .giftbox{transition:margin-top .9s cubic-bezier(.2,.7,.2,1);}
+    .gift-stage.opened .giftbox{margin-top:200px;}
   }
   @media (max-width:520px) and (max-height:620px){
     .g-hero{padding-top:18px;}
@@ -116,6 +105,9 @@
     .g-hero .lede{font-size:15px;}
     .giftbox{width:min(170px,48vw);margin-top:52px;}
     .giftbox .tagline{font-size:17px;}
+    .gift-stage.opened .giftbox{margin-top:230px;}
+    .note{padding:20px 18px;}
+    .note .script{font-size:23px;}
   }
 </style>
 </head>
@@ -127,7 +119,7 @@
     <p class="lede reveal d2" style="margin:16px auto 0">Just a little something, wrapped by hand, very carefully, for you.</p>
   </section>
 
-  <section class="gift-stage" id="giftStage">
+  <section class="gift-stage" id="giftStage" data-scroll-stop>
     <button class="giftbox" id="giftbox" aria-label="Open your Diwali gift">
       <span class="halo"></span>
       <span class="beams"></span>
@@ -139,7 +131,7 @@
     <div class="tap">Tap the gift to open it</div>
   </section>
 
-  <section class="card-sec" id="cardSec" aria-label="Diwali greeting card">
+  <section class="card-sec" id="cardSec" data-scroll-stop aria-label="Diwali greeting card">
     <div class="eyebrow">And a card, of course</div>
     <h2 style="margin-top:12px;font-size:clamp(28px,4vw,44px)">Every gift needs a card</h2>
     <div class="gcard-wrap" id="gcard">
@@ -185,15 +177,11 @@
     <div class="card-hint" id="cardHint">Tap the card to open</div>
   </section>
 
-  <div class="next-step wait" id="nextStep">
+  <div class="next-step wait" id="nextStep" data-scroll-stop>
     <span class="k">One last stop</span>
     <a class="btn gold" href="celebrate.html">Next: let’s celebrate →</a>
   </div>
 </main>
-<button class="scroll-down" id="scrollDown" aria-label="Scroll down">
-  <span class="chev"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
-  <span>Scroll</span>
-</button>
 
 <script src="assets/js/data.js"></script>
 <script src="assets/js/site.js"></script>
@@ -224,19 +212,6 @@
     $('#cardHint').textContent = open ? 'Tap the card to close' : 'Tap the card to open';
     if(open){ const r = wrap.getBoundingClientRect(); setTimeout(() => G.Sparkles.burst(r.left + r.width / 2, r.top + r.height / 3, 50), 700); G.Music.chime(); }
   });
-  /* scroll-down button: glides to the next part of the page, hides at the bottom */
-  const sd = $('#scrollDown');
-  const parts = ['#giftStage', '#cardSec', '#nextStep'].map(q => $(q));
-  const atBottom = () => innerHeight + scrollY >= document.documentElement.scrollHeight - 40;
-  const paint = () => sd.classList.toggle('hide', atBottom());
-  sd.addEventListener('click', () => {
-    const next = parts.find(el => el.getBoundingClientRect().top > 90);
-    const top = next ? scrollY + next.getBoundingClientRect().top - 80 : document.documentElement.scrollHeight;
-    scrollTo({ top, behavior: G.reduce ? 'auto' : 'smooth' });
-  });
-  addEventListener('scroll', paint, { passive: true });
-  addEventListener('resize', paint);
-  paint();
 })();
 </script>
 </body>
