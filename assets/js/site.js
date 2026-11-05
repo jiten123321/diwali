@@ -80,7 +80,7 @@
 
     const footer = document.createElement('footer');
     footer.className = 'site-footer';
-    footer.innerHTML = `<div class="wrap foot-note"><span>Diwali 2026</span><span>Made with <span class="heart">♥</span> for Ladoo</span></div>`;
+    footer.innerHTML = `<div class="wrap foot-note" style="justify-content:center"><span>Made with <span class="heart">♥</span> for Ladoo</span></div>`;
     document.body.append(footer);
 
     const extras = document.createElement('div');
