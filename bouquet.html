@@ -5,149 +5,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f1d5d3">
 <title>Pink Roses for Ladoo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400;1,6..96,500&family=Parisienne&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&display=swap">
 <style>
-  :root{
-    color-scheme:light;
-    --blush:#f1d5d3; --rose:#b23a64; --rose-2:#d45c86; --ink:#45182a; --ink-soft:#7b4a5c; --ivory:#fbf4ec;
-  }
-  html,body{background:var(--blush);}
-  html{-webkit-text-size-adjust:100%;overflow-x:hidden;overflow-x:clip;}
-  body{margin:0;color:var(--ink);font-family:"Crimson Pro", Georgia, "Times New Roman", serif;font-size:19px;line-height:1.55;
-    padding-inline:16px;padding-block:calc(22px + env(safe-area-inset-top,0px)) calc(60px + env(safe-area-inset-bottom,0px));
-    background:var(--blush);overflow-x:hidden;overflow-x:clip;}
-  button{-webkit-tap-highlight-color:transparent;font:inherit;}
-  #petals{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
-  main{position:relative;z-index:2;max-width:560px;margin:0 auto;display:grid;gap:18px;}
-
-  header{text-align:center;}
-  .eyebrow{font-family:"Bodoni Moda", Georgia, serif;font-style:italic;font-size:16px;color:var(--ink-soft);}
-  h1{font-family:"Parisienne", "Snell Roundhand", cursive;font-weight:400;font-size:clamp(54px,15vw,84px);line-height:1.05;margin:2px 0 6px;color:var(--rose);}
-  .intro{text-align:center;max-width:30em;margin:0 auto;color:var(--ink);text-wrap:balance;}
-
-  .stage{position:relative;width:min(100%, 620px, calc(76svh * 1100 / 1174));justify-self:center;aspect-ratio:1100/1174;touch-action:manipulation;user-select:none;-webkit-user-select:none;}
-  .stage img{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;}
-  body.open .stage img{animation:bloom 2s cubic-bezier(.2,.7,.2,1) .35s both;}
-  @keyframes bloom{0%{opacity:0;transform:scale(.86) translateY(24px);filter:blur(10px) saturate(.6)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
-  body.open header{animation:rise 1.2s ease both;}
-  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-  body:not(.open) main{visibility:hidden;}
-  body:not(.open){overflow:hidden;}
-
-  /* ---- welcome ---- */
-  .welcome{position:fixed;inset:0;z-index:20;display:grid;place-items:center;text-align:center;background:var(--blush);
-    padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(24px + env(safe-area-inset-bottom,0px));transition:opacity .9s ease, transform 1s cubic-bezier(.6,0,.3,1);}
-  .welcome.gone{opacity:0;transform:translateY(-4%);pointer-events:none;}
-  .welcome .inner{display:grid;justify-items:center;gap:14px;max-width:26em;}
-  .bud{width:74px;height:auto;filter:drop-shadow(0 8px 14px rgba(120,20,40,.25));animation:sway 4s ease-in-out infinite;transform-origin:50% 100%;}
-  @keyframes sway{50%{transform:rotate(4deg)}}
-  .welcome .hey{font-family:"Parisienne","Snell Roundhand",cursive;font-size:clamp(60px,17vw,92px);line-height:1;color:var(--rose);margin:0;font-weight:400;}
-  .welcome p{margin:0;font-size:20px;color:var(--ink);text-wrap:balance;}
-  .open-btn{margin-top:14px;border:0;border-radius:999px;padding:15px 30px;background:linear-gradient(180deg,var(--rose-2),var(--rose));color:var(--ivory);
-    font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-size:19px;letter-spacing:.02em;cursor:pointer;
-    box-shadow:0 10px 26px rgba(178,58,100,.35),inset 0 1px 0 rgba(255,255,255,.25);animation:breathe 2.4s ease-in-out infinite;}
-  .open-btn:focus-visible{outline:2px solid var(--rose);outline-offset:4px;}
-  .open-btn:active{transform:scale(.97);}
-  @keyframes breathe{50%{box-shadow:0 12px 34px rgba(178,58,100,.5),0 0 0 8px rgba(178,58,100,.08),inset 0 1px 0 rgba(255,255,255,.25)}}
-  .welcome small{font-style:italic;color:var(--ink-soft);font-size:15px;}
-  .letter{position:relative;background:#fffaf5;border-radius:6px;padding:30px 26px 28px;margin:8px 4px 0;
-    box-shadow:0 18px 40px rgba(120,40,70,.16),0 2px 0 rgba(255,255,255,.8) inset;transform:rotate(-.6deg);
-}
-  .letter::before{content:"";position:absolute;top:-12px;left:50%;width:88px;height:24px;transform:translateX(-50%) rotate(2deg);background:rgba(212,92,134,.35);border-radius:2px;}
-  .letter h2{font-family:"Parisienne","Snell Roundhand",cursive;font-weight:400;font-size:44px;line-height:1.1;margin:0 0 10px;color:var(--rose);}
-  .letter p{margin:0 0 14px;line-height:1.65;}
-  .letter .sign{text-align:right;margin-top:6px;}
-  body.open .letter{animation:rise 1.2s ease 1.3s both;}
-  @media (max-width:520px){.letter{padding:26px 20px 22px;margin-inline:0;}.letter h2{font-size:38px;}}
-  .sign{font-family:"Parisienne",cursive;font-size:40px;color:var(--rose);line-height:1.1;}
-
-  @media (max-width:520px){
-    body{font-size:18px;padding-block:calc(14px + env(safe-area-inset-top,0px)) calc(48px + env(safe-area-inset-bottom,0px));}
-    main{gap:14px;}
-    .eyebrow{font-size:15px;}
-    .sign{font-size:36px;}
-  }
-  @media (max-width:360px){body{font-size:17px;}}
-  @media (max-width:652px) and (min-height:501px){.stage{width:calc(100% + 32px);margin-inline:-16px;}}
-  @media (orientation:landscape) and (max-height:500px){.stage{width:min(100%, calc(92svh * 1100 / 1174));}}
-  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.15s!important;}}
+  :root{color-scheme:light;--blush:#f1d5d3;}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--blush);}
+  body{animation:fadeIn 1.2s ease both;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .bg{position:fixed;inset:0;background:radial-gradient(75% 65% at 50% 45%,#f6dedb 0%,var(--blush) 55%,#e6c2c1 100%);}
+  .stage{position:fixed;inset:0;display:grid;place-items:center;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);}
+  .bouquet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(100vw,96svh * 1500 / 1560, 1100px);aspect-ratio:1500/1560;}
+  .bouquet img{position:absolute;inset:0;width:100%;height:100%;display:block;
+    -webkit-mask-image:radial-gradient(ellipse 52% 52% at 50% 50%,#000 78%,transparent 100%);
+            mask-image:radial-gradient(ellipse 52% 52% at 50% 50%,#000 78%,transparent 100%);
+    animation:bloom 2.4s cubic-bezier(.2,.7,.2,1) .3s both;}
+  @keyframes bloom{0%{opacity:0;transform:scale(.82) translateY(30px);filter:blur(12px) saturate(.6)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
+  .sway{position:absolute;inset:0;animation:sway 8s ease-in-out 2.8s infinite;transform-origin:50% 92%;}
+  @keyframes sway{50%{transform:rotate(.8deg) translateY(-5px)}}
+  @media (max-aspect-ratio:3/4){.bouquet{width:min(128vw, 96svh * 1500 / 1560);}}
+  #petals{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;}}
 </style>
 </head>
 <body>
-<div class="welcome" id="welcome">
-  <div class="inner">
-    <svg class="bud" viewBox="0 0 80 120" aria-hidden="true">
-      <defs><radialGradient id="bg1" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fcd0df"/><stop offset=".6" stop-color="#ec8fb0"/><stop offset="1" stop-color="#b23a64"/></radialGradient></defs>
-      <path d="M40 118 C40 95 41 80 40 62" stroke="#4f7a3a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <path d="M40 92 C28 86 20 88 14 96 C24 100 33 98 40 92Z" fill="#5f8a45"/>
-      <path d="M40 60 C22 58 16 40 22 24 C28 12 36 6 40 4 C44 6 52 12 58 24 C64 40 58 58 40 60Z" fill="url(#bg1)"/>
-      <path d="M40 60 C30 52 29 36 36 20 M40 60 C50 52 52 38 46 22" stroke="#b23a64" stroke-width="1.4" fill="none" opacity=".6"/>
-      <path d="M40 62 C30 64 24 58 22 50 C30 54 36 56 40 56 C44 56 50 54 58 50 C56 58 50 64 40 62Z" fill="#4f7a3a"/>
-    </svg>
-    <h2 class="hey">Hey Ladoo</h2>
-    <p>I have something for you.</p>
-    <button class="open-btn" id="openBtn" type="button">Open your flowers</button>
-    <small>Tap to open</small>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="stage">
+    <div class="bouquet"><div class="sway">
+      <img src="assets/img/grand-bouquet.jpg" alt="A huge bouquet of soft pink roses for Ladoo">
+    </div></div>
   </div>
-</div>
-<canvas id="petals" aria-hidden="true"></canvas>
-<main>
-  <header>
-    <div class="eyebrow">for my Ladoo</div>
-    <h1>Pink roses</h1>
-    <p class="intro">A whole armful of them, because one rose felt too small for what I feel about you.</p>
-  </header>
-
-  <div class="stage" id="stage">
-    <img src="assets/img/roses.jpg" alt="A thick bouquet of soft pink garden roses ringed with pink baby's breath and small pink carnations, wrapped in dusty pink and white paper with a blush ribbon." >
-  </div>
-
-  <section class="letter" aria-label="A letter for Ladoo">
-    <h2>Dear Ladoo,</h2>
-    <p>I wanted to give you flowers that don't wilt in a few days, so here's a bouquet you can open whenever you want.</p>
-    <p>Pink, because it's soft and warm, just like you are with me, even on the days I don't deserve it.</p>
-    <p>Thank you for being patient with me, for laughing at my silly jokes, and for making ordinary days feel like something worth remembering. You make my life lighter in ways you probably don't even notice.</p>
-    <p>Whenever you miss me, open this page. The flowers will be here, and so will I.</p>
-    <div class="sign">Always yours</div>
-  </section>
-  <p style="text-align:center;margin:8px 0 0;"><a href="index.html" style="font-family:'Bodoni Moda',Georgia,serif;font-style:italic;color:var(--rose);">↺ celebrate again</a></p>
-</main>
-
+  <canvas id="petals" aria-hidden="true"></canvas>
 <script>
 (function(){
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const welcome=document.getElementById('welcome');
-  document.getElementById('openBtn').addEventListener('click',()=>{
-    welcome.classList.add('gone');document.body.classList.add('open');window.scrollTo(0,0);
-    setTimeout(()=>{welcome.hidden=true;},1100);
-  });
-
-  /* falling rose petals */
-  const cv=document.getElementById('petals'),c=cv.getContext('2d');let W,H,ps=[];
-  function mk(top){return{x:Math.random()*W,y:top?-30:Math.random()*H,s:7+Math.random()*9,vy:.45+Math.random()*.7,sw:Math.random()*6.28,sws:.01+Math.random()*.015,
-    rot:Math.random()*6.28,vr:(Math.random()-.5)*.03,flip:Math.random()*6.28,vf:.02+Math.random()*.03,hue:Math.random()};}
-  function size(){const d=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;c.setTransform(d,0,0,d,0,0);
-    const n=Math.round(Math.min(18,W*H/40000)+4);ps=Array.from({length:n},()=>mk(false));}
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cv = document.getElementById('petals'), c = cv.getContext('2d');
+  let W, H, ps = [];
+  const mk = top => ({ x: Math.random() * W, y: top ? -30 : Math.random() * H, s: 7 + Math.random() * 9, vy: .45 + Math.random() * .7,
+    sw: Math.random() * 6.28, sws: .01 + Math.random() * .015, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .03,
+    flip: Math.random() * 6.28, vf: .02 + Math.random() * .03, hue: Math.random() });
+  function size(){ const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+    cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0);
+    ps = Array.from({ length: Math.round(Math.min(26, W * H / 36000) + 6) }, () => mk(false)); }
   function petal(p){
-    c.save();c.translate(p.x,p.y);c.rotate(p.rot);c.scale(Math.cos(p.flip)*.8+.2*Math.sign(Math.cos(p.flip)||1),1);
-    const s=p.s,g=c.createRadialGradient(-s*.2,-s*.3,s*.1,0,0,s*1.2);
-    const a=p.hue<.5?['#fde0ea','#f4a3be','#d9658e']:['#fbd3e1','#ee93b3','#cf5a84'];
-    g.addColorStop(0,a[0]);g.addColorStop(.6,a[1]);g.addColorStop(1,a[2]);
-    c.fillStyle=g;c.globalAlpha=.9;
-    c.beginPath();c.moveTo(0,s);c.bezierCurveTo(s*1.1,s*.5,s*.9,-s*1.1,0,-s*.75);c.bezierCurveTo(-s*.9,-s*1.1,-s*1.1,s*.5,0,s);c.fill();
-    c.globalAlpha=.25;c.strokeStyle='#ffd1d8';c.lineWidth=.8;c.beginPath();c.moveTo(0,s*.8);c.quadraticCurveTo(s*.1,0,0,-s*.5);c.stroke();
+    c.save(); c.translate(p.x, p.y); c.rotate(p.rot); c.scale(Math.cos(p.flip) * .8 + .2 * Math.sign(Math.cos(p.flip) || 1), 1);
+    const s = p.s, g = c.createRadialGradient(-s * .2, -s * .3, s * .1, 0, 0, s * 1.2);
+    const a = p.hue < .5 ? ['#fde0ea', '#f4a3be', '#d9658e'] : ['#fbd3e1', '#ee93b3', '#cf5a84'];
+    g.addColorStop(0, a[0]); g.addColorStop(.6, a[1]); g.addColorStop(1, a[2]);
+    c.fillStyle = g; c.globalAlpha = .9;
+    c.beginPath(); c.moveTo(0, s); c.bezierCurveTo(s * 1.1, s * .5, s * .9, -s * 1.1, 0, -s * .75); c.bezierCurveTo(-s * .9, -s * 1.1, -s * 1.1, s * .5, 0, s); c.fill();
+    c.globalAlpha = .25; c.strokeStyle = '#ffd1d8'; c.lineWidth = .8; c.beginPath(); c.moveTo(0, s * .8); c.quadraticCurveTo(s * .1, 0, 0, -s * .5); c.stroke();
     c.restore();
   }
   function tick(){
-    c.clearRect(0,0,W,H);
+    c.clearRect(0, 0, W, H);
     for(const p of ps){
-      if(!reduce){p.sw+=p.sws;p.x+=Math.sin(p.sw)*.7;p.y+=p.vy;p.rot+=p.vr;p.flip+=p.vf;if(p.y>H+30)Object.assign(p,mk(true));}
+      if(!reduce){ p.sw += p.sws; p.x += Math.sin(p.sw) * .7; p.y += p.vy; p.rot += p.vr; p.flip += p.vf; if(p.y > H + 30) Object.assign(p, mk(true)); }
       petal(p);
     }
     if(!reduce) requestAnimationFrame(tick);
   }
-  size();addEventListener('resize',size);requestAnimationFrame(tick);
+  size(); addEventListener('resize', size); requestAnimationFrame(tick);
 })();
 </script>
 </body>
