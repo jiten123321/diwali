@@ -78,14 +78,12 @@
      Plain <audio> players (not Web Audio): this is what iPhones reliably play, in every
      browser and even with the silent switch on, once the page has been tapped once.
      Bursts use real firework recordings with a light outdoor echo (assets/sfx/boom*.mp3,
-     from fireworks-js, MIT licence); rockets whistle, then pop and crackle. */
+     from fireworks-js, MIT licence). The rockets are silent. */
   const SFX = {
     boom:    ['assets/sfx/boom0.mp3', 'assets/sfx/boom1.mp3', 'assets/sfx/boom2.mp3'],
     launch:  ['assets/sfx/launch.mp3'],
-    whistle: ['assets/sfx/whistle.mp3'],
-    pop:     ['assets/sfx/pop.mp3'],
   };
-  const COPIES = { boom: 4, launch: 4, whistle: 4, pop: 4 };   // players per file, so sounds can overlap
+  const COPIES = { boom: 4, launch: 4 };   // players per file, so sounds can overlap
   const pool = {};
   for(const [k, files] of Object.entries(SFX)){
     pool[k] = [];
@@ -108,8 +106,6 @@
     delay ? setTimeout(go, delay) : go();
   }
   function soundLaunch(x, dur){ play('launch', .55, 0, rnd(.9, 1.1)); }
-  function soundRocket(x, dur){ play('whistle', .5, 0, Math.max(.8, Math.min(1.25, 1 / dur))); }
-  function soundPop(x, y){ play('pop', .6, 60); }
   function soundBoom(x, y, size){
     const far = Math.max(0, Math.min(1, 1 - y / H));               // higher bursts feel further away
     play('boom', (.7 + .3 * size) * (1 - far * .35), 80 + far * 300, rnd(.86, 1.1));
@@ -133,7 +129,7 @@
   ['touchend', 'click', 'pointerup', 'keydown', 'touchstart', 'pointerdown'].forEach(ev => addEventListener(ev, unlock, { capture: true, passive: true }));
   // try straight away: browsers that allow sound without a tap (e.g. desktop Chrome) start at once
   (function probe(){
-    const el = pool.pop[0]; el.muted = true;
+    const el = pool.launch[0]; el.muted = true;
     const pr = el.play();
     if(pr && pr.then) pr.then(() => { el.pause(); el.currentTime = 0; el.muted = false; markUnlocked(); }, () => { el.muted = false; });
   })();
@@ -159,13 +155,12 @@
     rockets.push({ x: sx, y: H + 10, ty: y, vx: (x - sx) / frames, vy: -(H + 10 - y) / frames, t: 0, max: frames + 15 });
     soundLaunch(sx, frames / 60);
   }
-  /* Diwali rockets: fast, wobbly streaks with a thick spark tail and a whistle, ending in a crackling pop */
+  /* Diwali rockets: fast, wobbly streaks with a thick spark tail, ending in a crackling pop of sparks (silent) */
   function rocket(sx){
     sx = sx ?? rnd(W * .08, W * .92);
     const ty = rnd(H * .08, H * .32), frames = rnd(42, 58);
     rockets.push({ rocket: true, x: sx, y: H + 10, ty, vx: rnd(-1.2, 1.2), vy: -(H + 10 - ty) / frames, t: 0, max: frames + 20,
       wob: rnd(.6, 1.6), wf: rnd(.18, .3), ph: Math.random() * 6.28 });
-    soundRocket(sx, frames / 60);
   }
   function volley(){
     const n = 2 + Math.floor(Math.random() * 3), base = rnd(W * .2, W * .8);
@@ -178,7 +173,6 @@
       sparks.push({ x, y, px: x, py: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: rnd(40, 70), max: 70, g: .035, col, w: rnd(1, 1.8), twinkle: true, crackle: true });
     }
     sparks.push({ flash: true, x, y, life: 7, max: 7, col: [255, 240, 200], r: 70 * scale });
-    soundPop(x, y);
   }
   function explode(x, y){
     const pal = PALETTES[Math.floor(Math.random() * PALETTES.length)];
