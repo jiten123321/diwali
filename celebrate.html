@@ -30,13 +30,6 @@
     box-shadow:0 10px 30px rgba(178,58,100,.45),inset 0 1px 0 rgba(255,255,255,.25);}
   .next.in{opacity:1;transform:translate(-50%,0);pointer-events:auto;animation:breathe 2.4s ease-in-out 1.2s infinite;}
   @keyframes breathe{50%{box-shadow:0 12px 36px rgba(178,58,100,.6),0 0 0 8px rgba(212,92,134,.12),inset 0 1px 0 rgba(255,255,255,.25)}}
-  /* shown only while the browser is still holding the sound back (iPhones need one tap) */
-  .tap-sound{position:fixed;left:50%;top:calc(18px + env(safe-area-inset-top,0px));z-index:6;transform:translate(-50%,-10px);opacity:0;
-    padding:10px 18px;border-radius:999px;background:rgba(20,8,20,.6);border:1px solid rgba(255,220,170,.35);color:#ffe2b0;
-    font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-size:16px;white-space:nowrap;pointer-events:none;
-    transition:opacity .6s ease, transform .6s ease;}
-  .tap-sound.show{opacity:1;transform:translate(-50%,0);animation:tapPulse 2s ease-in-out infinite;}
-  @keyframes tapPulse{50%{box-shadow:0 0 0 8px rgba(255,210,150,.10)}}
   .veil{position:fixed;inset:0;z-index:9;background:#05020a;opacity:0;pointer-events:none;transition:opacity .7s;}
   .veil.on{opacity:1;}
 </style>
@@ -46,7 +39,6 @@
   <canvas id="stars" aria-hidden="true"></canvas>
   <canvas id="fireworks" aria-hidden="true"></canvas>
 
-  <div class="tap-sound" id="tapSound" aria-hidden="true">🔊 Tap anywhere for sound</div>
   <a class="next" id="next" href="bouquet.html">One more thing… 🌹</a>
   <div class="veil" id="veil"></div>
 
@@ -78,7 +70,7 @@
      Plain <audio> players (not Web Audio): this is what iPhones reliably play, in every
      browser and even with the silent switch on, once the page has been tapped once.
      Bursts use real firework recordings with a light outdoor echo (assets/sfx/boom*.mp3,
-     from fireworks-js, MIT licence). The rockets are silent. */
+     from fireworks-js, MIT licence). */
   const SFX = {
     boom:    ['assets/sfx/boom0.mp3', 'assets/sfx/boom1.mp3', 'assets/sfx/boom2.mp3'],
     launch:  ['assets/sfx/launch.mp3'],
@@ -115,8 +107,7 @@
   }
 
   /* unlock: the first touch plays every player silently once, which iPhones require */
-  const tapSound = document.getElementById('tapSound');
-  function markUnlocked(){ if(!unlocked){ unlocked = true; tapSound.classList.remove('show'); } }
+  function markUnlocked(){ unlocked = true; }
   function unlock(){
     if(unlocked) return;
     try{ if(navigator.audioSession) navigator.audioSession.type = 'playback'; }catch(e){}
@@ -136,7 +127,6 @@
     const pr = el.play();
     if(pr && pr.then) pr.then(() => { el.pause(); el.currentTime = 0; el.muted = false; markUnlocked(); }, () => { el.muted = false; });
   })();
-  setTimeout(() => { if(!unlocked) tapSound.classList.add('show'); }, 700);
 
   /* ---------------- fireworks ---------------- */
   const cv = document.getElementById('fireworks'), c = cv.getContext('2d');
@@ -148,34 +138,11 @@
   const small = Math.min(innerWidth, innerHeight) < 600;
   const MAX_SPARKS = small ? 1300 : 2600;
   const room = () => sparks.length < MAX_SPARKS;
-  // pre-rendered glow sprite for rocket heads (cheaper than a gradient every frame)
-  const headSprite = (() => { const g = document.createElement('canvas'); g.width = g.height = 32; const x = g.getContext('2d');
-    const gr = x.createRadialGradient(16, 16, 0, 16, 16, 16); gr.addColorStop(0, 'rgba(255,250,230,.95)'); gr.addColorStop(1, 'rgba(255,190,90,0)');
-    x.fillStyle = gr; x.fillRect(0, 0, 32, 32); return g; })();
   function launch(tx, ty){
     const x = tx ?? rnd(W * .1, W * .9), y = ty ?? rnd(H * .12, H * .45);
     const sx = x + rnd(-W * .06, W * .06), frames = 55 + Math.random() * 15;
     rockets.push({ x: sx, y: H + 10, ty: y, vx: (x - sx) / frames, vy: -(H + 10 - y) / frames, t: 0, max: frames + 15 });
     soundLaunch(sx, frames / 60);
-  }
-  /* Diwali rockets: fast, wobbly streaks with a thick spark tail, ending in a crackling pop of sparks (silent) */
-  function rocket(sx){
-    sx = sx ?? rnd(W * .08, W * .92);
-    const ty = rnd(H * .08, H * .32), frames = rnd(42, 58);
-    rockets.push({ rocket: true, x: sx, y: H + 10, ty, vx: rnd(-1.2, 1.2), vy: -(H + 10 - ty) / frames, t: 0, max: frames + 20,
-      wob: rnd(.6, 1.6), wf: rnd(.18, .3), ph: Math.random() * 6.28 });
-  }
-  function volley(){
-    const n = 2 + Math.floor(Math.random() * 3), base = rnd(W * .2, W * .8);
-    for(let i = 0; i < n; i++) setTimeout(() => rocket(Math.max(W * .06, Math.min(W * .94, base + rnd(-W * .25, W * .25)))), i * rnd(120, 260));
-  }
-  function popRocket(x, y){
-    const scale = Math.max(.8, Math.min(W, H) / 420), col = Math.random() < .5 ? [255, 236, 190] : [255, 205, 120];
-    for(let i = 0; i < (small ? 30 : 48); i++){
-      const a = Math.random() * 6.28, sp = rnd(.6, 2.6) * scale;
-      sparks.push({ x, y, px: x, py: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: rnd(40, 70), max: 70, g: .035, col, w: rnd(1, 1.8), twinkle: true, crackle: true });
-    }
-    sparks.push({ flash: true, x, y, life: 7, max: 7, col: [255, 240, 200], r: 70 * scale });
   }
   function explode(x, y){
     const pal = PALETTES[Math.floor(Math.random() * PALETTES.length)];
@@ -200,17 +167,6 @@
     for(let i = rockets.length - 1; i >= 0; i--){
       const r = rockets[i]; r.t++;
       const px = r.x, py = r.y;
-      if(r.rocket){
-        // a wobbly, fast streak with a bright head and a thick tail of sparks
-        r.x += r.vx + Math.sin(r.t * r.wf + r.ph) * r.wob; r.y += r.vy;
-        c.strokeStyle = 'rgba(255,240,200,.95)'; c.lineWidth = 2.6;
-        c.beginPath(); c.moveTo(px, py); c.lineTo(r.x, r.y); c.stroke();
-        c.drawImage(headSprite, r.x - 9, r.y - 9, 18, 18);
-        if(room()) for(let k = 0; k < (small ? 2 : 4); k++) sparks.push({ x: r.x, y: r.y, px: r.x, py: r.y, vx: rnd(-.9, .9), vy: rnd(.6, 2.4), life: rnd(16, 34), max: 34, g: .045,
-          col: Math.random() < .6 ? [255, 210, 120] : [255, 245, 220], w: rnd(.8, 1.6), twinkle: Math.random() < .5 });
-        if(r.y <= r.ty || r.t > r.max){ popRocket(r.x, r.y); rockets.splice(i, 1); }
-        continue;
-      }
       r.x += r.vx; r.y += r.vy;
       if(!r.boomed && (r.y + r.vy * 7 <= r.ty || r.t >= r.max - 7)){
         r.boomed = true;
@@ -276,11 +232,6 @@
   (function loop(){
     if(!document.hidden){ launch(); if(Math.random() < .35) setTimeout(() => launch(), 260); }
     setTimeout(loop, rnd(900, 1800));
-  })();
-  setTimeout(volley, 2800);
-  (function rocketLoop(){
-    if(!document.hidden){ Math.random() < .6 ? volley() : rocket(); }
-    setTimeout(rocketLoop, rnd(2200, 4200));
   })();
   // tap the sky for your own firework
   addEventListener('pointerdown', e => {
