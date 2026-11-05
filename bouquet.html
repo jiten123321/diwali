@@ -61,8 +61,11 @@
   img.onerror = () => { img.onerror = null; img.classList.add('fallback'); img.src = 'assets/img/bouquet-cutout-red.webp'; };
   img.src = BOUQUET;
 
-  let W, H;
-  /* soft golden sparkles, like the rest of the site */
+  let W, H, D = 1;
+  /* soft golden sparkles, like the rest of the site (one pre-rendered glow, reused) */
+  const spark = (() => { const g = document.createElement('canvas'); g.width = g.height = 32; const x = g.getContext('2d');
+    const gr = x.createRadialGradient(16, 16, 0, 16, 16, 16); gr.addColorStop(0, 'hsla(42,100%,82%,1)'); gr.addColorStop(1, 'hsla(42,100%,60%,0)');
+    x.fillStyle = gr; x.fillRect(0, 0, 32, 32); return g; })();
   const sc = document.getElementById('sparkles'), s2 = sc.getContext('2d');
   let sp = [];
   const mkS = bottom => ({ x: Math.random() * W, y: bottom ? H + 10 : Math.random() * H, r: .6 + Math.random() * 1.8,
@@ -80,10 +83,11 @@
     const face = Math.cos(p.flip);                       // which way the fleck is facing
     const glint = Math.pow(Math.abs(face), 6);            // flashes when it faces you
     const [r, g, b] = p.col;
-    c.save(); c.translate(p.x, p.y); c.rotate(p.rot); c.scale(.25 + .75 * Math.abs(face), 1);
+    const sx = .25 + .75 * Math.abs(face), co = Math.cos(p.rot), si = Math.sin(p.rot);
+    c.setTransform(D * co * sx, D * si * sx, -D * si, D * co, D * p.x, D * p.y);
     c.fillStyle = `rgba(${Math.min(255, r + 40 * glint)},${Math.min(255, g + 40 * glint)},${Math.min(255, b + 40 * glint)},${.75 + .25 * glint})`;
     c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-    c.restore();
+    c.setTransform(D, 0, 0, D, 0, 0);
     if(glint > .45){                                        // a tiny star-shaped sparkle on the brightest flashes
       const L = p.w * 2.6 * glint;
       c.strokeStyle = `rgba(255,250,235,${glint * .85})`; c.lineWidth = .7;
@@ -91,7 +95,7 @@
     }
   }
   function size(){
-    const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+    const d = D = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight;
     for(const [el, ctx] of [[pc, c], [sc, s2]]){ el.width = W * d; el.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); }
     ps = Array.from({ length: Math.round(Math.min(420, W * H / 2600)) }, () => mk(false));
     sp = Array.from({ length: Math.round(Math.min(60, W * H / 22000)) }, () => mkS(false));
@@ -102,10 +106,10 @@
     for(const p of sp){
       p.a += p.va; p.y += p.vy; p.x += Math.sin(p.a) * .15;
       if(p.y < -10) Object.assign(p, mkS(true));
-      const tw = .45 + Math.sin(p.a * 2) * .35, g = s2.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
-      g.addColorStop(0, `hsla(42,100%,82%,${tw})`); g.addColorStop(1, 'hsla(42,100%,60%,0)');
-      s2.fillStyle = g; s2.beginPath(); s2.arc(p.x, p.y, p.r * 4, 0, 6.29); s2.fill();
+      const tw = .45 + Math.sin(p.a * 2) * .35, R = p.r * 4;
+      s2.globalAlpha = Math.max(0, tw); s2.drawImage(spark, p.x - R, p.y - R, R * 2, R * 2);
     }
+    s2.globalAlpha = 1;
     for(const p of ps){
       p.sw += p.sws; p.x += p.vx + Math.sin(p.sw) * .35; p.y += p.vy; p.rot += p.vr; p.flip += p.vf;
       if(p.y > H + 10) Object.assign(p, mk(true));

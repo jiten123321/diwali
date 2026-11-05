@@ -96,7 +96,7 @@
     }
     function draw(d, t){
       const S = d.el.clientWidth; if(!S) return;
-      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const dpr = Math.min(devicePixelRatio || 1, 1.5);
       const W = Math.round(S * 2.2), H = Math.round(S * 2.3);
       if(d.S !== S){ d.S = S; d.cv.width = W * dpr; d.cv.height = H * dpr; d.ctx = d.cv.getContext('2d'); d.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
       const c = d.ctx;
@@ -126,12 +126,20 @@
       gr.addColorStop(0, `rgba(110,160,255,${.55 * g})`); gr.addColorStop(1, 'rgba(110,160,255,0)');
       c.fillStyle = gr; c.beginPath(); c.ellipse(x, y - h * .07, w * 1.1, h * .12, 0, 0, 6.29); c.fill();
 
+      // soft halo hugging the flame (replaces a costly shadow blur)
+      c.globalCompositeOperation = 'lighter';
+      const hy = y - h * .42, hr = h * .62;
+      gr = c.createRadialGradient(x + sway * .3, hy, 0, x + sway * .3, hy, hr);
+      gr.addColorStop(0, `rgba(255,150,50,${.45 * g})`); gr.addColorStop(1, 'rgba(255,120,30,0)');
+      c.fillStyle = gr; c.beginPath(); c.ellipse(x + sway * .3, hy, hr * .55, hr, 0, 0, 6.29); c.fill();
+      c.globalCompositeOperation = 'source-over';
+
       // outer flame: orange edges fading to transparent
       drop(c, x, y, w, h, sway);
       gr = c.createRadialGradient(x + sway * .3, y - h * .28, 0, x + sway * .3, y - h * .3, h * .95);
       gr.addColorStop(0, `rgba(255,246,214,${g})`); gr.addColorStop(.28, `rgba(255,214,110,${g})`);
       gr.addColorStop(.6, `rgba(255,146,44,${.92 * g})`); gr.addColorStop(.88, `rgba(220,70,12,${.5 * g})`); gr.addColorStop(1, 'rgba(180,40,0,0)');
-      c.save(); c.shadowColor = `rgba(255,140,40,${.9 * g})`; c.shadowBlur = S * .12; c.fillStyle = gr; c.fill(); c.restore();
+      c.fillStyle = gr; c.fill();
 
       // bright inner core
       drop(c, x + sway * .12, y - h * .04, w * .48, h * .58, sway * .45);
@@ -242,6 +250,15 @@
   }
 
   /* ---------------- golden particles + heart bursts ---------------- */
+  const sprites = {};
+  function glowSprite(hue){
+    if(sprites[hue]) return sprites[hue];
+    const g = document.createElement('canvas'); g.width = g.height = 32; const x = g.getContext('2d');
+    const gr = x.createRadialGradient(16, 16, 0, 16, 16, 16);
+    gr.addColorStop(0, `hsla(${hue},100%,82%,1)`); gr.addColorStop(1, `hsla(${hue},100%,60%,0)`);
+    x.fillStyle = gr; x.fillRect(0, 0, 32, 32);
+    return sprites[hue] = g;
+  }
   const Sparkles = (() => {
     let c, W, H, ps = [], level = 1, bursts = [];
     function mk(spawnBottom){
@@ -262,11 +279,11 @@
       for(const p of ps){
         p.a += p.va; p.y += p.vy; p.x += p.vx + Math.sin(p.a) * .15;
         if(p.y < -10) Object.assign(p, mk(true));
-        const tw = .45 + Math.sin(p.a * 2) * .35;
-        const g = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
-        g.addColorStop(0, `hsla(${p.hue},100%,82%,${tw})`); g.addColorStop(1, `hsla(${p.hue},100%,60%,0)`);
-        c.fillStyle = g; c.beginPath(); c.arc(p.x, p.y, p.r * 4, 0, 6.28); c.fill();
+        const tw = .45 + Math.sin(p.a * 2) * .35, R = p.r * 4;
+        c.globalAlpha = Math.max(0, tw);
+        c.drawImage(glowSprite(p.hue), p.x - R, p.y - R, R * 2, R * 2);
       }
+      c.globalAlpha = 1;
       c.globalCompositeOperation = 'source-over';
       for(let i = bursts.length - 1; i >= 0; i--){
         const b = bursts[i]; b.life -= 1;
@@ -293,7 +310,7 @@
       const host = $('#sparkles'); if(!host) return;
       c = host.getContext('2d');
       level = { none:0, low:.5, high:1.6, max:2.4 }[document.body.dataset.sparkles] ?? 1;
-      const resize = () => { const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+      const resize = () => { const d = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight;
         host.width = W * d; host.height = H * d; c.setTransform(d, 0, 0, d, 0, 0);
         const n = Math.round(Math.min(70, W * H / 26000) * level); while(ps.length < n) ps.push(mk(false)); ps.length = n; };
       resize(); addEventListener('resize', resize);
