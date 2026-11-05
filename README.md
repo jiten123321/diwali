@@ -13,4 +13,4 @@ Plain HTML, CSS and JS with no build step. Host the folder on GitHub Pages.
 
 ## Credits
 
-Firework explosion recordings in `assets/sfx/` come from [fireworks-js](https://github.com/crashmax-dev/fireworks-js) (MIT licence, © Vitalij Ryndin).
+Firework explosion recordings in `assets/sfx/boom*.mp3` (with an added echo) come from [fireworks-js](https://github.com/crashmax-dev/fireworks-js) (MIT licence, © Vitalij Ryndin). The rocket whistle, launch and pop sounds were generated for this site.
