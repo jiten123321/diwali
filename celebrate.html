@@ -28,6 +28,13 @@
     box-shadow:0 10px 30px rgba(178,58,100,.45),inset 0 1px 0 rgba(255,255,255,.25);}
   .next.in{opacity:1;transform:translate(-50%,0);pointer-events:auto;animation:breathe 2.4s ease-in-out 1.2s infinite;}
   @keyframes breathe{50%{box-shadow:0 12px 36px rgba(178,58,100,.6),0 0 0 8px rgba(212,92,134,.12),inset 0 1px 0 rgba(255,255,255,.25)}}
+  /* shown only while the browser is still holding the sound back (iPhones need one tap) */
+  .tap-sound{position:fixed;left:50%;top:calc(18px + env(safe-area-inset-top,0px));z-index:6;transform:translate(-50%,-10px);opacity:0;
+    padding:10px 18px;border-radius:999px;background:rgba(20,8,20,.6);border:1px solid rgba(255,220,170,.35);color:#ffe2b0;
+    font-family:"Bodoni Moda",Georgia,serif;font-style:italic;font-size:16px;white-space:nowrap;pointer-events:none;
+    transition:opacity .6s ease, transform .6s ease;}
+  .tap-sound.show{opacity:1;transform:translate(-50%,0);animation:tapPulse 2s ease-in-out infinite;}
+  @keyframes tapPulse{50%{box-shadow:0 0 0 8px rgba(255,210,150,.10)}}
   .veil{position:fixed;inset:0;z-index:9;background:#05020a;opacity:0;pointer-events:none;transition:opacity .7s;}
   .veil.on{opacity:1;}
 </style>
@@ -37,6 +44,7 @@
   <canvas id="stars" aria-hidden="true"></canvas>
   <canvas id="fireworks" aria-hidden="true"></canvas>
 
+  <div class="tap-sound" id="tapSound" aria-hidden="true">🔊 Tap anywhere for sound</div>
   <a class="next" id="next" href="bouquet.html">One more thing… 🌹</a>
   <div class="veil" id="veil"></div>
 
@@ -173,10 +181,36 @@
   /* sound is always on: start straight away; if the browser holds audio back until the
      first touch (iPhones do), the very first tap or key press starts it */
   soundOn = true;
-  const wake = () => { try{ initAudio(); if(ac && ac.state !== 'running') ac.resume(); }catch(e){} };
+  // iPhones: treat this page as media playback so the fireworks are heard even with the silent switch on
+  try{ if(navigator.audioSession) navigator.audioSession.type = 'playback'; }catch(e){}
+  // a tiny silent clip, played on the first touch, switches older iPhones into playback mode as well
+  let unlocker;
+  function silentClip(){
+    const rate = 8000, n = 800, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+    const w = (o, str) => { for(let i = 0; i < str.length; i++) v.setUint8(o + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); w(8, 'WAVEfmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, 'data'); v.setUint32(40, n * 2, true);
+    return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+  }
+  const tapSound = document.getElementById('tapSound');
+  const audible = () => ac && ac.state === 'running';
+  const paintHint = () => tapSound.classList.toggle('show', !!AC && !audible());
+  const wake = () => {
+    try{
+      initAudio();
+      if(ac && ac.state !== 'running') ac.resume().then(paintHint, () => {});
+      if(!unlocker){ unlocker = new Audio(silentClip()); unlocker.loop = true; unlocker.setAttribute('playsinline', ''); }
+      if(unlocker.paused){ const pr = unlocker.play(); if(pr && pr.catch) pr.catch(() => {}); }
+      // a near-silent blip straight through Web Audio also "unlocks" iOS
+      if(ac){ const b = ac.createBuffer(1, 1, 22050), src = ac.createBufferSource(); src.buffer = b; src.connect(ac.destination); src.start(0); }
+    }catch(e){}
+    paintHint();
+  };
   wake();
-  ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown'].forEach(ev => addEventListener(ev, wake, { capture: true, passive: true }));
+  ['touchstart', 'touchend', 'pointerdown', 'pointerup', 'mousedown', 'click', 'keydown'].forEach(ev => addEventListener(ev, wake, { capture: true, passive: true }));
   document.addEventListener('visibilitychange', () => { if(!document.hidden) wake(); });
+  setTimeout(paintHint, 900);
+  setInterval(paintHint, 1000);
 
   /* ---------------- fireworks ---------------- */
   const cv = document.getElementById('fireworks'), c = cv.getContext('2d');
