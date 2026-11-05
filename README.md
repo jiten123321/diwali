@@ -10,3 +10,7 @@ A small Diwali surprise, one page at a time:
 | `bouquet.html`: The e-bouquet | No words: one enormous, realistic bouquet of about 200 pink roses (generated with Gamma on pure black, which blends away so it sits right on the site’s burgundy-and-gold background), with golden sparkles and a shimmering glitter rain. |
 
 Plain HTML, CSS and JS with no build step. Host the folder on GitHub Pages.
+
+## Credits
+
+Firework explosion recordings in `assets/sfx/` come from [fireworks-js](https://github.com/crashmax-dev/fireworks-js) (MIT licence, © Vitalij Ryndin).
