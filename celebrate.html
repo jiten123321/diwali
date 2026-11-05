@@ -87,7 +87,11 @@
   const pool = {};
   for(const [k, files] of Object.entries(SFX)){
     pool[k] = [];
-    files.forEach(src => { for(let i = 0; i < COPIES[k]; i++){ const el = new Audio(src); el.preload = 'auto'; el.setAttribute('playsinline', ''); pool[k].push(el); } });
+    files.forEach(src => { for(let i = 0; i < COPIES[k]; i++){
+      const el = new Audio(src); el.preload = 'auto'; el.setAttribute('playsinline', '');
+      el.addEventListener('ended', () => { try{ el.currentTime = 0; }catch(e){} });
+      pool[k].push(el);
+    } });
   }
   let unlocked = false, soundOn = true;
   function play(kind, volume, delay = 0, rate = 1){
@@ -98,17 +102,16 @@
     const go = () => {
       try{
         el.muted = false; el.volume = Math.max(0, Math.min(1, volume));
-        el.playbackRate = rate; if('preservesPitch' in el) el.preservesPitch = false; if('webkitPreservesPitch' in el) el.webkitPreservesPitch = false;
-        el.currentTime = 0;
+        if(el.currentTime > .02) el.currentTime = 0;
         const pr = el.play(); if(pr && pr.then) pr.then(markUnlocked, () => {});
       }catch(e){}
     };
     delay ? setTimeout(go, delay) : go();
   }
-  function soundLaunch(x, dur){ play('launch', .55, 0, rnd(.9, 1.1)); }
+  function soundLaunch(x, dur){ play('launch', .55); }
   function soundBoom(x, y, size){
     const far = Math.max(0, Math.min(1, 1 - y / H));               // higher bursts feel further away
-    play('boom', (.7 + .3 * size) * (1 - far * .35), 80 + far * 300, rnd(.86, 1.1));
+    play('boom', (.75 + .25 * size) * (1 - far * .25));
   }
 
   /* unlock: the first touch plays every player silently once, which iPhones require */
@@ -189,7 +192,6 @@
         twinkle: Math.random() < .3, crackle });
     }
     sparks.push({ flash: true, x, y, life: 12, max: 12, col: pal[0], r: 150 * scale });
-    soundBoom(x, y, Math.min(1, .55 + scale * .25));
   }
   function frame(){
     c.globalCompositeOperation = 'destination-out';
@@ -210,6 +212,10 @@
         continue;
       }
       r.x += r.vx; r.y += r.vy;
+      if(!r.boomed && (r.y + r.vy * 7 <= r.ty || r.t >= r.max - 7)){
+        r.boomed = true;
+        soundBoom(r.x, r.ty, Math.min(1, .55 + Math.max(.8, Math.min(W, H) / 420) * .25));
+      }
       c.strokeStyle = 'rgba(255,225,170,.95)'; c.lineWidth = 2;
       c.beginPath(); c.moveTo(px, py); c.lineTo(r.x, r.y); c.stroke();
       if(room() && Math.random() < .7) sparks.push({ x: r.x, y: r.y, px: r.x, py: r.y, vx: rnd(-.4, .4), vy: rnd(.4, 1.4), life: 22, max: 22, g: .02, col: [255, 190, 110], w: 1 });
