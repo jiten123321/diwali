@@ -15,13 +15,14 @@
       radial-gradient(55% 50% at 50% 46%,rgba(214,177,111,.22),transparent 70%),
       radial-gradient(90% 80% at 50% 40%,var(--maroon) 0%,var(--burgundy) 45%,var(--wine) 80%,#160309 100%);}
 
-  .bouquet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  /* the Gamma photo sits on pure black: "lighten" drops the black out so the page's burgundy shows through */
+  .bouquet{mix-blend-mode:lighten;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     width:min(100vw, 94svh * 4 / 5, 900px);aspect-ratio:4/5;}
   @media (max-aspect-ratio:3/4){.bouquet{width:min(118vw, 94svh * 4 / 5);}}
   .bouquet img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
-    /* feather the photo's edges so its burgundy backdrop melts into the page */
-    -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 70%,transparent 100%);
-            mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 70%,transparent 100%);
+    /* feather the photo's edges as a safety net */
+    -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 82%,transparent 100%);
+            mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 82%,transparent 100%);
     opacity:0;}
   .bouquet img.fallback{-webkit-mask-image:none;mask-image:none;object-fit:contain;filter:drop-shadow(0 0 30px rgba(255,170,200,.25));}
   .bouquet img.ready{animation:bloom 2.4s cubic-bezier(.2,.7,.2,1) both;}
@@ -45,10 +46,10 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* a realistic bouquet generated with Gamma; a cut-out of the original bouquet is the fallback */
-  const BOUQUET = 'https://cdn.gamma.app/n4ay785j5gfy9a4/design-anything/7lywuVeb1vJHMrlXGQKB7/WCgRkw0jX1i0SD6Q21VrB.jpg';
+  const BOUQUET = 'https://cdn.gamma.app/n4ay785j5gfy9a4/design-anything/vIsqIQywkO1SZ2SKNNxX1/Z-ZVfBSMuWiTqXuLOaOkW.jpg';
   const img = document.getElementById('bouquet');
   img.onload = () => img.classList.add('ready');
-  img.onerror = () => { img.onerror = null; img.classList.add('fallback'); img.src = 'assets/img/bouquet-cutout.webp'; };
+  img.onerror = () => { img.onerror = null; img.classList.add('fallback'); img.parentNode.parentNode.style.mixBlendMode = 'normal'; img.src = 'assets/img/bouquet-cutout.webp'; };
   img.src = BOUQUET;
 
   let W, H;
