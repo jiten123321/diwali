@@ -399,11 +399,34 @@
   document.addEventListener('click', e => { if(e.target.closest('[data-close]')) closeModals(); if(e.target.classList.contains('modal')) closeModals(); });
   document.addEventListener('keydown', e => { if(e.key === 'Escape'){ closeModals(); } });
 
+  /* ---------------- scroll-down button ----------------
+     Appears whenever there is more of the page below the screen; each tap glides to the
+     next [data-scroll-stop] section (or one screen down) and it hides near the bottom. */
+  function scrollHint(){
+    const btn = document.createElement('button');
+    btn.className = 'scroll-down hide'; btn.id = 'scrollDown'; btn.setAttribute('aria-label', 'Scroll down');
+    btn.innerHTML = '<span class="chev"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span><span>Scroll</span>';
+    document.body.append(btn);
+    const remaining = () => document.documentElement.scrollHeight - (scrollY + innerHeight);
+    const paint = () => btn.classList.toggle('hide', remaining() < 140);
+    btn.addEventListener('click', () => {
+      const stops = $$('[data-scroll-stop]').filter(el => el.offsetParent !== null);
+      const next = stops.find(el => el.getBoundingClientRect().top > 100);
+      const top = next ? scrollY + next.getBoundingClientRect().top - 84 : scrollY + innerHeight * .8;
+      scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+    });
+    addEventListener('scroll', paint, { passive: true });
+    addEventListener('resize', paint);
+    setInterval(paint, 700);            // content can grow (letters, cards opening)
+    paint();
+  }
+
   /* ---------------- boot ---------------- */
   buildChrome();
   transitions();
   Sparkles.init();
   soundUI();
+  scrollHint();
   $$('[data-diya]').forEach(makeDiya);
   hydrateImages();
   reveal();
