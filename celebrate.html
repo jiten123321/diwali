@@ -3,292 +3,185 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#14030a">
+<meta name="theme-color" content="#0b0206">
 <title>Happy Diwali, Ladoo ❤️</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Parisienne&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500&display=swap">
-<link rel="stylesheet" href="assets/css/style.css">
 <style>
-  body{background:#14030a;color:var(--ivory);}
-  .scene{position:relative;z-index:4;overflow:hidden;min-height:100svh;padding-bottom:80px;cursor:crosshair;}
-  .scene .backdrop{position:absolute;inset:0;opacity:.28;filter:blur(2px) saturate(1.2);}
-  .scene .backdrop .media{width:100%;height:100%;background:none;}
-  .scene .backdrop .media.fail::after{display:none;}
-  .scene::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:
-    radial-gradient(60% 45% at 50% 58%,rgba(255,150,50,.28),transparent 70%),
-    linear-gradient(to bottom,rgba(20,3,10,.4),rgba(20,3,10,.1) 30%,rgba(20,3,10,.85));}
-  .scene > *{position:relative;z-index:2;}
+  :root{color-scheme:dark;}
+  html,body{margin:0;height:100%;background:#0b0206;overflow:hidden;}
+  body{animation:fadeIn 1.4s ease both;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-  .toran{width:100%;height:clamp(110px,16vw,190px);display:block;pointer-events:none;}
-  .toran .sway{animation:sway 6s ease-in-out infinite;transform-origin:50% 0;transform-box:fill-box;}
-  @keyframes sway{50%{transform:rotate(1.5deg)}}
+  /* night sky backdrop (Gamma-generated photo, with a graceful gradient behind it) */
+  .sky{position:fixed;inset:0;background:
+      radial-gradient(70% 55% at 50% 60%,rgba(255,140,60,.18),transparent 70%),
+      radial-gradient(120% 90% at 50% 0%,#2a0712 0%,#12030a 55%,#070105 100%);}
+  .sky img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 2.4s ease;filter:saturate(1.08) brightness(.82);}
+  .sky img.on{opacity:1;}
+  .sky::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 55%,rgba(8,1,4,.15),rgba(8,1,4,.55) 100%);}
 
-  .center-piece{position:relative;width:min(560px,86vw);aspect-ratio:1;margin:clamp(16px,4vw,48px) auto 0;}
-  .rangoli{position:absolute;inset:12%;animation:spin 120s linear infinite;filter:drop-shadow(0 0 30px rgba(255,140,60,.25));}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .ring{position:absolute;inset:0;}
-  .ring .diya{position:absolute;width:clamp(48px,11vw,78px);transform:translate(-50%,-60%);}
-  .center-msg{position:absolute;inset:30%;display:grid;place-items:center;text-align:center;pointer-events:none;}
-  .center-msg .script{font-size:clamp(30px,6vw,48px);color:#fff4d6;text-shadow:0 0 24px rgba(255,170,80,.8);line-height:1.05;}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block;}
+  #fireworks{z-index:2;}
+  #petals{z-index:4;pointer-events:none;}
 
-  .final{max-width:760px;margin:10px auto 0;padding:0 var(--gutter);text-align:center;cursor:default;}
-  .final p{font-family:var(--serif);font-size:clamp(22px,3vw,34px);line-height:1.35;margin:0 0 18px;opacity:0;transform:translateY(14px);transition:opacity 1.4s var(--ease), transform 1.4s var(--ease);}
-  .final p.in{opacity:1;transform:none;}
-  .final p:first-child{font-size:clamp(28px,4.4vw,50px);}
-  .final p em{color:var(--gold-2);}
-  .final .sig{font-family:var(--script);font-size:clamp(44px,7vw,72px);color:#ffd9a0;text-shadow:0 0 30px rgba(255,160,60,.6);line-height:1.1;}
-  .look-note{display:inline-block;margin:10px 0 0;padding:12px 20px;border:1px solid rgba(214,177,111,.35);font-size:16px;color:rgba(251,244,236,.8);opacity:0;transition:opacity 1.4s;}
-  .look-note.in{opacity:1;}
-  .look-note b{color:var(--gold-2);font-weight:400;font-style:italic;}
-  .again{margin-top:36px;opacity:0;transition:opacity 1.4s;}
-  .again.in{opacity:1;}
-  .again .btn{font-size:14px;padding:18px 36px;}
-  .tip{font-family:var(--sans);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:rgba(214,177,111,.7);margin-top:26px;}
+  /* the bouquet */
+  .bouquet{position:fixed;left:50%;top:52%;z-index:3;width:min(78vw,62svh,560px);aspect-ratio:1100/1174;transform:translate(-50%,-50%);pointer-events:none;}
+  .bouquet .glow{position:absolute;inset:-6% -2% 8%;border-radius:50%;background:radial-gradient(circle,rgba(255,170,200,.30),rgba(255,140,90,.10) 45%,transparent 68%);filter:blur(10px);
+    animation:glow 4s ease-in-out infinite;opacity:0;animation-delay:1.6s;animation-fill-mode:both;}
+  @keyframes glow{0%{opacity:.6;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}100%{opacity:.6;transform:scale(.96)}}
+  .bouquet img{position:absolute;inset:0;width:100%;height:100%;
+    -webkit-mask-image:linear-gradient(#000 82%,transparent 94%);
+            mask-image:linear-gradient(#000 82%,transparent 94%);
+    filter:drop-shadow(0 0 22px rgba(255,170,200,.25));
+    animation:bloom 2.4s cubic-bezier(.2,.7,.2,1) .5s both;}
+  @keyframes bloom{0%{opacity:0;transform:scale(.8) translateY(30px);filter:blur(12px) saturate(.6)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
+  .bouquet .sway{position:absolute;inset:0;animation:sway 7s ease-in-out 3s infinite;transform-origin:50% 90%;}
+  @keyframes sway{50%{transform:rotate(1.2deg) translateY(-4px)}}
 
-  /* ---------- the e-bouquet ---------- */
-  .bouquet{--blush:#f1d5d3;--rose:#b23a64;--rose-2:#d45c86;--ink2:#45182a;--ink2-soft:#7b4a5c;
-    position:relative;z-index:46;background:var(--blush);color:var(--ink2);overflow:hidden;padding:clamp(56px,9vw,110px) 16px clamp(64px,9vw,110px);cursor:default;}
-  .bouquet .petals{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
-  .b-inner{position:relative;z-index:1;max-width:560px;margin:0 auto;}
-  .b-welcome{display:grid;justify-items:center;gap:14px;text-align:center;min-height:60svh;align-content:center;transition:opacity .9s ease, transform 1s cubic-bezier(.6,0,.3,1);}
-  .b-welcome.gone{opacity:0;transform:translateY(-4%);}
-  .bud{width:74px;height:auto;filter:drop-shadow(0 8px 14px rgba(120,20,40,.25));animation:bsway 4s ease-in-out infinite;transform-origin:50% 100%;}
-  @keyframes bsway{50%{transform:rotate(4deg)}}
-  .b-welcome .hey{font-family:var(--script);font-size:clamp(60px,17vw,92px);line-height:1;color:var(--rose);margin:0;font-weight:400;}
-  .b-welcome p{margin:0;font-size:20px;}
-  .b-welcome small{font-style:italic;color:var(--ink2-soft);font-size:15px;}
-  .open-btn{margin-top:14px;border:0;border-radius:999px;padding:15px 30px;background:linear-gradient(180deg,var(--rose-2),var(--rose));color:#fbf4ec;
-    font-family:var(--serif);font-style:italic;font-size:19px;letter-spacing:.02em;cursor:pointer;
-    box-shadow:0 10px 26px rgba(178,58,100,.35),inset 0 1px 0 rgba(255,255,255,.25);animation:breathe 2.4s ease-in-out infinite;}
-  .open-btn:active{transform:scale(.97);}
-  @keyframes breathe{50%{box-shadow:0 12px 34px rgba(178,58,100,.5),0 0 0 8px rgba(178,58,100,.08),inset 0 1px 0 rgba(255,255,255,.25)}}
-  .b-content{display:grid;gap:18px;}
-  .bouquet [hidden]{display:none!important;}
-  .bouquet{scroll-margin-top:60px;}
-  .b-head{text-align:center;animation:brise 1.2s ease both;}
-  .b-eyebrow{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink2-soft);}
-  .b-title{font-family:var(--script);font-weight:400;font-size:clamp(54px,15vw,84px);line-height:1.05;margin:2px 0 6px;color:var(--rose);}
-  .intro{max-width:30em;margin:0 auto;text-wrap:balance;}
-  .stage{position:relative;width:min(100%,620px);justify-self:center;aspect-ratio:1100/1174;}
-  .stage img{position:absolute;inset:0;width:100%;height:100%;animation:bloom 2s cubic-bezier(.2,.7,.2,1) .35s both;}
-  @keyframes bloom{0%{opacity:0;transform:scale(.86) translateY(24px);filter:blur(10px) saturate(.6)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
-  @keyframes brise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-  .b-letter{position:relative;background:#fffaf5;border-radius:6px;padding:30px 26px 28px;margin:8px 4px 0;
-    box-shadow:0 18px 40px rgba(120,40,70,.16),0 2px 0 rgba(255,255,255,.8) inset;transform:rotate(-.6deg);animation:brise 1.2s ease 1.3s both;}
-  .b-letter::before{content:"";position:absolute;top:-12px;left:50%;width:88px;height:24px;transform:translateX(-50%) rotate(2deg);background:rgba(212,92,134,.35);border-radius:2px;}
-  .b-letter h3{font-family:var(--script);font-weight:400;font-size:44px;line-height:1.1;margin:0 0 10px;color:var(--rose);}
-  .b-letter p{margin:0 0 14px;line-height:1.65;font-size:19px;}
-  .b-letter .sign{font-family:var(--script);font-size:40px;color:var(--rose);line-height:1.1;text-align:right;margin-top:6px;}
-  .bouquet .again{opacity:1;text-align:center;margin-top:28px;}
-  .rose-btn{background:linear-gradient(180deg,var(--rose-2),var(--rose));border-radius:999px;}
-  .rose-btn:hover{background:var(--rose);}
-  @media (max-width:520px){.b-letter{padding:26px 20px 22px;margin-inline:0;}.b-letter h3{font-size:38px;}.b-letter .sign{font-size:36px;}.b-letter p{font-size:18px;}}
-  .more{margin-top:34px;opacity:0;transition:opacity 1.4s;}
-  .more.in{opacity:1;}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;}}
 </style>
 </head>
-<body data-page="celebrate" class="dark-page" data-sparkles="high">
-<main>
-  <section class="scene" id="scene" aria-label="Diwali celebration">
-    <div class="backdrop" aria-hidden="true"><div class="media"><img data-img="diwaliNight" data-w="1600" alt=""></div></div>
-    <svg class="toran" id="toran" viewBox="0 0 1200 190" preserveAspectRatio="xMidYMin slice" aria-hidden="true"></svg>
+<body>
+  <div class="sky" aria-hidden="true"><img id="skyImg" alt=""></div>
+  <canvas id="fireworks" aria-hidden="true"></canvas>
+  <div class="bouquet">
+    <div class="glow"></div>
+    <div class="sway"><img src="assets/img/bouquet.webp" alt="A bouquet of soft pink roses for Ladoo, under Diwali fireworks"></div>
+  </div>
+  <canvas id="petals" aria-hidden="true"></canvas>
 
-    <div class="center-piece">
-      <svg class="rangoli" id="rangoli" viewBox="-100 -100 200 200" aria-hidden="true"></svg>
-      <div class="ring" id="ring" role="group" aria-label="Diyas around the rangoli"></div>
-    </div>
-
-    <div class="final" id="final">
-      <div class="eyebrow" style="margin-bottom:18px">Shubh Deepavali</div>
-      <p>May your life always shine <em>brighter than a thousand diyas.</em></p>
-      <p>Keep smiling, keep being your beautiful self, and never stop being excited about the little things.</p>
-      <p class="sig">Happy Diwali, Ladoo! ❤️</p>
-      <div class="more" id="again"><a class="btn gold" href="#bouquet">There’s one more thing… 🌹</a></div>
-      <div class="tip">Tap anywhere for phuljhadi · tap a diya to light it</div>
-    </div>
-  </section>
-
-  <section class="bouquet" id="bouquet" aria-label="Pink roses for Ladoo">
-    <canvas class="petals" id="petals" aria-hidden="true"></canvas>
-    <div class="b-inner">
-      <div class="b-welcome" id="bWelcome">
-        <svg class="bud" viewBox="0 0 80 120" aria-hidden="true">
-          <defs><radialGradient id="bg1" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fcd0df"/><stop offset=".6" stop-color="#ec8fb0"/><stop offset="1" stop-color="#b23a64"/></radialGradient></defs>
-          <path d="M40 118 C40 95 41 80 40 62" stroke="#4f7a3a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-          <path d="M40 92 C28 86 20 88 14 96 C24 100 33 98 40 92Z" fill="#5f8a45"/>
-          <path d="M40 60 C22 58 16 40 22 24 C28 12 36 6 40 4 C44 6 52 12 58 24 C64 40 58 58 40 60Z" fill="url(#bg1)"/>
-          <path d="M40 60 C30 52 29 36 36 20 M40 60 C50 52 52 38 46 22" stroke="#b23a64" stroke-width="1.4" fill="none" opacity=".6"/>
-          <path d="M40 62 C30 64 24 58 22 50 C30 54 36 56 40 56 C44 56 50 54 58 50 C56 58 50 64 40 62Z" fill="#4f7a3a"/>
-        </svg>
-        <h2 class="hey">Hey Ladoo</h2>
-        <p>I have something for you.</p>
-        <button class="open-btn" id="openBtn" type="button">Open your flowers</button>
-        <small>Tap to open</small>
-      </div>
-
-      <div class="b-content" id="bContent" hidden>
-        <header class="b-head">
-          <div class="b-eyebrow">for my Ladoo</div>
-          <h2 class="b-title">Pink roses</h2>
-          <p class="intro">A whole armful of them, because one rose felt too small for what I feel about you.</p>
-        </header>
-        <div class="stage"><img src="assets/img/roses.jpg" alt="A thick bouquet of soft pink garden roses ringed with pink baby's breath and small pink carnations, wrapped in dusty pink and white paper with a blush ribbon."></div>
-        <section class="b-letter" aria-label="A letter for Ladoo">
-          <h3>Dear Ladoo,</h3>
-          <p>I wanted to give you flowers that don't wilt in a few days, so here's a bouquet you can open whenever you want.</p>
-          <p>Pink, because it's soft and warm, just like you are with me, even on the days I don't deserve it.</p>
-          <p>Thank you for being patient with me, for laughing at my silly jokes, and for making ordinary days feel like something worth remembering. You make my life lighter in ways you probably don't even notice.</p>
-          <p>Whenever you miss me, open this page. The flowers will be here, and so will I.</p>
-          <div class="sign">Always yours</div>
-        </section>
-        <div class="again"><a class="btn rose-btn" href="index.html">Celebrate Again ✨</a></div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<script src="assets/js/data.js"></script>
-<script src="assets/js/site.js"></script>
 <script>
 (function(){
-  const G = window.GULAAB, { $, $$ } = G;
-  const NS = 'http://www.w3.org/2000/svg';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- marigold toran ---------- */
-  (function(){
-    const svg = $('#toran');
-    let defs = `<defs>
-      <radialGradient id="mgO" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#ffd27a"/><stop offset=".55" stop-color="#f28a1c"/><stop offset="1" stop-color="#b8510c"/></radialGradient>
-      <radialGradient id="mgY" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#fff0a0"/><stop offset=".55" stop-color="#f6c21c"/><stop offset="1" stop-color="#c08a0a"/></radialGradient>
-      <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5f9a3a"/><stop offset="1" stop-color="#2f5a1c"/></linearGradient></defs>`;
-    let out = '';
-    const flower = (x, y, r, k) => {
-      let s = `<circle cx="${x}" cy="${y}" r="${r}" fill="url(#${k ? 'mgY' : 'mgO'})"/>`;
-      for(let i = 0; i < 6; i++){ const a = i / 6 * 6.28 + (x % 7); s += `<circle cx="${(x + Math.cos(a) * r * .55).toFixed(1)}" cy="${(y + Math.sin(a) * r * .55).toFixed(1)}" r="${(r * .32).toFixed(1)}" fill="${k ? '#ffe36a' : '#ffae3d'}" opacity=".7"/>`; }
-      return s;
-    };
-    // top straight band of mango leaves
-    for(let x = -10; x < 1220; x += 26){ out += `<path d="M${x} 6 q 10 28 0 44 q -10 -16 0 -44Z" fill="url(#leaf)" transform="rotate(${(x % 3) * 4 - 4} ${x} 6)"/>`; }
-    // swags
-    const swags = 6, w = 1200 / swags;
-    for(let s = 0; s < swags; s++){
-      const x0 = s * w, x1 = x0 + w, depth = 70;
-      let g = '';
-      for(let t = 0; t <= 1.0001; t += 1 / 22){
-        const x = x0 + (x1 - x0) * t, y = 14 + 4 * depth * t * (1 - t);
-        g += flower(+x.toFixed(1), +y.toFixed(1), 9, (Math.round(t * 22) % 2));
-      }
-      out += `<g class="sway" style="animation-delay:${-s * .7}s">${g}</g>`;
-      // hanging strand at join
-      let h = '';
-      for(let k = 0; k < 7; k++) h += flower(x1, 24 + k * 15, 7.5, k % 2);
-      h += `<path d="M${x1} ${24 + 7 * 15} l -7 16 h14z" fill="#d6b16f"/><circle cx="${x1}" cy="${24 + 7 * 15 + 18}" r="3" fill="#efd9a6"/>`;
-      if(s < swags - 1) out += `<g class="sway" style="animation-delay:${-s * .5}s">${h}</g>`;
-    }
-    svg.innerHTML = defs + out;
-  })();
+  /* backdrop photo: fades in only once it has loaded */
+  // photorealistic Diwali fireworks sky, generated with Gamma
+  const SKY = 'https://cdn.gamma.app/n4ay785j5gfy9a4/design-anything/SckNC0qbL8Ab3UHKjuGAz/gsUIvFrJ06EpvR9HqVbxv.jpg';
+  const sky = document.getElementById('skyImg');
+  sky.onload = () => sky.classList.add('on');
+  sky.src = SKY;
 
-  /* ---------- rangoli ---------- */
-  (function(){
-    const svg = $('#rangoli');
-    const layers = [
-      { n:16, r:92, len:16, w:7,  c:'#d6336c' },
-      { n:16, r:80, len:14, w:7,  c:'#f28a1c', off:.5 },
-      { n:12, r:64, len:20, w:10, c:'#f6c21c' },
-      { n:12, r:46, len:18, w:9,  c:'#1f9e8a', off:.5 },
-      { n:8,  r:30, len:16, w:10, c:'#8e2a9e' },
-      { n:8,  r:16, len:10, w:7,  c:'#fff4d6', off:.5 },
-    ];
-    let s = `<circle r="98" fill="none" stroke="#efd9a6" stroke-width=".8" stroke-dasharray="1 4" stroke-linecap="round"/>`;
-    s += `<circle r="86" fill="#3a0d1c" opacity=".55"/>`;
-    layers.forEach(L => {
-      for(let i = 0; i < L.n; i++){
-        const a = (i + (L.off || 0)) / L.n * 360;
-        s += `<path d="M0 ${-L.r} C ${L.w} ${-L.r + L.len * .4} ${L.w * .6} ${-L.r + L.len} 0 ${-L.r + L.len} C ${-L.w * .6} ${-L.r + L.len} ${-L.w} ${-L.r + L.len * .4} 0 ${-L.r}Z" fill="${L.c}" transform="rotate(${a})"/>`;
-        s += `<circle cy="${-L.r + L.len * .55}" r="1.2" fill="#fff8e6" opacity=".85" transform="rotate(${a})"/>`;
-      }
-    });
-    for(let i = 0; i < 48; i++) s += `<circle cy="-95" r="1.4" fill="#fff8e6" transform="rotate(${i * 7.5})"/>`;
-    s += `<circle r="8" fill="#f28a1c"/><circle r="4" fill="#fff4d6"/>`;
-    svg.innerHTML = s;
-  })();
+  /* ---------------- realistic fireworks ---------------- */
+  const cv = document.getElementById('fireworks'), c = cv.getContext('2d');
+  let W, H, D;
+  function size(){ D = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+    cv.width = W * D; cv.height = H * D; c.setTransform(D, 0, 0, D, 0, 0);
+    pc.width = W * D; pc.height = H * D; p2.setTransform(D, 0, 0, D, 0, 0); }
 
-  /* ---------- ring of diyas ---------- */
-  const ring = $('#ring'), N = 10, diyas = [];
-  for(let i = 0; i < N; i++){
-    const b = document.createElement('button');
-    b.className = 'diya'; b.setAttribute('aria-label', `Light diya ${i + 1}`);
-    const a = i / N * Math.PI * 2 - Math.PI / 2;
-    b.style.left = (50 + Math.cos(a) * 44) + '%'; b.style.top = (50 + Math.sin(a) * 44) + '%';
-    G.makeDiya(b); ring.append(b); diyas.push(b);
-    b.addEventListener('click', e => {
-      e.stopPropagation();
-      b.classList.toggle('lit');
-      if(b.classList.contains('lit')){ const r = b.getBoundingClientRect(); G.Sparkles.burst(r.left + r.width / 2, r.top + r.height / 4, 24, [42, 30]); G.Music.chime(); }
-    });
+  const PALETTES = [
+    [[255, 214, 120], [255, 180, 70]],          // gold
+    [[255, 120, 170], [255, 190, 215]],         // pink
+    [[255, 140, 60], [255, 220, 140]],          // saffron
+    [[200, 120, 255], [255, 160, 220]],         // violet-pink
+    [[120, 220, 255], [255, 255, 255]],         // silver-blue
+    [[255, 90, 90], [255, 200, 120]],           // red-gold
+  ];
+  const rockets = [], sparks = [];
+  const rnd = (a, b) => a + Math.random() * (b - a);
+
+  function launch(tx, ty){
+    const x = tx ?? rnd(W * .12, W * .88);
+    const y = ty ?? rnd(H * .1, H * .38);
+    const sx = x + rnd(-W * .05, W * .05);
+    rockets.push({ x: sx, y: H + 10, tx: x, ty: y, vx: (x - sx) / 60, vy: -(H + 10 - y) / 60, t: 0, trail: [] });
   }
-  diyas.forEach((d, i) => setTimeout(() => d.classList.add('lit'), 600 + i * 220));
-
-  /* ---------- message ---------- */
-  const lines = $$('#final > p');
-  lines.forEach((p, i) => setTimeout(() => p.classList.add('in'), 2400 + i * (G.reduce ? 0 : 1600)));
-  const after = 2400 + lines.length * (G.reduce ? 0 : 1600);
-  setTimeout(() => $('#again').classList.add('in'), after + 600);
-
-  /* ---------- fireworks ---------- */
-  const palettes = [[42, 30, 50], [340, 320, 42], [24, 12, 42], [180, 42, 160], [280, 42, 330]];
-  const fire = (x, y) => G.Sparkles.burst(x, y, 70, palettes[Math.floor(Math.random() * palettes.length)]);
-  $('#scene').addEventListener('click', e => { if(e.target.closest('a,button')) return; fire(e.clientX, e.clientY); G.Music.chime(); });
-  let auto = 0;
-  const show = setInterval(() => {
-    if(document.hidden) return;
-    fire(innerWidth * (.15 + Math.random() * .7), innerHeight * (.12 + Math.random() * .3));
-    if(++auto > 14) clearInterval(show);
-  }, 1500);
-
-  /* ---------- the e-bouquet ---------- */
-  (function(){
-    const welcome = $('#bWelcome'), content = $('#bContent');
-    $('#openBtn').addEventListener('click', () => {
-      welcome.classList.add('gone'); G.Music.chime();
-      setTimeout(() => { welcome.hidden = true; content.hidden = false;
-        $('#bouquet').scrollIntoView({ behavior: G.reduce ? 'auto' : 'smooth', block: 'start' }); }, G.reduce ? 0 : 900);
-    });
-    const cv = $('#petals'), c = cv.getContext('2d'), sec = $('#bouquet');
-    let W, H, ps = [], running = false;
-    const mk = top => ({ x: Math.random() * W, y: top ? -30 : Math.random() * H, s: 7 + Math.random() * 9, vy: .45 + Math.random() * .7,
-      sw: Math.random() * 6.28, sws: .01 + Math.random() * .015, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .03,
-      flip: Math.random() * 6.28, vf: .02 + Math.random() * .03, hue: Math.random() });
-    function size(){ const d = Math.min(devicePixelRatio || 1, 2); W = sec.clientWidth; H = sec.clientHeight;
-      cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0);
-      const n = Math.round(Math.min(26, W * H / 40000) + 4); ps = Array.from({ length: n }, () => mk(false)); }
-    function petal(p){
-      c.save(); c.translate(p.x, p.y); c.rotate(p.rot); c.scale(Math.cos(p.flip) * .8 + .2 * Math.sign(Math.cos(p.flip) || 1), 1);
-      const s = p.s, g = c.createRadialGradient(-s * .2, -s * .3, s * .1, 0, 0, s * 1.2);
-      const a = p.hue < .5 ? ['#fde0ea', '#f4a3be', '#d9658e'] : ['#fbd3e1', '#ee93b3', '#cf5a84'];
-      g.addColorStop(0, a[0]); g.addColorStop(.6, a[1]); g.addColorStop(1, a[2]);
-      c.fillStyle = g; c.globalAlpha = .9;
-      c.beginPath(); c.moveTo(0, s); c.bezierCurveTo(s * 1.1, s * .5, s * .9, -s * 1.1, 0, -s * .75); c.bezierCurveTo(-s * .9, -s * 1.1, -s * 1.1, s * .5, 0, s); c.fill();
-      c.globalAlpha = .25; c.strokeStyle = '#ffd1d8'; c.lineWidth = .8; c.beginPath(); c.moveTo(0, s * .8); c.quadraticCurveTo(s * .1, 0, 0, -s * .5); c.stroke();
-      c.restore();
+  function explode(x, y){
+    const pal = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+    const kind = Math.random();
+    const n = kind < .2 ? 170 : 130;
+    const scale = Math.max(.8, Math.min(W, H) / 420);
+    const speed = rnd(3.2, 4.8) * scale;
+    for(let i = 0; i < n; i++){
+      const a = (i / n) * Math.PI * 2 + rnd(-.05, .05);
+      let s = speed * (kind < .2 ? 1 : rnd(.35, 1));        // ring vs peony
+      const col = Math.random() < .75 ? pal[0] : pal[1];
+      sparks.push({ x, y, px: x, py: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rnd(70, 110), max: 110,
+        col, w: rnd(1.4, 2.6), twinkle: Math.random() < .35, crackle: kind > .85 && Math.random() < .5 });
     }
-    function tick(){
-      if(sec.clientHeight !== H || sec.clientWidth !== W) size();
-      c.clearRect(0, 0, W, H);
-      for(const p of ps){
-        if(!G.reduce){ p.sw += p.sws; p.x += Math.sin(p.sw) * .7; p.y += p.vy; p.rot += p.vr; p.flip += p.vf; if(p.y > H + 30) Object.assign(p, mk(true)); }
-        petal(p);
+    // bright flash
+    sparks.push({ flash: true, x, y, life: 12, max: 12, col: pal[0], r: 140 * scale });
+  }
+
+  function frame(){
+    // fade previous frame for natural light trails while keeping the backdrop visible
+    c.globalCompositeOperation = 'destination-out';
+    c.fillStyle = 'rgba(0,0,0,.18)';
+    c.fillRect(0, 0, W, H);
+    c.globalCompositeOperation = 'lighter';
+
+    for(let i = rockets.length - 1; i >= 0; i--){
+      const r = rockets[i]; r.t++;
+      r.px = r.x; r.py = r.y;
+      r.x += r.vx; r.y += r.vy; r.vy *= .985;
+      c.strokeStyle = 'rgba(255,220,160,.9)'; c.lineWidth = 2;
+      c.beginPath(); c.moveTo(r.px, r.py); c.lineTo(r.x, r.y); c.stroke();
+      // ember sparks falling from the rocket
+      if(Math.random() < .6) sparks.push({ x: r.x, y: r.y, px: r.x, py: r.y, vx: rnd(-.4, .4), vy: rnd(.5, 1.5), life: 22, max: 22, col: [255, 190, 110], w: 1 });
+      if(r.y <= r.ty || r.t > 75){ explode(r.x, r.y); rockets.splice(i, 1); }
+    }
+
+    for(let i = sparks.length - 1; i >= 0; i--){
+      const s = sparks[i]; s.life--;
+      if(s.life <= 0){ sparks.splice(i, 1); continue; }
+      const al = s.life / s.max;
+      if(s.flash){
+        const g = c.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r);
+        g.addColorStop(0, `rgba(${s.col},${.6 * al})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+        c.fillStyle = g; c.beginPath(); c.arc(s.x, s.y, s.r, 0, 6.29); c.fill(); continue;
       }
-      if(running && !G.reduce) requestAnimationFrame(tick);
+      s.px = s.x; s.py = s.y;
+      s.vx *= .978; s.vy = s.vy * .978 + .04;   // drag + gravity
+      s.x += s.vx; s.y += s.vy;
+      let a = al;
+      if(s.twinkle) a *= .5 + Math.random() * .5;
+      if(s.crackle && al < .35 && Math.random() < .3) a = 1;
+      c.strokeStyle = `rgba(${s.col[0]},${s.col[1]},${s.col[2]},${a})`;
+      c.lineWidth = s.w;
+      c.beginPath(); c.moveTo(s.px, s.py); c.lineTo(s.x, s.y); c.stroke();
     }
-    size(); addEventListener('resize', size);
-    new IntersectionObserver(es => es.forEach(e => {
-      if(e.isIntersecting && !running){ running = true; requestAnimationFrame(tick); }
-      else if(!e.isIntersecting) running = false;
-    })).observe(sec);
-    if(location.hash === '#bouquet') setTimeout(() => sec.scrollIntoView(), 50);
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------------- falling rose petals ---------------- */
+  const pc = document.getElementById('petals'), p2 = pc.getContext('2d');
+  let petals = [];
+  const mkPetal = top => ({ x: Math.random() * W, y: top ? -30 : Math.random() * H, s: 6 + Math.random() * 8, vy: .4 + Math.random() * .6,
+    sw: Math.random() * 6.28, sws: .01 + Math.random() * .015, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .03, flip: Math.random() * 6.28, vf: .02 + Math.random() * .03, hue: Math.random() });
+  function petal(p){
+    p2.save(); p2.translate(p.x, p.y); p2.rotate(p.rot); p2.scale(Math.cos(p.flip) * .8 + .2 * Math.sign(Math.cos(p.flip) || 1), 1);
+    const s = p.s, g = p2.createRadialGradient(-s * .2, -s * .3, s * .1, 0, 0, s * 1.2);
+    const a = p.hue < .5 ? ['#fde0ea', '#f4a3be', '#d9658e'] : ['#fbd3e1', '#ee93b3', '#cf5a84'];
+    g.addColorStop(0, a[0]); g.addColorStop(.6, a[1]); g.addColorStop(1, a[2]);
+    p2.fillStyle = g; p2.globalAlpha = .85;
+    p2.beginPath(); p2.moveTo(0, s); p2.bezierCurveTo(s * 1.1, s * .5, s * .9, -s * 1.1, 0, -s * .75); p2.bezierCurveTo(-s * .9, -s * 1.1, -s * 1.1, s * .5, 0, s); p2.fill();
+    p2.restore();
+  }
+  function petalFrame(){
+    p2.clearRect(0, 0, W, H);
+    for(const p of petals){
+      p.sw += p.sws; p.x += Math.sin(p.sw) * .7; p.y += p.vy; p.rot += p.vr; p.flip += p.vf;
+      if(p.y > H + 30) Object.assign(p, mkPetal(true));
+      petal(p);
+    }
+    requestAnimationFrame(petalFrame);
+  }
+
+  size();
+  addEventListener('resize', size);
+  petals = Array.from({ length: Math.round(Math.min(18, W * H / 50000) + 5) }, () => mkPetal(false));
+
+  if(reduce){ petals.forEach(petal); return; }
+  requestAnimationFrame(frame);
+  requestAnimationFrame(petalFrame);
+
+  // a grand opening volley, then a gentle, endless show
+  [900, 1300, 1700, 2000, 2400].forEach(t => setTimeout(() => launch(), t));
+  (function loop(){
+    if(!document.hidden){ launch(); if(Math.random() < .35) setTimeout(() => launch(), 250); }
+    setTimeout(loop, rnd(900, 1800));
   })();
+
+  // tap anywhere for your own firework
+  addEventListener('pointerdown', e => launch(e.clientX, Math.min(e.clientY, H * .6)));
 })();
 </script>
 </body>
