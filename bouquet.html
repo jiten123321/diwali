@@ -3,47 +3,67 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f1d5d3">
+<meta name="theme-color" content="#2a0710">
 <title>Pink Roses for Ladoo</title>
 <style>
-  :root{color-scheme:light;--blush:#f1d5d3;}
-  html,body{margin:0;height:100%;overflow:hidden;background:var(--blush);}
+  /* same palette as the rest of the site: wine, burgundy, maroon and champagne gold */
+  :root{color-scheme:dark;--wine:#2a0710;--burgundy:#4a0d1c;--maroon:#6e1427;--gold:#d6b16f;}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--wine);}
   body{animation:fadeIn 1.2s ease both;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  .bg{position:fixed;inset:0;background:radial-gradient(75% 65% at 50% 45%,#f6dedb 0%,var(--blush) 55%,#e6c2c1 100%);}
-  .stage{position:fixed;inset:0;display:grid;place-items:center;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);}
-  .bouquet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(100vw,96svh * 1500 / 1560, 1100px);aspect-ratio:1500/1560;}
-  .bouquet img{position:absolute;inset:0;width:100%;height:100%;display:block;
-    -webkit-mask-image:radial-gradient(ellipse 52% 52% at 50% 50%,#000 78%,transparent 100%);
-            mask-image:radial-gradient(ellipse 52% 52% at 50% 50%,#000 78%,transparent 100%);
-    animation:bloom 2.4s cubic-bezier(.2,.7,.2,1) .3s both;}
-  @keyframes bloom{0%{opacity:0;transform:scale(.82) translateY(30px);filter:blur(12px) saturate(.6)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
+  .bg{position:fixed;inset:0;background:
+      radial-gradient(55% 50% at 50% 46%,rgba(214,177,111,.22),transparent 70%),
+      radial-gradient(90% 80% at 50% 40%,var(--maroon) 0%,var(--burgundy) 45%,var(--wine) 80%,#160309 100%);}
+
+  .bouquet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:min(100vw, 94svh * 4 / 5, 900px);aspect-ratio:4/5;}
+  @media (max-aspect-ratio:3/4){.bouquet{width:min(118vw, 94svh * 4 / 5);}}
+  .bouquet img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+    /* feather the photo's edges so its burgundy backdrop melts into the page */
+    -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 70%,transparent 100%);
+            mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 70%,transparent 100%);
+    opacity:0;}
+  .bouquet img.fallback{-webkit-mask-image:none;mask-image:none;object-fit:contain;filter:drop-shadow(0 0 30px rgba(255,170,200,.25));}
+  .bouquet img.ready{animation:bloom 2.4s cubic-bezier(.2,.7,.2,1) both;}
+  @keyframes bloom{0%{opacity:0;transform:scale(.84) translateY(30px);filter:blur(12px) saturate(.7)}60%{filter:blur(0) saturate(1.05)}100%{opacity:1;transform:none;filter:none}}
   .sway{position:absolute;inset:0;animation:sway 8s ease-in-out 2.8s infinite;transform-origin:50% 92%;}
-  @keyframes sway{50%{transform:rotate(.8deg) translateY(-5px)}}
-  @media (max-aspect-ratio:3/4){.bouquet{width:min(128vw, 96svh * 1500 / 1560);}}
-  #petals{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;}
+  @keyframes sway{50%{transform:rotate(.7deg) translateY(-5px)}}
+
+  canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;}
   @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;}}
 </style>
 </head>
 <body>
   <div class="bg" aria-hidden="true"></div>
-  <div class="stage">
-    <div class="bouquet"><div class="sway">
-      <img src="assets/img/grand-bouquet.jpg" alt="A huge bouquet of soft pink roses for Ladoo">
-    </div></div>
-  </div>
+  <canvas id="sparkles" aria-hidden="true"></canvas>
+  <div class="bouquet"><div class="sway">
+    <img id="bouquet" alt="A huge bouquet of soft pink roses for Ladoo">
+  </div></div>
   <canvas id="petals" aria-hidden="true"></canvas>
 <script>
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const cv = document.getElementById('petals'), c = cv.getContext('2d');
-  let W, H, ps = [];
+
+  /* a realistic bouquet generated with Gamma; a cut-out of the original bouquet is the fallback */
+  const BOUQUET = 'https://cdn.gamma.app/n4ay785j5gfy9a4/design-anything/7lywuVeb1vJHMrlXGQKB7/WCgRkw0jX1i0SD6Q21VrB.jpg';
+  const img = document.getElementById('bouquet');
+  img.onload = () => img.classList.add('ready');
+  img.onerror = () => { img.onerror = null; img.classList.add('fallback'); img.src = 'assets/img/bouquet-cutout.webp'; };
+  img.src = BOUQUET;
+
+  let W, H;
+  /* soft golden sparkles, like the rest of the site */
+  const sc = document.getElementById('sparkles'), s2 = sc.getContext('2d');
+  let sp = [];
+  const mkS = bottom => ({ x: Math.random() * W, y: bottom ? H + 10 : Math.random() * H, r: .6 + Math.random() * 1.8,
+    vy: -(.12 + Math.random() * .35), a: Math.random() * 6.28, va: .01 + Math.random() * .03 });
+
+  /* falling rose petals */
+  const pc = document.getElementById('petals'), c = pc.getContext('2d');
+  let ps = [];
   const mk = top => ({ x: Math.random() * W, y: top ? -30 : Math.random() * H, s: 7 + Math.random() * 9, vy: .45 + Math.random() * .7,
     sw: Math.random() * 6.28, sws: .01 + Math.random() * .015, rot: Math.random() * 6.28, vr: (Math.random() - .5) * .03,
     flip: Math.random() * 6.28, vf: .02 + Math.random() * .03, hue: Math.random() });
-  function size(){ const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
-    cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0);
-    ps = Array.from({ length: Math.round(Math.min(26, W * H / 36000) + 6) }, () => mk(false)); }
   function petal(p){
     c.save(); c.translate(p.x, p.y); c.rotate(p.rot); c.scale(Math.cos(p.flip) * .8 + .2 * Math.sign(Math.cos(p.flip) || 1), 1);
     const s = p.s, g = c.createRadialGradient(-s * .2, -s * .3, s * .1, 0, 0, s * 1.2);
@@ -51,13 +71,27 @@
     g.addColorStop(0, a[0]); g.addColorStop(.6, a[1]); g.addColorStop(1, a[2]);
     c.fillStyle = g; c.globalAlpha = .9;
     c.beginPath(); c.moveTo(0, s); c.bezierCurveTo(s * 1.1, s * .5, s * .9, -s * 1.1, 0, -s * .75); c.bezierCurveTo(-s * .9, -s * 1.1, -s * 1.1, s * .5, 0, s); c.fill();
-    c.globalAlpha = .25; c.strokeStyle = '#ffd1d8'; c.lineWidth = .8; c.beginPath(); c.moveTo(0, s * .8); c.quadraticCurveTo(s * .1, 0, 0, -s * .5); c.stroke();
     c.restore();
   }
+  function size(){
+    const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+    for(const [el, ctx] of [[pc, c], [sc, s2]]){ el.width = W * d; el.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); }
+    ps = Array.from({ length: Math.round(Math.min(24, W * H / 38000) + 6) }, () => mk(false));
+    sp = Array.from({ length: Math.round(Math.min(60, W * H / 22000)) }, () => mkS(false));
+  }
   function tick(){
-    c.clearRect(0, 0, W, H);
+    c.clearRect(0, 0, W, H); s2.clearRect(0, 0, W, H);
+    s2.globalCompositeOperation = 'lighter';
+    for(const p of sp){
+      p.a += p.va; p.y += p.vy; p.x += Math.sin(p.a) * .15;
+      if(p.y < -10) Object.assign(p, mkS(true));
+      const tw = .45 + Math.sin(p.a * 2) * .35, g = s2.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      g.addColorStop(0, `hsla(42,100%,82%,${tw})`); g.addColorStop(1, 'hsla(42,100%,60%,0)');
+      s2.fillStyle = g; s2.beginPath(); s2.arc(p.x, p.y, p.r * 4, 0, 6.29); s2.fill();
+    }
     for(const p of ps){
-      if(!reduce){ p.sw += p.sws; p.x += Math.sin(p.sw) * .7; p.y += p.vy; p.rot += p.vr; p.flip += p.vf; if(p.y > H + 30) Object.assign(p, mk(true)); }
+      p.sw += p.sws; p.x += Math.sin(p.sw) * .7; p.y += p.vy; p.rot += p.vr; p.flip += p.vf;
+      if(p.y > H + 30) Object.assign(p, mk(true));
       petal(p);
     }
     if(!reduce) requestAnimationFrame(tick);
